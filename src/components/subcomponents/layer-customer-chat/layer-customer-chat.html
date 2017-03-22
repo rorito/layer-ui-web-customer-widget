@@ -1,0 +1,18 @@
+<template>
+  <style>
+    layer-customer-chat {
+      display: flex;
+      flex-direction: column;
+    }
+    layer-customer-chat layer-conversation-panel {
+      flex-grow: 1;
+    }
+  </style>
+  <div class='layer-chat-title layer-dialog-title' layer-id='chatTitle'>
+    <div class='layer-title-buttons'>
+      <span class="layer-title-button layer-back-button" layer-id='listBackButton'></span>
+    </div>
+    <div class='layer-title-text' layer-id='titleText'>Your Conversations</div>
+  </div>
+  <layer-conversation-panel layer-id='conversationPanel'></layer-conversation-panel>
+</template>

@@ -1,0 +1,44 @@
+{
+  "name": "layer-ui-web-customer-widget",
+  "version": "1.0.0",
+  "description": "Customer facing chat widget for talking to support/staff",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/layerhq/layer-ui-web-customer-widget.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/layerhq/layer-ui-web-customer-widget/issues"
+  },
+  "homepage": "https://github.com/layerhq/layer-ui-web-customer-widget#readme",
+  "dependencies": {
+    "layer-ui-web": "^0.10.1",
+    "layer-websdk": "^3.1.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-latest": "^6.16.0",
+    "babelify": "^7.3.0",
+    "eslint": "^3.13.1",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.9.0",
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-cssmin": "^1.0.2",
+    "grunt-contrib-less": "^1.3.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-jsduck": "^1.0.1",
+    "grunt-notify": "^0.4.5",
+    "istanbulify": "^0.1.0",
+    "less": "^2.7.1"
+  }
+}

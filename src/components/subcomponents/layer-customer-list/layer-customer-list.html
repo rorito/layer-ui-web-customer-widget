@@ -1,0 +1,26 @@
+<template>
+  <style>
+    layer-customer-list {
+      display: flex;
+      flex-direction: column;
+    }
+    layer-conversations-list {
+      flex-grow: 1;
+    }
+    layer-customer-list .layer-list-toggles {
+      display: none;
+    }
+    layer-customer-list.layer-list-filter-toggles-enabled .layer-list-toggles {
+      display: block;
+    }
+  </style>
+  <div class='layer-list-title layer-dialog-title' layer-id='listTitle'>
+    <div class='layer-title-text' layer-id='titleText'></div>
+    <div class='layer-title-buttons layer-toggle-pannel'>
+      <button class='layer-toggle-selected' layer-id='filterOpenButton'></button>
+      <button layer-id='filterAllButton'></button>
+    </div>
+  </div>
+  <layer-conversations-list layer-id='listPanel'></layer-conversations-list>
+  <layer-composer layer-id='listComposer' placeholder='Start a new conversation'></layer-composer>
+</template>

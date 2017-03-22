@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <script src='build/layer-ui-web-customer-widget.js'></script>
+    <script src='identityServices.js'></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Raleway:300,400" rel="stylesheet" type="text/css">
+    <link href='themes/build/theme.css' rel="stylesheet" type="text/css">
+    <link  href='node_modules/layer-ui-web/themes/build/bubbles-compact.css' rel='stylesheet' />
+    <!--<link rel="import" href="src/templates/layer-message-item.html">-->
+
+    <script>
+      var client = new layer.Client({
+        appId: 'layer:///apps/staging/1d980162-c5ee-11e5-bb69-e08c0300541f'
+      });
+      client.on('challenge', function(evt) {
+        window.layerSample.getIdentityToken(client.appId, '2011', evt.nonce, evt.callback);
+      });
+      client.connect();
+      layerUI.init({
+        appId: 'layer:///apps/staging/1d980162-c5ee-11e5-bb69-e08c0300541f',
+      });
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var widget = document.querySelector('layer-customer-multiple-conversation');
+        widget.welcomeNodes = document.querySelector('#layerWelcomeNote');
+        widget.composeButtons = [
+          document.createElement('layer-file-upload-button')
+        ];
+      });
+    </script>
+  </head>
+  <body>
+    <layer-customer-multiple-conversation
+      new-participant='3'
+      new-metadata='{"conversationName": "", "resolved": "false"}'
+      chat-title-callback="function(conversation, callback) {callback('A Title');}"
+    ></layer-customer-multiple-conversation>
+    <div style='display:none'>
+      <div id='layerWelcomeNote'>
+        <p>Hello there, how would you like to have someone to talk to?</p>
+        <p>They may try to sell you something, but it will still be an enjoyable conversation</p>
+        <p>If you don't want to buy anything, we'll still talk to you.  So give us a Message, and we'll give you good memories</p>
+      </div>
+    </div>
+  </body>
+</html>
