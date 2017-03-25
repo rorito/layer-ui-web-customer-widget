@@ -21,17 +21,6 @@ registerComponent('layer-customer-list', {
   properties: {
 
     /**
-     * This widget requires a `client` property; this is passed in by the controller.
-     *
-     * @property {layer.Client} client
-     */
-    client: {
-      set() {
-        this.nodes.listComposer.client = this.client;
-      }
-    },
-
-    /**
      * This widget requires a `query` property; this is generated and passed in by the controller.
      *
      * @property {layer.ConversationQuery} query

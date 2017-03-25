@@ -29,7 +29,16 @@ module.exports = function (grunt) {
             src: 'lib-es5/index.js'
           }
         ]
-      }
+      },
+      debug: {
+        files: [
+          {
+            dest: 'test/layer-ui-web-customer-widget-test.js',
+            src: 'lib-es5/index.js'
+          }
+        ],
+        options: {}
+      },
     },
     webcomponents: {
       debug: {
@@ -69,7 +78,23 @@ module.exports = function (grunt) {
         }
       }
     },
-
+    'generate-tests': {
+      debug: {
+        files: [
+          {
+            src: ['src/**/test.js', 'src/**/tests/**.js']
+          }
+        ],
+      }
+    },
+    connect: {
+      develop: {
+        options: {
+          base: "",
+          port: 8005
+        }
+      }
+    },
     jsduck: {
       build: {
         src: ["lib-es5/**/*.js", "node_modules/layer-websdk/lib/**/*.js", "node_modules/layer-ui-web/lib-es5/**/*.js"],
@@ -326,15 +351,16 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-jsduck');
-  grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-notify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-connect');
 
-  grunt.registerTask('coverage', ['webcomponents', 'browserify:coverage'/*, "generate-tests"*/]);
+
+  grunt.registerTask('coverage', ['webcomponents', 'browserify:coverage', "generate-tests"]);
   grunt.registerTask('theme', ['less']),
 
   grunt.registerTask('docs', ['debug', 'jsduck']);
-  grunt.registerTask('debug', ['version', 'webcomponents', 'browserify'/*, "generate-tests"*/]);
+  grunt.registerTask('debug', ['version', 'webcomponents', 'browserify', "generate-tests"]);
   grunt.registerTask('build', ['version', 'webcomponents', 'browserify', 'uglify', 'theme', 'cssmin']);
 
   grunt.registerTask('default', ['build', 'docs']);

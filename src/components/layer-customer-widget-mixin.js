@@ -96,14 +96,7 @@ module.exports = {
         // Open the chat tab if/when we have a fully created conversation;
         // else use the welcome tab
         if (value) {
-          if (!value.isNew()) {
-            this.nodes.chatTab.isOpen = true;
-          } else {
-            this.nodes.welcomeTab.isOpen = true;
-            value.once('conversations:sent', () => {
-              this.nodes.chatTab.isOpen = true;
-            });
-          }
+          this.nodes.chatTab.isOpen = true;
         }
       },
     },
@@ -203,7 +196,7 @@ module.exports = {
         this.classList[value ? 'add' : 'remove']('layer-open-dialog');
         this.nodes.floatingButton.isOpen = value;
 
-        this.nodes.chatTab.isDialogShowing = false;
+        this.nodes.chatTab.isDialogShowing = value;
         if (this.nodes.listTab) this.nodes.listTab.isDialogShowing = value;
         this.nodes.welcomeTab.isDialogShowing = value;
       },
@@ -267,13 +260,12 @@ module.exports = {
      * That includes setting up a query and its event handlers.
      */
     onAfterCreate() {
-      this.nodes.welcomeTab.client = this.client;
-      this.nodes.chatTab.client = this.client;
-      if (this.nodes.listTab) this.nodes.listTab.client = this.client;
-      this.query = this.client.createQuery({
-        model: Query.Conversation,
-        paginationWindow: 20,
-      });
+      if (!this.query) {
+        this.query = this.client.createQuery({
+          model: Query.Conversation,
+          paginationWindow: 20,
+        });
+      }
       this.query.on('change', this._handleQueryChange, this);
 
       if (this.nodes.listTab) this.nodes.listTab.query = this.query;

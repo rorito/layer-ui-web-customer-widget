@@ -17,17 +17,6 @@ registerComponent('layer-customer-welcome', {
   properties: {
 
     /**
-     * The view needs a layer.Client; this is provided by the controller.
-     *
-     * @property {layer.Client} client
-     */
-    client: {
-      set() {
-        this.nodes.welcomeComposer.client = this.client;
-      }
-    },
-
-    /**
      * Any HTML elements provided here will be rendered on top of the view.
      *
      * This is presumed to be some sort of Welcome message.
