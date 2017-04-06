@@ -62,8 +62,8 @@ registerComponent('layer-customer-list', {
      * @property {layer.Conversation} resolvedTest.conversation
      */
     resolvedTest: {
-      set(value) {
-        if (value && this.filterMode === 'open') {
+      set(fn) {
+        if (fn && this.filterMode === 'open') {
           this.nodes.listPanel.filter = conversation => !this.properties.resolvedTest(conversation);
         } else {
           this.nodes.listPanel.filter = null;
@@ -179,7 +179,7 @@ registerComponent('layer-customer-list', {
      */
     onRenderItem(widget) {
       const conversation = widget.item;
-      const isResolved = this.resolvedTest(conversation);
+      const isResolved = this.resolvedTest ? this.resolvedTest(conversation) : false;
       const resolvedNode = widget.querySelector('.layer-conversation-resolved');
       if (!isResolved && resolvedNode) {
         resolvedNode.parentNode.removeChild(resolvedNode);

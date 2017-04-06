@@ -21,6 +21,12 @@ registerComponent('layer-customer-chat-button', {
   mixins: [],
   events: [],
   properties: {
+    openHTML: {
+      value: '\uf00d',
+    },
+    closedHTML: {
+      value: '\uf0e5',
+    },
     /**
      * isOpen property inidicates if the dialog is open or closed.
      *
@@ -35,7 +41,7 @@ registerComponent('layer-customer-chat-button', {
       set(value) {
         this.classList[value ? 'add' : 'remove']('floating-chat-icon-open');
         this.classList[value ? 'remove' : 'add']('floating-chat-icon-closed');
-        this.innerHTML = value ? '\uf00d' : '\uf0e5';
+        this.innerHTML = value ? this.openHTML : this.closedHTML;
       }
     },
 

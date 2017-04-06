@@ -14,7 +14,7 @@
         appId: 'layer:///apps/staging/1d980162-c5ee-11e5-bb69-e08c0300541f'
       });
       client.on('challenge', function(evt) {
-        window.layerSample.getIdentityToken(client.appId, '2010', evt.nonce, evt.callback);
+        window.layerSample.getIdentityToken(client.appId, 'michael@layer.com', 'mkantor1', evt.nonce, evt.callback);
       });
       client.connect();
       layerUI.init({

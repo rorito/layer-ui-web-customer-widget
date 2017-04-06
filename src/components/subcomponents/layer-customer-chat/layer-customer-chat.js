@@ -53,10 +53,10 @@ registerComponent('layer-customer-chat', {
     conversation: {
       set(newConversation, oldConversation) {
         this.nodes.conversationPanel.conversation = newConversation;
-        this._updateTitle(newConversation);
+        this._updateTitle();
 
         if (oldConversation) oldConversation.off(null, null, this);
-        if (newConversation) newConversation.on('conversations:change', this._updateTitle.bind(this, newConversation), this);
+        if (newConversation) newConversation.on('conversations:change', this._updateTitle, this);
       },
     },
 
@@ -181,7 +181,7 @@ registerComponent('layer-customer-chat', {
 
     // Setup initial values and event handlers
     onCreate() {
-      this.nodes.listBackButton.addEventListener('click', this._handleBackClick.bind(this));
+      this.nodes.backButton.addEventListener('click', this._handleBackClick.bind(this));
       this.nodes.conversationPanel.getMessageDeleteEnabled = function() {return false;};
       this.nodes.conversationPanel.disable = true;
     },
@@ -202,15 +202,13 @@ registerComponent('layer-customer-chat', {
      * @method _updateTitle
      * @private
      */
-    _updateTitle(conversation) {
-      if (this.titleCallback) {
-        if (conversation) {
-          this.titleCallback(conversation, (title) => {
-            this.title = title;
-          });
-        } else {
-          this.title = "";
-        }
+    _updateTitle() {
+      if (this.titleCallback && this.conversation) {
+        this.titleCallback(this.conversation, (title) => {
+          this.title = title;
+        });
+      } else {
+        this.title = "";
       }
     },
 
