@@ -734,6 +734,12 @@ var _layerUiWeb = require('layer-ui-web');
   mixins: [],
   events: [],
   properties: {
+    openHTML: {
+      value: '\uF00D'
+    },
+    closedHTML: {
+      value: '\uF0E5'
+    },
     /**
      * isOpen property inidicates if the dialog is open or closed.
      *
@@ -748,7 +754,7 @@ var _layerUiWeb = require('layer-ui-web');
       set: function set(value) {
         this.classList[value ? 'add' : 'remove']('floating-chat-icon-open');
         this.classList[value ? 'remove' : 'add']('floating-chat-icon-closed');
-        this.innerHTML = value ? '\uF00D' : '\uF0E5';
+        this.innerHTML = value ? this.openHTML : this.closedHTML;
       }
     },
 
@@ -854,10 +860,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     conversation: {
       set: function set(newConversation, oldConversation) {
         this.nodes.conversationPanel.conversation = newConversation;
-        this._updateTitle(newConversation);
+        this._updateTitle();
 
         if (oldConversation) oldConversation.off(null, null, this);
-        if (newConversation) newConversation.on('conversations:change', this._updateTitle.bind(this, newConversation), this);
+        if (newConversation) newConversation.on('conversations:change', this._updateTitle, this);
       }
     },
 
@@ -984,7 +990,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
     // Setup initial values and event handlers
     onCreate: function onCreate() {
-      this.nodes.listBackButton.addEventListener('click', this._handleBackClick.bind(this));
+      this.nodes.backButton.addEventListener('click', this._handleBackClick.bind(this));
       this.nodes.conversationPanel.getMessageDeleteEnabled = function () {
         return false;
       };
@@ -1009,17 +1015,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * @method _updateTitle
      * @private
      */
-    _updateTitle: function _updateTitle(conversation) {
+    _updateTitle: function _updateTitle() {
       var _this = this;
 
-      if (this.titleCallback) {
-        if (conversation) {
-          this.titleCallback(conversation, function (title) {
-            _this.title = title;
-          });
-        } else {
-          this.title = "";
-        }
+      if (this.titleCallback && this.conversation) {
+        this.titleCallback(this.conversation, function (title) {
+          _this.title = title;
+        });
+      } else {
+        this.title = "";
       }
     },
 
@@ -1037,7 +1041,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 (function () {
   var layerUI = require('layer-ui-web');
-  layerUI.buildAndRegisterTemplate("layer-customer-chat", "<div class='layer-chat-title layer-dialog-title' layer-id='chatTitle'><div class='layer-title-buttons'><span class=\"layer-title-button layer-back-button\" layer-id='listBackButton'></span></div><div class='layer-title-text' layer-id='titleText'>Your Conversations</div></div><layer-conversation-panel layer-id='conversationPanel'></layer-conversation-panel>", "");
+  layerUI.buildAndRegisterTemplate("layer-customer-chat", "<div class='layer-chat-title layer-dialog-title' layer-id='chatTitle'><div class='layer-title-buttons'><span class=\"layer-title-button layer-back-button\" layer-id='backButton'></span></div><div class='layer-title-text' layer-id='titleText'>Your Conversations</div></div><layer-conversation-panel layer-id='conversationPanel'></layer-conversation-panel>", "");
   layerUI.buildStyle("layer-customer-chat", "layer-customer-chat {\ndisplay: flex;\nflex-direction: column;\n}\nlayer-customer-chat layer-conversation-panel {\nflex-grow: 1;\n}", "");
 })();
 },{"../../../mixins/tab":9,"layer-ui-web":51,"layer-ui-web/lib-es5/mixins/focus-on-keydown":54}],6:[function(require,module,exports){
@@ -1114,10 +1118,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * @property {layer.Conversation} resolvedTest.conversation
      */
     resolvedTest: {
-      set: function set(value) {
+      set: function set(fn) {
         var _this = this;
 
-        if (value && this.filterMode === 'open') {
+        if (fn && this.filterMode === 'open') {
           this.nodes.listPanel.filter = function (conversation) {
             return !_this.properties.resolvedTest(conversation);
           };
@@ -1240,7 +1244,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      */
     onRenderItem: function onRenderItem(widget) {
       var conversation = widget.item;
-      var isResolved = this.resolvedTest(conversation);
+      var isResolved = this.resolvedTest ? this.resolvedTest(conversation) : false;
       var resolvedNode = widget.querySelector('.layer-conversation-resolved');
       if (!isResolved && resolvedNode) {
         resolvedNode.parentNode.removeChild(resolvedNode);
@@ -2105,10 +2109,10 @@ layerUI.adapters = {
  * @param {HTMLElement} options.handlesMessage.container     The container that this will be rendered within; typically identifies a specific
  *                                                          layerUI.MessageList or layerUI.ConversationItem.
  * @param {Boolean} options.handlesMessage.returns          Return true to signal that this handler accepts this Message.
- * @param {String} tagName                                  Dom node to create if this handler accepts the Message.
- * @param {String} label                                    Label to show when we can't render the whole message.
+ * @param {String} options.tagName                          Dom node to create if this handler accepts the Message.
+ * @param {String} options.label                            Label to show when we can't render the whole message.
  *                                                          Typically identifies the type of content to the user.
- * @param {Number} [order=0]                                Some handlers may need to be tested before other handlers to control which one gets
+ * @param {Number} [options.order=0]                        Some handlers may need to be tested before other handlers to control which one gets
  *                                                          selected; Defaults to order=0, this handler is first
  */
 layerUI.registerMessageHandler = function registerMessageHandler(options) {
@@ -2399,9 +2403,10 @@ layerUI.addAdapter = function (name, adapter) {
  * @method init
  * @static
  * @param {Object} settings     list any settings you want changed from their default values.
+ * @param {Object} mixins       hash of component names with mixins to add to the component
  */
 layerUI.init = function init(settings) {
-  // No-op -- see base-index.js
+  // No-op -- see layer-ui.js
 };
 
 /**
@@ -2409,7 +2414,7 @@ layerUI.init = function init(settings) {
  *
  * @type {String}
  */
-layerUI.version = '0.10.1';
+layerUI.version = '1.0.0';
 
 var clientVersions = _layerWebsdk2.default.Client.version.split('.').map(function (value) {
   return Number(value);
@@ -2483,8 +2488,8 @@ module.exports = layerUI;
                                                                                                                                                                                                      * A component defined this way can be registered as follows:
                                                                                                                                                                                                      *
                                                                                                                                                                                                      * ```
-                                                                                                                                                                                                     * var layerUI = require('websdk-ui-webcomponents');
-                                                                                                                                                                                                     * layerUI.registerComponent(componentDefinition);
+                                                                                                                                                                                                     * var layerUI = require('layer-ui-web');
+                                                                                                                                                                                                     * layerUI.registerComponent(tagName, componentDefinition);
                                                                                                                                                                                                      * ```
                                                                                                                                                                                                      *
                                                                                                                                                                                                      * ### Properties
@@ -2492,7 +2497,7 @@ module.exports = layerUI;
                                                                                                                                                                                                      * A property definition can be as simple as:
                                                                                                                                                                                                      *
                                                                                                                                                                                                      * ```
-                                                                                                                                                                                                     * layerUI.registerComponent({
+                                                                                                                                                                                                     * layerUI.registerComponent(tagName, {
                                                                                                                                                                                                      *    properties: {
                                                                                                                                                                                                      *       prop1: {}
                                                                                                                                                                                                      *    }
@@ -2545,7 +2550,7 @@ module.exports = layerUI;
                                                                                                                                                                                                      * Example:
                                                                                                                                                                                                      *
                                                                                                                                                                                                      * ```
-                                                                                                                                                                                                     * layerUI.registerComponent({
+                                                                                                                                                                                                     * layerUI.registerComponent(tagName, {
                                                                                                                                                                                                      *    events: ['layer-something-happening', 'layer-nothing-happening', 'your-custom-event']
                                                                                                                                                                                                      * });
                                                                                                                                                                                                      * ```
@@ -2629,7 +2634,7 @@ module.exports = layerUI;
                                                                                                                                                                                                      * });
                                                                                                                                                                                                      *
                                                                                                                                                                                                      * // Create a Component with prop1, prop2, method1 and method2
-                                                                                                                                                                                                     * registerComponent(componentDefinition);
+                                                                                                                                                                                                     * registerComponent(tagName, componentDefinition);
                                                                                                                                                                                                      * ```
                                                                                                                                                                                                      *
                                                                                                                                                                                                      * An app can modify an existing component by adding custom mixins to it using `layerUI.init()`.  The `mixins` parameter
@@ -2984,6 +2989,9 @@ function setupMixin(classDef, mixin) {
       if (mixin.properties[name].value !== undefined && classDef.properties[name].value === undefined) {
         classDef.properties[name].value = mixin.properties[name].value;
       }
+      if (mixin.properties[name].propagateToChildren !== undefined && classDef.properties[name].propagateToChildren === undefined) {
+        classDef.properties[name].propagateToChildren = mixin.properties[name].propagateToChildren;
+      }
     }
   });
 
@@ -3121,7 +3129,8 @@ function getPropArray(classDef) {
       attributeName: _base2.default.hyphenate(propertyName),
       type: classDef.properties[propertyName].type,
       order: classDef.properties[propertyName].order,
-      noGetterFromSetter: classDef.properties[propertyName].noGetterFromSetter
+      noGetterFromSetter: classDef.properties[propertyName].noGetterFromSetter,
+      propagateToChildren: classDef.properties[propertyName].propagateToChildren
     };
   }).sort(function (a, b) {
     if (a.order !== undefined && b.order !== undefined) {
@@ -3223,6 +3232,13 @@ function setupProperty(classDef, prop, propertyDefHash) {
         Object.keys(this.nodes).forEach(function (nodeName) {
           _this2.nodes[nodeName][name] = value;
         });
+        if (this._isList) {
+          var childNodes = this.childNodes;
+          var i = void 0;
+          for (i = 0; i < childNodes.length; i++) {
+            if (childNodes[i]._isListItem) childNodes[i][name] = value;
+          }
+        }
       }
     }
   };
@@ -3402,7 +3418,21 @@ function _registerComponent(tagName) {
           // Force the setter to trigger; this will force the value to be converted to the correct type,
           // and call all setters
           _this4[prop.propertyName] = value;
+
+          if (prop.propagateToChildren) {
+            Object.keys(_this4.nodes).forEach(function (nodeName) {
+              return _this4.nodes[nodeName][prop.propertyName] = value;
+            });
+          }
         }
+
+        // If there is no value, but the parent component has the same property name, presume it to also be
+        // propagateToChildren, and copy its value; useful for allowing list-items to automatically grab
+        // all parent propagateToChildren properties.
+        else if (prop.propagateToChildren && _this4.parentComponent) {
+            var parentValue = _this4.parentComponent.properties[prop.propertyName];
+            if (parentValue) _this4[prop.propertyName] = parentValue;
+          }
       });
       this.properties._internalState.inPropInit = [];
       this.onAfterCreate();
@@ -3447,6 +3477,7 @@ function _registerComponent(tagName) {
    *
    * This calls `onAttach`.
    * @method
+   * @private
    */
   classDef.attachedCallback = {
     value: function onAttach() {
@@ -3465,7 +3496,7 @@ function _registerComponent(tagName) {
    * for this Object. So we delete the property `appId` from the object so that the getter/setter up the prototype chain can
    * once again function.
    *
-   * @method
+   * @method _initializeProperties
    * @private
    * @param {Object} prop   A property def whose value should be stashed
    */
@@ -3483,6 +3514,7 @@ function _registerComponent(tagName) {
        * exists, they may still need to be setup.
        *
        * @property {Object} properties
+       * @protected
        */
       if (this.properties && this.properties._internalState) return;
       if (!this.properties) this.properties = {};
@@ -3589,7 +3621,7 @@ function _registerComponent(tagName) {
    * Any time a widget's attribute has changed, copy that change over to the properties where it can trigger the property setter.
    *
    * @method attributeChangedCallback
-   * @ignore
+   * @private
    * @param {String} name      Attribute name
    * @param {Mixed} oldValue   Original value of the attribute
    * @param {Mixed} newValue   Newly assigned value of the attribute
@@ -3670,6 +3702,7 @@ registerComponent.MODES = {
 };
 
 var standardClassProperties = {
+  parentComponent: {},
   mainComponent: {
     get: function get() {
       if (this.properties._isMainComponent) return this;
@@ -3694,30 +3727,47 @@ var standardClassMethods = {
    * you may need to call this directly.
    *
    * @method setupDomNodes
+   * @protected
    */
   setupDomNodes: function setupDomNodes() {
     var _this7 = this;
 
     this.nodes = {};
-    var findNodesWithin = function findNodesWithin(node) {
-      var children = node.childNodes;
-      for (var i = 0; i < children.length; i++) {
-        var innerNode = children[i];
-        var layerId = innerNode.getAttribute && innerNode.getAttribute('layer-id');
-        if (layerId) _this7.nodes[layerId] = innerNode;
 
-        var isLUIComponent = Boolean(innerNode instanceof HTMLElement && _base2.default.components[innerNode.tagName.toLowerCase()]);
+    this._findNodesWithin(this, function (node, isComponent) {
+      var layerId = node.getAttribute && node.getAttribute('layer-id');
+      if (layerId) _this7.nodes[layerId] = node;
 
-        // If its not a custom webcomponent with children that it manages and owns, iterate on it
-        if (!isLUIComponent) {
-          findNodesWithin(innerNode);
-        } else {
-          innerNode.properties.parentComponent = _this7;
-        }
+      if (isComponent) {
+        if (!node.properties) node.properties = {};
+        node.properties.parentComponent = _this7;
       }
-    };
+    });
+  },
 
-    findNodesWithin(this);
+  /**
+   * Iterate over all child nodes generated by the template; skip all subcomponent's child nodes.
+   *
+   * @method _findNodesWithin
+   * @private
+   * @param {HTMLElement} node    Node whose subtree should be called with the callback
+   * @param {Function} callback   Function to call on each node in the tree
+   * @param {HTMLElement} callback.node   Node that the callback is called on
+   * @param {Boolean} isComponent         Is the node a Component from this framework
+   */
+  _findNodesWithin: function _findNodesWithin(node, callback) {
+    var children = node.childNodes;
+    for (var i = 0; i < children.length; i++) {
+      var innerNode = children[i];
+
+      var isLUIComponent = Boolean(innerNode instanceof HTMLElement && _base2.default.components[innerNode.tagName.toLowerCase()]);
+      callback(innerNode, isLUIComponent);
+
+      // If its not a custom webcomponent with children that it manages and owns, iterate on it
+      if (!isLUIComponent) {
+        this._findNodesWithin(innerNode, callback);
+      }
+    }
   },
 
   /**
@@ -3740,6 +3790,7 @@ var standardClassMethods = {
    * ```
    *
    * @method getTemplate
+   * @protected
    * @returns {HTMLTemplateElement}
    */
   getTemplate: function getTemplate() {
@@ -3786,6 +3837,7 @@ var standardClassMethods = {
    * ```
    *
    * @method trigger
+   * @protected
    * @param {String} eventName
    * @param {Object} detail
    * @returns {Boolean} True if process should continue with its actions, false if application has canceled
@@ -3807,6 +3859,7 @@ var standardClassMethods = {
    * This basically just calls this.querySelectorAll and then returns a proper Array rather than a NodeList.
    *
    * @method querySelectorAllArray
+   * @protected
    * @param {String} XPath selector
    * @returns {HTMLElement[]}
    */
@@ -3867,7 +3920,11 @@ var standardClassMethods = {
    *
    * @method onRerender
    */
-  onRerender: function onRender() {},
+  onRerender: {
+    conditional: function onCanRerender() {
+      return this.properties._internalState.onAfterCreateCalled;
+    }
+  },
 
   /**
    * MIXIN HOOK: Each time a Component is inserted into a Document, its onAttach methods will be called.
@@ -3904,8 +3961,8 @@ var standardClassMethods = {
   onDetach: {
     mode: registerComponent.MODES.AFTER,
     value: function onDetach() {
-      this.properties.parentComponent = null;
       this.properties.mainComponent = null;
+      this.properties.parentComponent = null;
       this.properties._internalState.onDetachCalled = true;
     }
   },
@@ -3934,8 +3991,22 @@ var standardClassMethods = {
   }
 };
 
+function registerMessageComponent(tagName, componentDefinition) {
+  var handlesMessage = componentDefinition.methods.handlesMessage;
+  var label = componentDefinition.properties.label.value;
+  var order = componentDefinition.properties.order;
+  registerComponent(tagName, componentDefinition);
+  _base2.default.registerMessageHandler({
+    handlesMessage: handlesMessage,
+    tagName: tagName,
+    label: label,
+    order: order
+  });
+}
+
 module.exports = {
   registerComponent: registerComponent,
+  registerMessageComponent: registerMessageComponent,
   registerAll: registerAll,
   unregisterComponent: unregisterComponent
 };
@@ -5856,6 +5927,75 @@ if ('default' in Notify) Notify = Notify.default; // Annoying difference between
     },
 
     /**
+     * Modify the window titlebar to notify users of new messages
+     *
+     * NOTE: Rather than always show this indicator whenever there are unread messages, we only show
+     * this indicator if the most recently received message is unread.  Further, this will not show
+     * after reloading the app; its assumed that the user who reloads your app has seen what they want
+     * to see, and that the purpose of this indicator is to flag new stuff that should bring them back to your window.
+     *
+     * See layerUI.components.Notifier.notifyCharacterForTitlebar for more controls.
+     *
+     * @property {String} notifyInTitleBar
+     */
+    notifyInTitlebar: {
+      type: Boolean,
+      value: true
+    },
+
+    /**
+     * Set a character or string to prefix your window titlebar with when there are unread messages.
+     *
+     * This property is used if layerUI.components.Notifier.notifyInTitlebar is enabled.
+     *
+     * @property {String} notifyCharacterForTitlebar
+     */
+    notifyCharacterForTitlebar: {
+      value: '⬤'
+    },
+
+    /**
+     * Set to true to force the notifier to show the unread badge in the titlebar, or set to false to force it to remove this.
+     *
+     * Use this at runtime to modify the badging behavior, use layerUI.components.Notifier.notifyInTitlebar to enable/disable
+     * badging.  Treat this as state rather than setting.
+     *
+     * If you want to just set the badge until the message is marked as read, use layerUI.components.Notifier.flagTitlebarForMessage
+     *
+     * @property {Boolean} flagTitlebar
+     */
+    flagTitlebar: {
+      type: Boolean,
+      value: false,
+      set: function set(value) {
+        if (value) {
+          if (document.title.indexOf(this.notifyCharacterForTitlebar) !== 0) {
+            document.title = this.notifyCharacterForTitlebar + ' ' + document.title;
+          }
+        } else if (document.title.indexOf(this.notifyCharacterForTitlebar) === 0) {
+          document.title = document.title.substring(this.notifyCharacterForTitlebar.length + 1);
+        }
+      }
+    },
+
+    /**
+     * Tells the notifier to put a badge in the titlebar for the specified message if its unread, and clear it once read.
+     *
+     * @property {layer.Message} flagTitlebarForMessage
+     */
+    flagTitlebarForMessage: {
+      set: function set(message, oldMessage) {
+        if (oldMessage) oldMessage.off(null, this._handleTitlebarMessageChange, this);
+        if (!message || message.isRead) {
+          this.flagTitlebar = false;
+        } else {
+          this.flagTitlebar = true;
+          message.on('messages:change', this._handleTitlebarMessageChange, this);
+        }
+      }
+    },
+
+    /**
      * If the user hasn't granted priveledges to use desktop notifications, they won't be shown.
      *
      * This is a state property set by this component if/when the user/browser has approved the necessary permissions.
@@ -5958,6 +6098,14 @@ if ('default' in Notify) Notify = Notify.default; // Annoying difference between
       var isBackground = (0, _base.isInBackground)();
       var type = isBackground ? this.notifyInBackground : this.notifyInForeground;
       var message = evt.message;
+
+      // Note: desktopNotify does a message.off() call that deletes all event handlers associated with this widget;
+      // so make sure it gets called AFTER titlebarNotify which has a more precise off() call
+      // TODO: Fix this.
+      if (this.notifyInTitlebar && isBackground) {
+        this.flagTitlebarForMessage = message;
+      }
+
       if (type && type !== 'none') {
         if (this.trigger('layer-message-notification', { item: message, type: type, isBackground: isBackground })) {
           if (type === 'desktop' && this.properties.userEnabledDesktopNotifications) {
@@ -5966,6 +6114,21 @@ if ('default' in Notify) Notify = Notify.default; // Annoying difference between
             this.toastNotify(evt.message);
           }
         }
+      }
+    },
+
+
+    /**
+     * Whenever the flagTitlebarForMessage message changes, check if its now read.
+     *
+     * @method _handleTitlebarMessageChange
+     * @private
+     */
+    _handleTitlebarMessageChange: function _handleTitlebarMessageChange() {
+      var message = this.flagTitlebarForMessage;
+      if (message && message.isRead) {
+        this.flagTitlebar = false;
+        this.flagTitlebarForMessage = null;
       }
     },
 
@@ -6055,7 +6218,7 @@ if ('default' in Notify) Notify = Notify.default; // Annoying difference between
         this.classList.add(handler.tagName);
 
         var messageHandler = document.createElement(handler.tagName);
-        messageHandler.parentContainer = this;
+        messageHandler.parentComponent = this;
         messageHandler.message = message;
 
         messageHandler.classList.add('layer-message-item-placeholder');
@@ -6626,7 +6789,7 @@ module.exports = {
       var _this = this;
 
       var messageHandler = document.createElement(this._contentTag);
-      messageHandler.parentContainer = this;
+      messageHandler.parentComponent = this;
       messageHandler.message = this.item;
       this.nodes.messageHandler = messageHandler;
 
@@ -7706,8 +7869,10 @@ var TAB = 9;
     client: {
       set: function set(value) {
         if (!this.nodes.input) console.error('NO INPUT FOR COMPOSER');
-        this.properties.typingListener = this.properties.client.createTypingListener(this.nodes.input);
-        this._setTypingListenerConversation();
+        if (value) {
+          this.properties.typingListener = this.properties.client.createTypingListener(this.nodes.input);
+          this._setTypingListenerConversation();
+        }
       }
     },
 
@@ -7926,7 +8091,7 @@ var TAB = 9;
        */
       var textPart = parts.filter(function (part) {
         return part.mimeType === 'text/plain';
-      });
+      })[0];
       var notification = {
         text: textPart ? textPart.body : 'File received',
         title: 'New Message from ' + this.client.user.displayName
@@ -8033,7 +8198,7 @@ var TAB = 9;
 (function () {
   var layerUI = require('../../../base');
   layerUI.buildAndRegisterTemplate("layer-composer", "<layer-compose-button-panel layer-id='buttonPanelLeft' class='layer-button-panel-left'></layer-compose-button-panel><div class='layer-compose-edit-panel' layer-id='editPanel'><div class='hidden-resizer' layer-id='resizer'>&nbsp;&nbsp;</div><div class='hidden-lineheighter' layer-id='lineHeighter'>&nbsp;</div><textarea rows=\"1\" autoFocus layer-id='input'></textarea></div><layer-compose-button-panel layer-id='buttonPanel' class='layer-button-panel-right'></layer-compose-button-panel>", "");
-  layerUI.buildStyle("layer-composer", "layer-composer {\ndisplay: flex;\nflex-direction: row;\n}\nlayer-composer .layer-compose-edit-panel {\nposition: relative;\nflex-grow: 1;\nwidth: 100px; \npadding: 1px 0px;\n}\nlayer-composer textarea, layer-composer .hidden-resizer, layer-composer .hidden-lineheighter {\nline-height: 1.2em;\nmin-height: 20px;\noverflow :hidden;\nborder-width: 0px;\nfont-size: 1em;\npadding: 4px 8px;\nbox-sizing: border-box;\nfont-family: \"Open Sans\", \"Helvetica Neue\", Helvetica, Arial, \"Lucida Grande\", sans-serif;\nmargin: 0px;\n}\nlayer-composer textarea {\nresize: none;\noutline: none;\ncolor: rgba(0,0,0,0.87);\nposition: absolute;\nz-index: 2;\ntop: 0px;\nleft: 0px;\nwidth: 100%;\nheight: 100%;\noverflow-y: auto;\nwhite-space: pre-wrap;\nword-wrap: break-word;\n}\nlayer-composer.layer-composer-one-line-of-text textarea {\noverflow-y: hidden;\n}\nlayer-composer .hidden-resizer {\nopacity: 0.1;\nwhite-space: pre-wrap;\nword-wrap: break-word;\nmax-height: 250px;\n}\nlayer-composer .layer-compose-edit-panel .hidden-lineheighter {\nopacity: 0.1;\nwhite-space: nowrap;\nposition: absolute;\nleft: -10000px;\n}", "");
+  layerUI.buildStyle("layer-composer", "layer-composer {\ndisplay: flex;\nflex-direction: row;\n}\nlayer-composer .layer-compose-edit-panel {\nposition: relative;\nflex-grow: 1;\nwidth: 100px; \npadding: 1px 0px;\n}\nlayer-composer textarea, layer-composer .hidden-resizer, layer-composer .hidden-lineheighter {\nline-height: 1.2em;\nmin-height: 20px;\noverflow :hidden;\nborder-width: 0px;\nfont-size: 1em;\npadding: 4px 8px;\nbox-sizing: border-box;\nfont-family: \"Open Sans\", \"Helvetica Neue\", Helvetica, Arial, \"Lucida Grande\", sans-serif;\nmargin: 0px;\n}\nlayer-composer textarea {\nresize: none;\noutline: none;\ncolor: rgba(0,0,0,0.87);\nposition: absolute;\nz-index: 2;\ntop: 0px;\nleft: 0px;\nwidth: 100%;\nheight: 100%;\noverflow-y: auto;\nwhite-space: pre-wrap;\nword-wrap: break-word;\n}\nlayer-composer.layer-composer-one-line-of-text textarea {\noverflow-y: hidden;\n}\nlayer-composer .hidden-resizer {\nopacity: 0.1;\nwhite-space: pre-wrap;\nword-wrap: break-word;\nmax-height: 250px;\n}\nlayer-composer .layer-compose-edit-panel .hidden-lineheighter {\ntop: 0px;\nopacity: 0.1;\nwhite-space: nowrap;\nposition: absolute;\nright: 10000px;\n}", "");
 })();
 },{"../../../base":14,"../../../components/component":15,"../layer-compose-button-panel/layer-compose-button-panel":30,"layer-websdk":79}],32:[function(require,module,exports){
 /**
@@ -8135,6 +8300,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
         var conversation = this.item;
         var message = conversation ? conversation.lastMessage : null;
         this.innerHTML = '';
+        if (message && message.id == "layer:///messages/66320b84-ad65-4c73-8dc8-4df4566e2137") debugger;
         if (message) {
           var handler = _base2.default.getHandler(message, this);
           if (handler) {
@@ -8142,7 +8308,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
             // Create the element specified by the handler and add it as a childNode.
             if (!this.canFullyRenderLastMessage || this.canFullyRenderLastMessage(message)) {
               var messageHandler = document.createElement(handler.tagName);
-              messageHandler.parentContainer = this;
+              messageHandler.parentComponent = this;
               messageHandler.message = message;
               this.appendChild(messageHandler);
             } else if (handler.label) {
@@ -8504,29 +8670,29 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 })();
 },{"../../../base":14,"../../../components/component":15,"layer-websdk":79}],36:[function(require,module,exports){
 /**
-     * The Layer file upload button widget allows users to select a File to send.
-     *
-     * Its assumed that this button will be used within the layerUI.components.subcomponents.ComposeButtonPanel:
-     *
-     * ```
-     * myConversationPanel.composeButtons = [
-     *    document.createElement('layer-file-upload-button')
-     * ];
-     * ```
-     *
-     * If using it elsewhere, note that it triggers a `layer-file-selected` event that you would listen for to do your own processing.
-     * If using it in the ComposeButtonPanel, this event will be received by the Composer and will not propagate any further:
-     *
-     * ```
-     * document.body.addEventListener('layer-file-selected', function(evt) {
-     *    var messageParts = evt.custom.parts;
-     *    conversation.createMessage({ parts: messageParts }).send();
-     * }
-     * ```
-     *
-     * @class layerUI.components.subcomponents.FileUploadButton
-     * @extends layerUI.components.Component
-     */'use strict';
+ * The Layer file upload button widget allows users to select a File to send.
+ *
+ * Its assumed that this button will be used within the layerUI.components.subcomponents.ComposeButtonPanel:
+ *
+ * ```
+ * myConversationPanel.composeButtons = [
+ *    document.createElement('layer-file-upload-button')
+ * ];
+ * ```
+ *
+ * If using it elsewhere, note that it triggers a `layer-file-selected` event that you would listen for to do your own processing.
+ * If using it in the ComposeButtonPanel, this event will be received by the Composer and will not propagate any further:
+ *
+ * ```
+ * document.body.addEventListener('layer-file-selected', function(evt) {
+ *    var messageParts = evt.custom.parts;
+ *    conversation.createMessage({ parts: messageParts }).send();
+ * }
+ * ```
+ *
+ * @class layerUI.components.subcomponents.FileUploadButton
+ * @extends layerUI.components.Component
+ */'use strict';
 
 var _layerWebsdk = require('layer-websdk');
 
@@ -8536,11 +8702,17 @@ var _base = require('../../../base');
 
 var _base2 = _interopRequireDefault(_base);
 
+var _mainComponent = require('../../../mixins/main-component');
+
+var _mainComponent2 = _interopRequireDefault(_mainComponent);
+
 var _component = require('../../../components/component');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+
 (0, _component.registerComponent)('layer-file-upload-button', {
+  mixins: [_mainComponent2.default],
   properties: {},
   methods: {
 
@@ -8599,15 +8771,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       });
     }
   }
-}); 
-
+});
 
 (function () {
   var layerUI = require('../../../base');
   layerUI.buildAndRegisterTemplate("layer-file-upload-button", "<label layer-id='label'>+</label><input layer-id='input' type='file'></input>", "");
   layerUI.buildStyle("layer-file-upload-button", "layer-file-upload-button {\ncursor: pointer;\ndisplay: flex;\nflex-direction: column;\njustify-content: center;\n}\nlayer-file-upload-button input {\nwidth: 0.1px;\nheight: 0.1px;\nopacity: 0;\noverflow: hidden;\nposition: absolute;\nz-index: -1;\n}\nlayer-file-upload-button label {\ndisplay: block;\npointer-events: none;\ntext-align: center;\n}", "");
 })();
-},{"../../../base":14,"../../../components/component":15,"layer-websdk":79}],37:[function(require,module,exports){
+},{"../../../base":14,"../../../components/component":15,"../../../mixins/main-component":60,"layer-websdk":79}],37:[function(require,module,exports){
 /**
  * The Layer Message Status widget renders a Message's sent/delivered/read status.
  *
@@ -8777,6 +8948,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      *
      * @class layerUI.components.subcomponents.Presence
      * @extends layerUI.components.Component
+     * @mixin layerUI.mixins.MainComponent
      */'use strict';
 
 var _layerWebsdk = require('layer-websdk');
@@ -9128,8 +9300,6 @@ require('blueimp-load-image/js/load-image-exif');
 
 var _base = require('../../../base');
 
-var _base2 = _interopRequireDefault(_base);
-
 var _component = require('../../../components/component');
 
 var _sizing = require('../../../utils/sizing');
@@ -9143,9 +9313,13 @@ var _messageHandler2 = _interopRequireDefault(_messageHandler);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 
-(0, _component.registerComponent)('layer-message-image', {
+(0, _component.registerMessageComponent)('layer-message-image', {
   mixins: [_messageHandler2.default],
   properties: {
+    label: {
+      // TODO: Remove font awsome css classes!
+      value: '<i class="fa fa-file-image-o layer-image-message-icon" aria-hidden="true"></i> Image message'
+    },
 
     /**
      * The Message property provides the MessageParts we are going to render.
@@ -9184,12 +9358,29 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
             this.properties.image.on('content-loaded', this.onRender, this);
           }
       }
-    },
-
-    parentContainer: {}
-
+    }
   },
   methods: {
+    handlesMessage: function handlesMessage(message) {
+      // Get the Image Parts
+      var imageParts = message.parts.filter(function (part) {
+        return ['image/png', 'image/gif', 'image/jpeg'].indexOf(part.mimeType) !== -1;
+      }).length;
+
+      // Get the Preview Parts
+      var previewParts = message.parts.filter(function (part) {
+        return part.mimeType === 'image/jpeg+preview';
+      }).length;
+
+      // Get the Metadata Parts
+      var metaParts = message.parts.filter(function (part) {
+        return part.mimeType === 'application/json+imageSize';
+      }).length;
+
+      // We handle 1 part images or 3 part images.
+      return message.parts.length === 1 && imageParts || message.parts.length === 3 && imageParts === 1 && previewParts === 1 && metaParts === 1;
+    },
+
 
     /**
      * Constructor.
@@ -9230,7 +9421,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     onRender: function onRender() {
       var maxSizes = _base.settings.maxSizes;
       // TODO: Need to be able to customize this height, as well as the conditions (parentContainers) under which different sizes are applied.
-      if (this.parentContainer && this.parentContainer.tagName === 'LAYER-NOTIFIER') maxSizes = { height: 140, width: maxSizes.width };
+      if (this.parentComponent && this.parentComponent.tagName === 'LAYER-NOTIFIER') maxSizes = { height: 140, width: maxSizes.width };
       this.properties.sizes = (0, _sizing2.default)(this.properties.meta, { width: maxSizes.width, height: maxSizes.height });
       this.style.height = _base.settings.verticalMessagePadding + this.properties.sizes.height + 'px';
       if (this.properties.preview && this.properties.preview.body) {
@@ -9283,29 +9474,28 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /*
  * Handle any Message that contains an IMage + Preview + Metadata or is just an Image
  */
-_base2.default.registerMessageHandler({
-  tagName: 'layer-message-image',
-  label: '<i class="fa fa-file-image-o" aria-hidden="true"></i> Image message',
-  handlesMessage: function handlesMessage(message, container) {
-    // Get the Image Parts
-    var imageParts = message.parts.filter(function (part) {
-      return ['image/png', 'image/gif', 'image/jpeg'].indexOf(part.mimeType) !== -1;
-    }).length;
+// layerUI.registerMessageHandler({
+//   tagName: 'layer-message-image',
+//   label: '<i class="fa fa-file-image-o" aria-hidden="true"></i> Image message',
+//   handlesMessage(message, container) {
+//     // Get the Image Parts
+//     const imageParts = message.parts.filter(part =>
+//       ['image/png', 'image/gif', 'image/jpeg'].indexOf(part.mimeType) !== -1).length;
 
-    // Get the Preview Parts
-    var previewParts = message.parts.filter(function (part) {
-      return part.mimeType === 'image/jpeg+preview';
-    }).length;
+//     // Get the Preview Parts
+//     const previewParts = message.parts.filter(part =>
+//       part.mimeType === 'image/jpeg+preview').length;
 
-    // Get the Metadata Parts
-    var metaParts = message.parts.filter(function (part) {
-      return part.mimeType === 'application/json+imageSize';
-    }).length;
+//     // Get the Metadata Parts
+//     const metaParts = message.parts.filter(part =>
+//       part.mimeType === 'application/json+imageSize').length;
 
-    // We handle 1 part images or 3 part images.
-    return message.parts.length === 1 && imageParts || message.parts.length === 3 && imageParts === 1 && previewParts === 1 && metaParts === 1;
-  }
-});
+//     // We handle 1 part images or 3 part images.
+//     return (message.parts.length === 1 && imageParts ||
+//       message.parts.length === 3 && imageParts === 1 && previewParts === 1 && metaParts === 1);
+//   },
+// });
+
 
 (function () {
   var layerUI = require('../../../base');
@@ -9322,10 +9512,6 @@ _base2.default.registerMessageHandler({
  * @extends layerUI.components.Component
  */'use strict';
 
-var _base = require('../../base');
-
-var _base2 = _interopRequireDefault(_base);
-
 var _component = require('../../components/component');
 
 var _messageHandler = require('../../mixins/message-handler');
@@ -9334,9 +9520,24 @@ var _messageHandler2 = _interopRequireDefault(_messageHandler);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _component.registerComponent)('layer-message-text-plain', {
+
+(0, _component.registerMessageComponent)('layer-message-text-plain', {
   mixins: [_messageHandler2.default],
+  properties: {
+    label: {
+      label: 'Text'
+    }
+  },
   methods: {
+    /**
+     * This component can render any message that starts with text/plain message part
+     *
+     * @method
+     */
+    handlesMessage: function handlesMessage(message, container) {
+      return message.parts[0].mimeType === 'text/plain';
+    },
+
 
     /**
      * Replaces any html tags with escaped html tags so that the recipient
@@ -9364,7 +9565,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     onRender: function onRender() {
       var _this = this;
 
-      if (!_base2.default.textHandlersOrdered) this._setupOrderedHandlers();
+      if (!layerUI.textHandlersOrdered) this._setupOrderedHandlers();
 
       var text = this.message.parts[0].body;
       var textData = {
@@ -9373,7 +9574,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       };
       var afterText = '';
 
-      _base2.default.textHandlersOrdered.forEach(function (handler) {
+      layerUI.textHandlersOrdered.forEach(function (handler) {
         return handler(textData, _this.message);
       });
 
@@ -9395,10 +9596,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * @private
      */
     _setupOrderedHandlers: function _setupOrderedHandlers() {
-      _base2.default.textHandlersOrdered = Object.keys(_base2.default.textHandlers).filter(function (handlerName) {
-        return _base2.default.textHandlers[handlerName].enabled;
+      layerUI.textHandlersOrdered = Object.keys(layerUI.textHandlers).filter(function (handlerName) {
+        return layerUI.textHandlers[handlerName].enabled;
       }).map(function (handlerName) {
-        return _base2.default.textHandlers[handlerName];
+        return layerUI.textHandlers[handlerName];
       }).sort(function (a, b) {
         if (a.order > b.order) return 1;
         if (b.order > a.order) return -1;
@@ -9409,17 +9610,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
   }
 });
-
-// Handle any text/plain Message
-
-_base2.default.registerMessageHandler({
-  tagName: 'layer-message-text-plain',
-  label: 'Text',
-  handlesMessage: function handlesMessage(message, container) {
-    return message.parts[0].mimeType === 'text/plain';
-  }
-});
-},{"../../base":14,"../../components/component":15,"../../mixins/message-handler":61}],43:[function(require,module,exports){
+},{"../../components/component":15,"../../mixins/message-handler":61}],43:[function(require,module,exports){
 /**
  * The Unknown MessageHandler renders unhandled content with a placeholder politely
  * suggesting that a developer should probably handle it.
@@ -9476,8 +9667,6 @@ var _sizing2 = _interopRequireDefault(_sizing);
 
 var _base = require('../../base');
 
-var _base2 = _interopRequireDefault(_base);
-
 var _messageHandler = require('../../mixins/message-handler');
 
 var _messageHandler2 = _interopRequireDefault(_messageHandler);
@@ -9485,10 +9674,13 @@ var _messageHandler2 = _interopRequireDefault(_messageHandler);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 
-(0, _component.registerComponent)('layer-message-video', {
+(0, _component.registerMessageComponent)('layer-message-video', {
   mixins: [_messageHandler2.default],
   template: '<video layer-id="video"></video>',
   properties: {
+    label: {
+      value: '<i class="fa fa-file-video-o layer-video-message-icon" aria-hidden="true"></i> Video message'
+    },
 
     /**
      * The Message property provides the MessageParts we are going to render.
@@ -9523,11 +9715,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           this.properties.preview.on('url-loaded', this.onRender, this);
         }
       }
-    },
-
-    parentContainer: {}
+    }
   },
   methods: {
+    handlesMessage: function handlesMessage(message, container) {
+      var videoParts = message.parts.filter(function (part) {
+        return part.mimeType === 'video/mp4';
+      }).length;
+      var previewParts = message.parts.filter(function (part) {
+        return part.mimeType === 'image/jpeg+preview';
+      }).length;
+      var metaParts = message.parts.filter(function (part) {
+        return part.mimeType === 'application/json+imageSize';
+      }).length;
+      return message.parts.length === 1 && videoParts || message.parts.length === 3 && videoParts === 1 && previewParts === 1 && metaParts === 1;
+    },
+
 
     /**
      * Render the Message.
@@ -9546,26 +9749,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       }
       this.nodes.video.controls = true;
     }
-  }
-});
-
-/*
-  * Handle any Message that contains a Video + Preview + Metadata or is just an Video
-  */
-_base2.default.registerMessageHandler({
-  tagName: 'layer-message-video',
-  label: '<i class="fa fa-file-video-o" aria-hidden="true"></i> Video message',
-  handlesMessage: function handlesMessage(message, container) {
-    var videoParts = message.parts.filter(function (part) {
-      return part.mimeType === 'video/mp4';
-    }).length;
-    var previewParts = message.parts.filter(function (part) {
-      return part.mimeType === 'image/jpeg+preview';
-    }).length;
-    var metaParts = message.parts.filter(function (part) {
-      return part.mimeType === 'application/json+imageSize';
-    }).length;
-    return message.parts.length === 1 && videoParts || message.parts.length === 3 && videoParts === 1 && previewParts === 1 && metaParts === 1;
   }
 });
 },{"../../base":14,"../../components/component":15,"../../mixins/message-handler":61,"../../utils/sizing":66}],45:[function(require,module,exports){
@@ -9652,6 +9835,7 @@ var _base2 = _interopRequireDefault(_base);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 _base2.default.registerTextHandler({
+  base: location.protocol + '://twemoji.maxcdn.com/',
   name: 'emoji',
   order: 300,
   requiresEnable: true,
@@ -9873,7 +10057,8 @@ LayerUI.mixins = {
   List: require('./mixins/list'),
   ListItem: require('./mixins/list-item'),
   ListSelection: require('./mixins/list-selection'),
-  ListItemSelection: require('./mixins/list-item-selection')
+  ListItemSelection: require('./mixins/list-item-selection'),
+  FocusOnKeydown: require('./mixins/focus-on-keydown')
 };
 
 // If we don't expose global.layerUI then custom templates can not load and call window.layerUI.registerTemplate()
@@ -9915,13 +10100,14 @@ LayerUI.mixins = {
   List: require('./mixins/list'),
   ListItem: require('./mixins/list-item'),
   ListSelection: require('./mixins/list-selection'),
-  ListItemSelection: require('./mixins/list-item-selection')
+  ListItemSelection: require('./mixins/list-item-selection'),
+  FocusOnKeydown: require('./mixins/focus-on-keydown')
 };
 
 // If we don't expose global.layerUI then custom templates can not load and call window.layerUI.registerTemplate()
 module.exports = global.layerUI = LayerUI;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./adapters/angular":11,"./adapters/backbone":12,"./adapters/react":13,"./components/conversation-list-panel/layer-conversations-list/layer-conversations-list":18,"./components/identities-list-panel/layer-identities-list/layer-identities-list":19,"./components/layer-conversation-panel/layer-conversation-panel":21,"./components/layer-notifier/layer-notifier":22,"./components/membership-list-panel/layer-membership-list/layer-membership-list":24,"./components/subcomponents/layer-file-upload-button/layer-file-upload-button":36,"./components/subcomponents/layer-send-button/layer-send-button":39,"./handlers/message/layer-message-image/layer-message-image":41,"./handlers/message/layer-message-text-plain":42,"./handlers/message/layer-message-video":44,"./handlers/text/autolinker":45,"./handlers/text/code-blocks":46,"./handlers/text/emoji":47,"./handlers/text/images":48,"./handlers/text/newline":49,"./handlers/text/youtube":50,"./layer-ui":52,"./mixins/has-query":55,"./mixins/list":59,"./mixins/list-item":57,"./mixins/list-item-selection":56,"./mixins/list-selection":58,"./mixins/main-component":60,"./mixins/message-handler":61,"./utils/date-separator":63,"./utils/files":64}],52:[function(require,module,exports){
+},{"./adapters/angular":11,"./adapters/backbone":12,"./adapters/react":13,"./components/conversation-list-panel/layer-conversations-list/layer-conversations-list":18,"./components/identities-list-panel/layer-identities-list/layer-identities-list":19,"./components/layer-conversation-panel/layer-conversation-panel":21,"./components/layer-notifier/layer-notifier":22,"./components/membership-list-panel/layer-membership-list/layer-membership-list":24,"./components/subcomponents/layer-file-upload-button/layer-file-upload-button":36,"./components/subcomponents/layer-send-button/layer-send-button":39,"./handlers/message/layer-message-image/layer-message-image":41,"./handlers/message/layer-message-text-plain":42,"./handlers/message/layer-message-video":44,"./handlers/text/autolinker":45,"./handlers/text/code-blocks":46,"./handlers/text/emoji":47,"./handlers/text/images":48,"./handlers/text/newline":49,"./handlers/text/youtube":50,"./layer-ui":52,"./mixins/focus-on-keydown":54,"./mixins/has-query":55,"./mixins/list":59,"./mixins/list-item":57,"./mixins/list-item-selection":56,"./mixins/list-selection":58,"./mixins/main-component":60,"./mixins/message-handler":61,"./utils/date-separator":63,"./utils/files":64}],52:[function(require,module,exports){
 'use strict';
 
 require('webcomponents.js/webcomponents-lite');
@@ -10615,6 +10801,7 @@ module.exports = {
     * A List Mixin that provides common list patterns
     *
     * @class layerUI.mixins.List
+    * @mixin layerUI.mixins.HasQuery
     */'use strict';
 
 var _layerWebsdk = require('layer-websdk');
@@ -10632,6 +10819,16 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 module.exports = {
   mixins: [_hasQuery2.default],
   properties: {
+    /**
+     * Lists have some special behaviors; its useful to be able to test if a component is in fact a list.
+     *
+     * @property {Boolean} [_isList=true]
+     * @private
+     * @readonly
+     */
+    _isList: {
+      value: true
+    },
 
     /**
      * Set/get state related to whether the Query data is loading data from the server.
@@ -10869,6 +11066,7 @@ module.exports = {
       var itemInstance = item instanceof _layerWebsdk2.default.Root ? item : this.client.getObject(item.id);
       if (itemInstance) {
         var widget = this._generateItem(itemInstance);
+        widget.parentComponent = this;
         widget.setAttribute('layer-item-id', item.id.replace(/^layer:\/\/\//, '').replace(/\//g, '_'));
         if (widget) {
           this.onGenerateListItem(widget);
@@ -11362,30 +11560,10 @@ module.exports = {
      * @property {Object} state
      */
     state: {
+      propagateToChildren: true,
       set: function set(newState) {
-        var _this = this;
-
-        Object.keys(this.nodes).forEach(function (nodeName) {
-          _this.nodes[nodeName].state = newState;
-        });
-        this.onRenderState();
+        if (this.onRenderState) this.onRenderState();
       }
-    }
-  },
-  methods: {
-    onRenderState: function onRenderState() {
-      // No-op
-    },
-    onAfterCreate: function onAfterCreate() {
-      var _this2 = this;
-
-      var state = this.properties.state;
-      if (state) Object.keys(this.nodes).forEach(function (nodeName) {
-        return _this2.nodes[nodeName].state = state;
-      });
-    },
-    onGenerateListItem: function onGenerateListItem(widget) {
-      widget.state = this.state;
     }
   }
 };
@@ -21901,7 +22079,7 @@ var ClientAuthenticator = function (_Root) {
         var identityObj = JSON.parse(userData);
 
         if (!identityObj.prn) {
-          throw new Error("Your identity token prn (user id) is empty");
+          throw new Error('Your identity token prn (user id) is empty');
         }
 
         if (this.user.userId && this.user.userId !== identityObj.prn) {
@@ -22685,15 +22863,16 @@ ClientAuthenticator.prototype.isConnected = false;
  */
 ClientAuthenticator.prototype.isReady = false;
 
-/* JSDUCK
+/**
  * If presence is enabled, then your presence can be set/restored.
  *
- * @type {Boolean} [presenceEnabled=true]
+ * @type {Boolean} [isPresenceEnabled=true]
  */
 ClientAuthenticator.prototype.isPresenceEnabled = true;
 
 /**
  * Your Layer Application ID. Can not be changed once connected.
+ *
  * To find your Layer Application ID, see your Layer Developer Dashboard.
  *
  * @type {String}
@@ -23485,6 +23664,11 @@ function createParser(request) {
           updateObject._handlePatchEvent(newValue, oldValue, paths);
         }
       },
+      Channel: {
+        all: function all(updateObject, newValue, oldValue, paths) {
+          updateObject._handlePatchEvent(newValue, oldValue, paths);
+        }
+      },
       Identity: {
         all: function all(updateObject, newValue, oldValue, paths) {
           updateObject._handlePatchEvent(newValue, oldValue, paths);
@@ -24269,7 +24453,7 @@ Client.prototype._scheduleCheckAndPurgeCacheAt = 0;
  * @static
  * @type {String}
  */
-Client.version = '3.2.1';
+Client.version = '3.2.0';
 
 /**
  * Any Conversation or Message that is part of a Query's results are kept in memory for as long as it
@@ -26752,6 +26936,9 @@ module.exports = {
      */
     getChannel: function getChannel(id, canLoad) {
       if (typeof id !== 'string') throw new Error(ErrorDictionary.idParamRequired);
+      if (!Channel.isValidId(id)) {
+        id = Channel.prefixUUID + id;
+      }
       if (this._models.channels[id]) {
         return this._models.channels[id];
       } else if (canLoad) {
@@ -27168,6 +27355,9 @@ module.exports = {
      */
     getConversation: function getConversation(id, canLoad) {
       if (typeof id !== 'string') throw new Error(ErrorDictionary.idParamRequired);
+      if (!Conversation.isValidId(id)) {
+        id = Conversation.prefixUUID + id;
+      }
       if (this._models.conversations[id]) {
         return this._models.conversations[id];
       } else if (canLoad) {
@@ -27844,6 +28034,7 @@ module.exports = {
  */
 
 var Syncable = require('../models/syncable');
+var Message = require('../models/message');
 var ErrorDictionary = require('../layer-error').dictionary;
 
 module.exports = {
@@ -28054,6 +28245,11 @@ module.exports = {
     getMessage: function getMessage(id, canLoad) {
       if (typeof id !== 'string') throw new Error(ErrorDictionary.idParamRequired);
 
+      // NOTE: This could be an announcement
+      if (id.indexOf('layer:///')) {
+        id = Message.prefixUUID + id;
+      }
+
       if (this._models.messages[id]) {
         return this._models.messages[id];
       } else if (canLoad) {
@@ -28164,7 +28360,7 @@ module.exports = {
 };
 
 
-},{"../layer-error":86,"../models/syncable":106}],94:[function(require,module,exports){
+},{"../layer-error":86,"../models/message":105,"../models/syncable":106}],94:[function(require,module,exports){
 'use strict';
 
 /**
@@ -28737,17 +28933,6 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
  * @extends layer.Container
  * @author  Michael Kantor
  */
-
-/**
- * @method setMetadataProperties
- * @hide
- */
-
-/**
- * @method deleteMetadataProperties
- * @hide
- */
-
 var Root = require('../root');
 var Syncable = require('./syncable');
 var Container = require('./container');
@@ -29118,9 +29303,7 @@ var Channel = function (_Container) {
       try {
         var events = this._disableEvents;
         this._disableEvents = false;
-        if (paths[0].indexOf('metadata') === 0) {
-          this.__updateMetadata(newValue, oldValue, paths);
-        }
+        _get(Object.getPrototypeOf(Channel.prototype), '_handlePatchEvent', this).call(this, newValue, oldValue, paths);
         this._disableEvents = events;
       } catch (err) {
         // do nothing
@@ -29855,6 +30038,13 @@ var Container = function (_Syncable) {
           oldValue: oldValue,
           paths: paths
         });
+      }
+    }
+  }, {
+    key: '_handlePatchEvent',
+    value: function _handlePatchEvent(newValue, oldValue, paths) {
+      if (paths[0].indexOf('metadata') === 0) {
+        this.__updateMetadata(newValue, oldValue, paths);
       }
     }
 
@@ -30996,12 +31186,6 @@ var Conversation = function (_Container) {
         this.participants.push(client.user);
       }
 
-      // If there is only one participant, its client.user.userId.  Not enough
-      // for us to have a good Conversation on the server.  Abort.
-      if (this.participants.length === 1) {
-        throw new Error(LayerError.dictionary.moreParticipantsRequired);
-      }
-
       return _get(Object.getPrototypeOf(Conversation.prototype), 'send', this).call(this, message);
     }
 
@@ -31364,9 +31548,7 @@ var Conversation = function (_Container) {
       try {
         var events = this._disableEvents;
         this._disableEvents = false;
-        if (paths[0].indexOf('metadata') === 0) {
-          this.__updateMetadata(newValue, oldValue, paths);
-        } else if (paths[0] === 'participants') {
+        if (paths[0] === 'participants') {
           (function () {
             var client = _this4.getClient();
             // oldValue/newValue come as a Basic Identity POJO; lets deliver events with actual instances
@@ -31378,6 +31560,8 @@ var Conversation = function (_Container) {
             });
             _this4.__updateParticipants(newValue, oldValue);
           })();
+        } else {
+          _get(Object.getPrototypeOf(Conversation.prototype), '_handlePatchEvent', this).call(this, newValue, oldValue, paths);
         }
         this._disableEvents = events;
       } catch (err) {
@@ -34701,6 +34885,7 @@ var Syncable = function (_Root) {
     value: function _loadResult(result) {
       var _this4 = this;
 
+      if (this.isDestroyed) return;
       var prefix = this.constructor.eventPrefix;
       if (!result.success) {
         this.syncState = SYNC_STATE.NEW;

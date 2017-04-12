@@ -11,14 +11,14 @@
 
     <script>
       var client = new layer.Client({
-        appId: 'layer:///apps/staging/1d980162-c5ee-11e5-bb69-e08c0300541f'
+        appId: window.layerSample.appId
       });
       client.on('challenge', function(evt) {
-        window.layerSample.getIdentityToken(client.appId, '2011', evt.nonce, evt.callback);
+        window.layerSample.getIdentityToken(client.appId, 'michael+customer2@layer.com', 'mkantor1', evt.nonce, evt.callback);
       });
       client.connect();
       layerUI.init({
-        appId: 'layer:///apps/staging/1d980162-c5ee-11e5-bb69-e08c0300541f',
+        appId: window.layerSample.appId
       });
 
       document.addEventListener('DOMContentLoaded', function() {
@@ -32,7 +32,7 @@
   </head>
   <body>
     <layer-customer-multiple-conversation
-      new-participant='3'
+      new-participant='a8aaf37c-0d7a-4d87-8639-bab4c08f1765'
       new-metadata='{"conversationName": "", "resolved": "false"}'
       chat-title-callback="function(conversation, callback) {callback('A Title');}"
     ></layer-customer-multiple-conversation>
