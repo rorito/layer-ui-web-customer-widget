@@ -19,8 +19,8 @@
  *
  *
  * <layer-customer-multiple-conversation
- *     new-participant='jane-the-support-agent'
- *     new-metadata='{"conversationName": "New Customer", "resolved": "false"}'>
+ *     conversation-participants='jane-the-support-agent'
+ *     conversation-metadata='{"conversationName": "New Customer", "resolved": "false"}'>
  * </layer-customer-multiple-conversation>
  * ```
  *

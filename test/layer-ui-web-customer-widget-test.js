@@ -20,8 +20,8 @@
  *
  *
  * <layer-customer-multiple-conversation
- *     new-participant='jane-the-support-agent'
- *     new-metadata='{"conversationName": "New Customer", "resolved": "false"}'>
+ *     conversation-participants='jane-the-support-agent'
+ *     conversation-metadata='{"conversationName": "New Customer", "resolved": "false"}'>
  * </layer-customer-multiple-conversation>
  * ```
  *
@@ -263,8 +263,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      *
      *
      * <layer-customer-single-conversation
-     *     new-participant='jane-the-support-agent'
-     *     new-metadata='{"conversationName": "New Customer"}'>
+     *     conversation-participants='jane-the-support-agent'
+     *     conversation-metadata='{"conversationName": "New Customer"}'>
      * </layer-customer-single-conversation>
      * ```
      *
@@ -488,41 +488,46 @@ module.exports = {
      * Identity ID for the customer support staff (or bot) that the user will create a conversation with.
      *
      * ```
-     * widget.newParticipant = 'layer:///identities/support-beam';
+     * widget.conversationParticipants = ['layer:///identities/support-beam'];
      *
      * // OR
      * <widget
-     *     new-participant='layer:///identities/jane-the-support-agent'>
+     *     conversation-participants='layer:///identities/jane-the-support-agent'>
      * </widget>
      * ```
-     * ```
      *
-     * @property {String} newParticipant
+     * @property {String[]} conversationParticipants
      */
-    newParticipant: {},
+    conversationParticipants: {
+      set: function set(value) {
+        if (typeof value === 'string') {
+          this.properties.conversationParticipants = value.split(/\s*,\s*/);
+        }
+      }
+    },
 
     /**
      * Metadata to create a Conversation with.  Has no impact on existing Conversations.
      *
      * ```
-     * widget.newMetadata = {
+     * widget.conversationMetadata = {
      *    "resolved": "false",
      *    "conversationName": "Support Call"
      * };
      *
      * // OR
      * <widget
-     *     new-metadata='{"resolved": "false", "conversationName": "Support Call"}'>
+     *     conversation-metadata='{"resolved": "false", "conversationName": "Support Call"}'>
      * </widget>
      * ```
      *
-     * @property {Object} newMetadata
+     * @property {Object} conversationMetadata
      */
-    newMetadata: {
+    conversationMetadata: {
       set: function set(value) {
         if (typeof value === 'string') {
           try {
-            this.properties.newMetadata = JSON.parse(value);
+            this.properties.conversationMetadata = JSON.parse(value);
           } catch (e) {}
         }
       }
@@ -606,7 +611,8 @@ module.exports = {
     onCreate: function onCreate() {
       this.addEventListener('layer-customer-chat-button-click', this.toggleOpen.bind(this));
       this.addEventListener('layer-send-message', this._createConversationAndSendMessage.bind(this));
-      if (!this.properties.newMetadata) this.properties.newMetadata = {};
+      if (!this.properties.conversationMetadata) this.properties.conversationMetadata = {};
+      if (!this.properties.conversationParticipants) this.properties.conversationParticipants = [];
       this.nodes.welcomeTab.isOpen = true;
     },
 
@@ -660,8 +666,8 @@ module.exports = {
         evt.preventDefault();
         var conversation = this.client.createConversation({
           distinct: false,
-          participants: [this.client.user, this.newParticipant],
-          metadata: this.newMetadata
+          participants: this.conversationParticipants.concat(this.client.user),
+          metadata: this.conversationMetadata
         });
         var message = conversation.createMessage({
           parts: evt.detail.parts
@@ -1810,9 +1816,12 @@ function initReact(React, ReactDom) {
       render: function render() {
         var _this3 = this;
 
-        return React.createElement(componentName, { ref: function ref(node) {
+        return React.createElement(componentName, {
+          ref: function ref(node) {
             _this3.node = node;
-          } });
+          },
+          id: this.props.id
+        });
       }
     });
   });
@@ -2481,6 +2490,14 @@ module.exports = layerUI;
                                                                                                                                                                                                      *     myRenderer: function() {
                                                                                                                                                                                                      *        this.innerHTML = this.properties.prop1;
                                                                                                                                                                                                      *     }
+                                                                                                                                                                                                     *   },
+                                                                                                                                                                                                     *   listeners: {
+                                                                                                                                                                                                     *     'layer-notification-click': function notificationClick(evt) {
+                                                                                                                                                                                                     *          const message = evt.detail.item;
+                                                                                                                                                                                                     *          const conversation = message.getConversation();
+                                                                                                                                                                                                     *          if (conversation) this.selectedId = conversation.id;
+                                                                                                                                                                                                     *       },
+                                                                                                                                                                                                     *    }
                                                                                                                                                                                                      *   }
                                                                                                                                                                                                      * };
                                                                                                                                                                                                      * ```
@@ -3332,6 +3349,10 @@ function _registerComponent(tagName) {
     }
   }
 
+  classDef.properties._listeners = {
+    value: Object.keys(classDef.listeners || {})
+  };
+
   classDef.mixins.forEach(function (mixin) {
     return setupMixin(classDef, mixin);
   });
@@ -3357,6 +3378,15 @@ function _registerComponent(tagName) {
     };
   });
   delete classDef.methods;
+
+  // This veresion of listeners does not blend listeners from multiple mixins
+  Object.keys(classDef.listeners || {}).forEach(function (name) {
+    classDef['__listener-' + name] = {
+      value: classDef.listeners[name],
+      writable: true
+    };
+  });
+  delete classDef.listeners;
 
   /**
    * createdCallback is part of the Webcomponent lifecycle and drives this framework's lifecycle.
@@ -3398,9 +3428,27 @@ function _registerComponent(tagName) {
     }
   };
 
+  classDef._setupListeners = {
+    value: function _setupListeners() {
+      var _this4 = this;
+
+      this._listeners.forEach(function (eventName) {
+        document.body.addEventListener(eventName, _this4._handleListenerEvent.bind(_this4, '__listener-' + eventName));
+      });
+    }
+  };
+
+  classDef._handleListenerEvent = {
+    value: function _handleListenerEvent(methodName, evt) {
+      if (this.properties.listenTo.indexOf(evt.target.id) !== -1) {
+        this[methodName].apply(this, [evt]);
+      }
+    }
+  };
+
   classDef._onAfterCreate = {
     value: function _onAfterCreate() {
-      var _this4 = this;
+      var _this5 = this;
 
       // Allow Adapters to call _onAfterCreate... and then insure its not run a second time
       if (this.properties._internalState.onAfterCreateCalled) return;
@@ -3411,17 +3459,17 @@ function _registerComponent(tagName) {
       });
 
       props.forEach(function (prop) {
-        var value = _this4.properties[prop.propertyName];
+        var value = _this5.properties[prop.propertyName];
         // UNIT TEST: This line is primarily to keep unit tests from throwing errors
         if (value instanceof _layerWebsdk2.default.Root && value.isDestroyed) return;
         if (value !== undefined && value !== null) {
           // Force the setter to trigger; this will force the value to be converted to the correct type,
           // and call all setters
-          _this4[prop.propertyName] = value;
+          _this5[prop.propertyName] = value;
 
           if (prop.propagateToChildren) {
-            Object.keys(_this4.nodes).forEach(function (nodeName) {
-              return _this4.nodes[nodeName][prop.propertyName] = value;
+            Object.keys(_this5.nodes).forEach(function (nodeName) {
+              return _this5.nodes[nodeName][prop.propertyName] = value;
             });
           }
         }
@@ -3429,12 +3477,17 @@ function _registerComponent(tagName) {
         // If there is no value, but the parent component has the same property name, presume it to also be
         // propagateToChildren, and copy its value; useful for allowing list-items to automatically grab
         // all parent propagateToChildren properties.
-        else if (prop.propagateToChildren && _this4.parentComponent) {
-            var parentValue = _this4.parentComponent.properties[prop.propertyName];
-            if (parentValue) _this4[prop.propertyName] = parentValue;
+        else if (prop.propagateToChildren && _this5.parentComponent) {
+            var parentValue = _this5.parentComponent.properties[prop.propertyName];
+            if (parentValue) _this5[prop.propertyName] = parentValue;
           }
       });
       this.properties._internalState.inPropInit = [];
+
+      // Warning: these listeners may miss events triggered while initializing properties
+      // only way around this is to add another Layer.Util.defer() to our lifecycle
+      this._setupListeners();
+
       this.onAfterCreate();
     }
   };
@@ -3502,7 +3555,7 @@ function _registerComponent(tagName) {
    */
   classDef._initializeProperties = {
     value: function _initializeProperties() {
-      var _this5 = this;
+      var _this6 = this;
 
       /**
        * Values for all properties of this widget.
@@ -3541,7 +3594,7 @@ function _registerComponent(tagName) {
       // });
 
       props.forEach(function (prop) {
-        return _this5._copyInAttribute(prop);
+        return _this6._copyInAttribute(prop);
       });
     }
   };
@@ -3604,14 +3657,14 @@ function _registerComponent(tagName) {
    */
   classDef.detachedCallback = {
     value: function detachedCallback() {
-      var _this6 = this;
+      var _this7 = this;
 
       this.onDetach();
 
       // Wait 10 seconds after its been removed, then check to see if its still removed from the dom before doing cleanup and destroy.
       setTimeout(function () {
-        if (!document.body.contains(_this6) && !document.head.contains(_this6) && _this6.trigger('layer-widget-destroyed')) {
-          _this6.onDestroy();
+        if (!document.body.contains(_this7) && !document.head.contains(_this7) && _this7.trigger('layer-widget-destroyed')) {
+          _this7.onDestroy();
         }
       }, 10000);
     }
@@ -3714,6 +3767,12 @@ var standardClassProperties = {
   },
   client: {
     propagateToChildren: true
+  },
+  listenTo: {
+    value: [],
+    set: function set(value) {
+      if (typeof value === 'string') this.properties.listenTo = value.split(/\s*,\s*/);
+    }
   }
 };
 
@@ -3730,17 +3789,17 @@ var standardClassMethods = {
    * @protected
    */
   setupDomNodes: function setupDomNodes() {
-    var _this7 = this;
+    var _this8 = this;
 
     this.nodes = {};
 
     this._findNodesWithin(this, function (node, isComponent) {
       var layerId = node.getAttribute && node.getAttribute('layer-id');
-      if (layerId) _this7.nodes[layerId] = node;
+      if (layerId) _this8.nodes[layerId] = node;
 
       if (isComponent) {
         if (!node.properties) node.properties = {};
-        node.properties.parentComponent = _this7;
+        node.properties.parentComponent = _this8;
       }
     });
   },
@@ -3981,10 +4040,10 @@ var standardClassMethods = {
    * @private
    */
   onDestroy: function onDestroy() {
-    var _this8 = this;
+    var _this9 = this;
 
     this.properties._internalState.layerEventSubscriptions.forEach(function (subscribedObject) {
-      return subscribedObject.off(null, null, _this8);
+      return subscribedObject.off(null, null, _this9);
     });
     this.properties._internalState.layerEventSubscriptions = [];
     this.classList.add('layer-node-destroyed');
@@ -4538,6 +4597,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       conversationWidget.item = conversation;
       if (this.filter) conversationWidget._runFilter(this.filter);
       return conversationWidget;
+    }
+  },
+  listeners: {
+    'layer-notification-click': function notificationClick(evt) {
+      var message = evt.detail.item;
+      var conversation = message.getConversation();
+      if (conversation) this.selectedId = conversation.id;
     }
   }
 }); 
@@ -5351,6 +5417,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     },
 
     /**
+     * If you have an initial conversation id, but what this property to be otherwise ignored.
+     *
+     * When to use this? You have set your Conversation Panel to `listen-to` your Conversation List,
+     * but you still want to be able to set an initial conversation.  Any changes to this property
+     * will be ignored.
+     *
+     * @property {String} initialConversationId
+     */
+    initialConversationId: {
+      set: function set(value) {
+        if (!this.properties._internalState.onAfterCreateCalled) {
+          this.conversationId = value;
+        }
+      }
+    },
+
+    /**
      * The Conversation being shown by this panel.
      *
      * This Conversation ID specifies what conversation to render and interact with.
@@ -5392,11 +5475,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * So, the user clicked on a Conversation in a Conversation List, and focus is no longer on this widget?
      * Automatically refocus on it.
      *
-     * @property {Boolean} [autoFocusConversation=true]
+     * Possible values:
+     *
+     * * always
+     * * desktop-only
+     * * never
+     *
+     * Note that the definition we'd like to have for desktop-only is any device that automatically opens
+     * an on-screen keyboard.  There are no good techniques for that.  But if we detect your on an Android device
+     * we're going to assume it uses an on-screen keyboard.
+     *
+     * @property {String} [autoFocusConversation=desktop-only]
      */
     autoFocusConversation: {
-      value: true,
-      type: Boolean
+      value: 'desktop-only'
     },
 
     // Docs in mixins/main-component.js
@@ -5722,7 +5814,39 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
           });
         }
       }
-      if (this.autoFocusConversation) this.focusText();
+      if (this.shouldAutoFocusConversation(navigator)) this.focusText();
+    },
+    shouldAutoFocusConversation: function shouldAutoFocusConversation(_ref) {
+      var _ref$userAgent = _ref.userAgent,
+          userAgent = _ref$userAgent === undefined ? '' : _ref$userAgent,
+          maxTouchPoints = _ref.maxTouchPoints;
+
+      switch (this.autoFocusConversation) {
+        case 'always':
+          return true;
+        case 'desktop-only':
+          if (maxTouchPoints !== undefined && maxTouchPoints > 0) return true;
+          return Boolean(userAgent.match(/(mobile|android|phone)/i));
+        case 'never':
+          return false;
+      }
+    }
+  },
+  listeners: {
+    'layer-conversation-selected': function conversationSelected(evt) {
+      this.conversation = evt.detail.item;
+    },
+    'layer-notification-click': function notificationClick(evt) {
+      var message = evt.detail.item;
+      var conversation = message.getConversation();
+      if (conversation !== this.conversation) this.conversation = conversation;
+    },
+    'layer-message-notification': function messageNotification(evt) {
+      // If the notification is not background, and we have toast notifications enabled, and message isn't in the selected conversation,
+      // to a toast notify
+      if (!evt.detail.isBackground && evt.detail.item.conversationId === this.conversation.id && evt.target.notifyInForeground === 'toast') {
+        evt.preventDefault();
+      }
     }
   }
 });
@@ -5990,7 +6114,7 @@ if ('default' in Notify) Notify = Notify.default; // Annoying difference between
           this.flagTitlebar = false;
         } else {
           this.flagTitlebar = true;
-          message.on('messages:change', this._handleTitlebarMessageChange, this);
+          message.on('messages:change destroy', this._handleTitlebarMessageChange, this);
         }
       }
     },
@@ -6124,9 +6248,9 @@ if ('default' in Notify) Notify = Notify.default; // Annoying difference between
      * @method _handleTitlebarMessageChange
      * @private
      */
-    _handleTitlebarMessageChange: function _handleTitlebarMessageChange() {
+    _handleTitlebarMessageChange: function _handleTitlebarMessageChange(evt) {
       var message = this.flagTitlebarForMessage;
-      if (message && message.isRead) {
+      if (message && (message.isRead || evt.eventName === 'destroy')) {
         this.flagTitlebar = false;
         this.flagTitlebarForMessage = null;
       }
@@ -6161,8 +6285,8 @@ if ('default' in Notify) Notify = Notify.default; // Annoying difference between
         });
         this.properties.desktopNotify.show();
 
-        message.on('messages:change', function (evt) {
-          if (message.isRead) {
+        message.on('messages:change destroy', function (evt) {
+          if (message.isRead || evt.eventName === 'destroy') {
             _this.closeDesktopNotify();
           }
         }, this);
@@ -6228,8 +6352,8 @@ if ('default' in Notify) Notify = Notify.default; // Annoying difference between
         this.properties._toastTimeout = setTimeout(this.closeToast.bind(this), this.timeoutSeconds * 1000);
 
         this.properties.toastMessage = message;
-        message.on('messages:change', function (evt) {
-          if (message.isRead) {
+        message.on('messages:change destroy', function (evt) {
+          if (message.isRead || evt.eventName === 'destroy') {
             _this2.closeToast();
           }
         }, this);
@@ -10704,7 +10828,6 @@ module.exports = {
 
 module.exports = {
   properties: {
-
     /**
      * Get/Set the selected Conversation by ID.
      *
@@ -10739,6 +10862,9 @@ module.exports = {
   methods: {
     onCreate: function onCreate() {
       this.addEventListener('click', this._onClick.bind(this));
+    },
+    onAfterCreate: function onAfterCreate() {
+      if (!this.properties._selectedItemEventName) this.properties._selectedItemEventName = 'layer-item-selected';
     },
 
 
@@ -11600,6 +11726,7 @@ var dateClassName = 'layer-list-item-separator-date';
 
 
 module.exports = _base.utils.dateSeparator = function (widget, messages, index) {
+  if (index > messages.length) return;
   var message = widget.item;
   var needsBoundary = index === 0 || message.sentAt.toDateString() !== messages[index - 1].sentAt.toDateString();
 
@@ -21724,7 +21851,6 @@ var ClientAuthenticator = function (_Root) {
 
       this.onlineManager = new OnlineManager({
         socketManager: this.socketManager,
-        testUrl: this.url + '/nonces?connection-test',
         connected: this._handleOnlineChange.bind(this),
         disconnected: this._handleOnlineChange.bind(this)
       });
@@ -21843,6 +21969,27 @@ var ClientAuthenticator = function (_Root) {
     }
 
     /**
+     * Get a nonce and start the authentication process
+     *
+     * @method
+     * @private
+     */
+
+  }, {
+    key: '_connect',
+    value: function _connect() {
+      var _this2 = this;
+
+      this.xhr({
+        url: '/nonces',
+        method: 'POST',
+        sync: false
+      }, function (result) {
+        return _this2._connectionResponse(result);
+      });
+    }
+
+    /**
      * Initiates the connection.
      *
      * Called by constructor().
@@ -21863,12 +22010,12 @@ var ClientAuthenticator = function (_Root) {
   }, {
     key: 'connect',
     value: function connect() {
-      var _this2 = this;
-
       var userId = arguments.length <= 0 || arguments[0] === undefined ? '' : arguments[0];
 
       var user = void 0;
       this.isConnected = false;
+      this._lastChallengeTime = 0;
+      this._wantsToBeAuthenticated = true;
       this.user = null;
       this.onlineManager.start();
       if (!this.isTrustedDevice || !userId || this._isPersistedSessionsDisabled() || this._hasUserIdChanged(userId)) {
@@ -21893,13 +22040,7 @@ var ClientAuthenticator = function (_Root) {
       if (this.sessionToken && this.user.userId) {
         this._sessionTokenRestored();
       } else {
-        this.xhr({
-          url: '/nonces',
-          method: 'POST',
-          sync: false
-        }, function (result) {
-          return _this2._connectionResponse(result);
-        });
+        this._connect();
       }
       return this;
     }
@@ -21934,6 +22075,8 @@ var ClientAuthenticator = function (_Root) {
 
       var user = void 0;
       this.user = null;
+      this._lastChallengeTime = 0;
+      this._wantsToBeAuthenticated = true;
       if (!userId || !sessionToken) throw new Error(LayerError.dictionary.sessionAndUserRequired);
       if (!this.isTrustedDevice || this._isPersistedSessionsDisabled() || this._hasUserIdChanged(userId)) {
         this._clearStoredData();
@@ -22044,6 +22187,7 @@ var ClientAuthenticator = function (_Root) {
   }, {
     key: '_authenticate',
     value: function _authenticate(nonce) {
+      this._lastChallengeTime = Date.now();
       if (nonce) {
         this.trigger('challenge', {
           nonce: nonce,
@@ -22353,6 +22497,7 @@ var ClientAuthenticator = function (_Root) {
   }, {
     key: 'logout',
     value: function logout(callback) {
+      this._wantsToBeAuthenticated = false;
       var callbackCount = 1,
           counter = 0;
       if (this.isAuthenticated) {
@@ -22557,6 +22702,7 @@ var ClientAuthenticator = function (_Root) {
     key: 'sendSocketRequest',
     value: function sendSocketRequest(data, callback) {
       var isChangesArray = Boolean(data.isChangesArray);
+      if (this._wantsToBeAuthenticated && !this.isAuthenticated) this._connect();
 
       if (data.sync) {
         var target = data.sync.target;
@@ -22589,12 +22735,15 @@ var ClientAuthenticator = function (_Root) {
   }, {
     key: '_handleOnlineChange',
     value: function _handleOnlineChange(evt) {
-      if (!this.isAuthenticated) return;
+      if (!this._wantsToBeAuthenticated) return;
       var duration = evt.offlineDuration;
       var isOnline = evt.eventName === 'connected';
       var obj = { isOnline: isOnline };
       if (isOnline) {
         obj.reset = duration > ClientAuthenticator.ResetAfterOfflineDuration;
+
+        // TODO: Use a cached nonce if it hasn't expired
+        if (!this.isAuthenticated) this._connect();
       }
       this.trigger('online', obj);
     }
@@ -22655,6 +22804,8 @@ var ClientAuthenticator = function (_Root) {
       var _this7 = this;
 
       if (!options.sync) options.sync = {};
+      if (this._wantsToBeAuthenticated && !this.isAuthenticated) this._connect();
+
       var innerCallback = function innerCallback(result) {
         _this7._xhrResult(result, callback);
       };
@@ -22796,13 +22947,17 @@ var ClientAuthenticator = function (_Root) {
         // If its an authentication error, reauthenticate
         // don't call _resetSession as that wipes all data and screws with UIs, and the user
         // is still authenticated on the customer's app even if not on Layer.
-        if (result.status === 401 && this.isAuthenticated) {
-          logger.warn('SESSION EXPIRED!');
-          this.isAuthenticated = false;
-          this.isReady = false;
-          if (global.localStorage) localStorage.removeItem(LOCALSTORAGE_KEYS.SESSIONDATA + this.appId);
-          this.trigger('deauthenticated');
-          this._authenticate(result.data.getNonce());
+        if (result.status === 401 && this._wantsToBeAuthenticated) {
+          if (this.isAuthenticated) {
+            logger.warn('SESSION EXPIRED!');
+            this.isAuthenticated = false;
+            this.isReady = false;
+            if (global.localStorage) localStorage.removeItem(LOCALSTORAGE_KEYS.SESSIONDATA + this.appId);
+            this.trigger('deauthenticated');
+            this._authenticate(result.data.getNonce());
+          } else if (this._lastChallengeTime > Date.now() + ClientAuthenticator.TimeBetweenReauths) {
+            this._authenticate(result.data.getNonce());
+          }
         }
       }
       if (callback) callback(result);
@@ -22864,6 +23019,18 @@ ClientAuthenticator.prototype.isConnected = false;
 ClientAuthenticator.prototype.isReady = false;
 
 /**
+ * State variable; indicates if the WebSDK thinks that the app WANTS to be connected.
+ *
+ * An app wants to be connected if it has called `connect()` or `connectWithSession()`
+ * and has not called `logout()`.  A client that is connected will receive reauthentication
+ * events in the form of `challenge` events.
+ *
+ * @type {boolean}
+ * @readonly
+ */
+ClientAuthenticator.prototype._wantsToBeAuthenticated = false;
+
+/**
  * If presence is enabled, then your presence can be set/restored.
  *
  * @type {Boolean} [isPresenceEnabled=true]
@@ -22893,6 +23060,14 @@ ClientAuthenticator.prototype.user = null;
  * @readonly
  */
 ClientAuthenticator.prototype.sessionToken = '';
+
+/**
+ * Time that the last challenge was issued
+ *
+ * @type {Number}
+ * @private
+ */
+ClientAuthenticator.prototype._lastChallengeTime = 0;
 
 /**
  * URL to Layer's Web API server.
@@ -23056,6 +23231,17 @@ Object.defineProperty(ClientAuthenticator.prototype, 'userId', {
  * @static
  */
 ClientAuthenticator.ResetAfterOfflineDuration = 1000 * 60 * 60 * 30;
+
+/**
+ * Number of miliseconds delay must pass before a subsequent challenge is issued.
+ *
+ * This value is here to insure apps don't get challenge requests while they are
+ * still processing the last challenge event.
+ *
+ * @property {Number}
+ * @static
+ */
+ClientAuthenticator.TimeBetweenReauths = 30 * 1000;
 
 /**
  * List of events supported by this class
@@ -23773,7 +23959,7 @@ exports.asciiInit = function (version) {
   line1 += new Array(13 - line1.length).join(' ');
   line2 += new Array(14 - line2.length).join(' ');
 
-  return '\n    /hNMMMMMMMMMMMMMMMMMMMms.\n  hMMy+/////////////////omMN-        \'oo.\n  MMN                    oMMo        .MM/\n  MMN                    oMMo        .MM/              ....                       ....            ...\n  MMN       Web SDK      oMMo        .MM/           ohdddddddo\' +md.      smy  -sddddddho.   hmosddmm.\n  MMM-                   oMMo        .MM/           ::.\'  \'.mM+ \'hMd\'    +Mm. +Nm/\'   .+Nm-  mMNs-\'.\n  MMMy      v' + line1 + 'oMMo        .MM/             .-:/+yNMs  .mMs   /MN: .MMs///////dMh  mMy\n  MMMMo     ' + line2 + 'oMMo        .MM/          .ymhyso+:hMs   :MM/ -NM/  :MMsooooooooo+  mM+\n  MMMMMy.                oMMo        .MM/          dMy\'    \'dMs    +MN:mM+   \'NMo            mM+\n  MMMMMMNy:\'             oMMo        .MMy++++++++: sMm/---/dNMs     yMMMs     -dMd+:-:/smy\'  mM+\n  NMMMMMMMMmy+:-.\'      \'yMM/        \'yyyyyyyyyyyo  :shhhys:+y/     .MMh       \'-oyhhhys:\'   sy:\n  :dMMMMMMMMMMMMNNNNNNNNNMNs                                        hMd\'\n   -/+++++++++++++++++++:\'                                      sNmdo\'';
+  return '\n    /hNMMMMMMMMMMMMMMMMMMMms.\n  hMMy+/////////////////omMN-\n  MMN                    oMMo\n  MMN        Layer       oMMo\n  MMN       Web SDK      oMMo\n  MMM-                   oMMo\n  MMMy      v' + line1 + 'oMMo\n  MMMMo     ' + line2 + 'oMMo\n  MMMMMy.                oMMo\n  MMMMMMNy:\'             oMMo\n  NMMMMMMMMmy+:-.\'      \'yMM/\n  :dMMMMMMMMMMMMNNNNNNNNNMNs\n   -/+++++++++++++++++++:\'';
 };
 
 
@@ -28246,7 +28432,7 @@ module.exports = {
       if (typeof id !== 'string') throw new Error(ErrorDictionary.idParamRequired);
 
       // NOTE: This could be an announcement
-      if (id.indexOf('layer:///')) {
+      if (id.indexOf('layer:///') !== 0) {
         id = Message.prefixUUID + id;
       }
 
@@ -28601,7 +28787,9 @@ var Announcement = function (_ConversationMessage) {
         url: '',
         method: 'DELETE'
       }, function (result) {
-        if (!result.success && (!result.data || result.data.id !== 'not_found')) Syncable.load(id, client);
+        if (!result.success && (!result.data || result.data.id !== 'not_found' && result.data.id !== 'authentication_required')) {
+          Syncable.load(id, client);
+        }
       });
 
       this._deleted();
@@ -28788,7 +28976,9 @@ var ChannelMessage = function (_Message) {
         url: '',
         method: 'DELETE'
       }, function (result) {
-        if (!result.success && (!result.data || result.data.id !== 'not_found')) Message.load(id, client);
+        if (!result.success && (!result.data || result.data.id !== 'not_found' && result.data.id !== 'authentication_required')) {
+          Message.load(id, client);
+        }
       });
 
       this._deleted();
@@ -29328,7 +29518,9 @@ var Channel = function (_Container) {
     key: '_deleteResult',
     value: function _deleteResult(result, id) {
       var client = this.getClient();
-      if (!result.success && (!result.data || result.data.id !== 'not_found')) Channel.load(id, client);
+      if (!result.success && (!result.data || result.data.id !== 'not_found' && result.data.id !== 'authentication_required')) {
+        Channel.load(id, client);
+      }
     }
 
     /**
@@ -29842,7 +30034,7 @@ var Container = function (_Syncable) {
           'content-type': 'application/vnd.layer-patch+json'
         }
       }, function (result) {
-        if (!result.success && !_this3.isDestroyed) _this3._load();
+        if (!result.success && !_this3.isDestroyed && result.data.id !== 'authentication_required') _this3._load();
       });
 
       return this;
@@ -29909,7 +30101,7 @@ var Container = function (_Syncable) {
           'content-type': 'application/vnd.layer-patch+json'
         }
       }, function (result) {
-        if (!result.success) _this4._load();
+        if (!result.success && result.data.id !== 'authentication_required') _this4._load();
       });
 
       return this;
@@ -30815,7 +31007,9 @@ var ConversationMessage = function (_Message) {
         url: '?' + queryStr,
         method: 'DELETE'
       }, function (result) {
-        if (!result.success && (!result.data || result.data.id !== 'not_found')) Message.load(id, client);
+        if (!result.success && (!result.data || result.data.id !== 'not_found' && result.data.id !== 'authentication_required')) {
+          Message.load(id, client);
+        }
       });
 
       this._deleted();
@@ -31431,7 +31625,7 @@ var Conversation = function (_Container) {
           'content-type': 'application/vnd.layer-patch+json'
         }
       }, function (result) {
-        if (!result.success) _this3._load();
+        if (!result.success && result.data.id !== 'authentication_required') _this3._load();
       });
     }
 
@@ -31597,7 +31791,9 @@ var Conversation = function (_Container) {
     key: '_deleteResult',
     value: function _deleteResult(result, id) {
       var client = this.getClient();
-      if (!result.success && (!result.data || result.data.id !== 'not_found')) Conversation.load(id, client);
+      if (!result.success && (!result.data || result.data.id !== 'not_found' && result.data.id !== 'authentication_required')) {
+        Conversation.load(id, client);
+      }
     }
   }, {
     key: '_register',
@@ -32316,7 +32512,7 @@ var Identity = function (_Syncable) {
           target: this.id
         }
       }, function (result) {
-        if (!result.success) _this5._updateValue(['_presence', 'status'], oldValue);
+        if (!result.success && result.data.id !== 'authentication_required') _this5._updateValue(['_presence', 'status'], oldValue);
       });
 
       // these are equivalent; only one is useful for understanding your state given that your still connected/online.
@@ -35259,14 +35455,12 @@ var OnlineStateManager = function (_Root) {
    * An Application is expected to only have one of these.
    *
    *      var onlineStateManager = new layer.OnlineStateManager({
-   *          socketManager: socketManager,
-   *          testUrl: 'https://api.layer.com/nonces'
+   *          socketManager: socketManager
    *      });
    *
    * @method constructor
    * @param  {Object} options
    * @param  {layer.Websockets.SocketManager} options.socketManager - A websocket manager to monitor for messages
-   * @param  {string} options.testUrl - A url to send requests to when testing if we are online
    */
   function OnlineStateManager(options) {
     _classCallCheck(this, OnlineStateManager);
@@ -35524,12 +35718,6 @@ var OnlineStateManager = function (_Root) {
 OnlineStateManager.prototype.isClientReady = false;
 
 /**
- * URL To fire when testing to see if we are online.
- * @type {String}
- */
-OnlineStateManager.prototype.testUrl = '';
-
-/**
  * A Websocket manager whose 'message' event we will listen to
  * in order to know that we are still online.
  * @type {layer.Websockets.SocketManager}
@@ -35537,7 +35725,7 @@ OnlineStateManager.prototype.testUrl = '';
 OnlineStateManager.prototype.socketManager = null;
 
 /**
- * Number of testUrl requests we've been offline for.
+ * Number of test requests we've been offline for.
  *
  * Will stop growing once the number is suitably large (10-20).
  * @type {Number}
@@ -35932,24 +36120,22 @@ var ChannelsQuery = function (_ConversationsQuery) {
       if (list.length) {
         (function () {
           var data = _this3.data;
+
+          // typically bulk inserts happen via _appendResults(); so this array typically iterates over an array of length 1
           list.forEach(function (channel) {
             var newIndex = _this3._getInsertIndex(channel, data);
             data.splice(newIndex, 0, _this3._getData(channel));
-          });
 
-          // Whether sorting by last_message or created_at, new results go at the top of the list
-          if (_this3.dataType === Query.ObjectDataType) {
-            _this3.data = [].concat(data);
-          }
-          _this3.totalSize += list.length;
+            // Typically this loop only iterates once; but each iteration is gaurenteed a unique object if needed
+            if (_this3.dataType === Query.ObjectDataType) {
+              _this3.data = [].concat(data);
+            }
+            _this3.totalSize += 1;
 
-          // Trigger an 'insert' event for each item added;
-          // typically bulk inserts happen via _appendResults().
-          list.forEach(function (channel) {
             var item = _this3._getData(channel);
             _this3._triggerChange({
               type: 'insert',
-              index: _this3.data.indexOf(item),
+              index: newIndex,
               target: item,
               query: _this3
             });
@@ -36267,24 +36453,21 @@ var ConversationsQuery = function (_Query) {
       if (list.length) {
         (function () {
           var data = _this3.data;
+
+          // typically bulk inserts happen via _appendResults(); so this array typically iterates over an array of length 1
           list.forEach(function (conversation) {
             var newIndex = _this3._getInsertIndex(conversation, data);
             data.splice(newIndex, 0, _this3._getData(conversation));
-          });
 
-          // Whether sorting by last_message or created_at, new results go at the top of the list
-          if (_this3.dataType === Query.ObjectDataType) {
-            _this3.data = [].concat(data);
-          }
-          _this3.totalSize += list.length;
+            if (_this3.dataType === Query.ObjectDataType) {
+              _this3.data = [].concat(data);
+            }
+            _this3.totalSize += 1;
 
-          // Trigger an 'insert' event for each item added;
-          // typically bulk inserts happen via _appendResults().
-          list.forEach(function (conversation) {
             var item = _this3._getData(conversation);
             _this3._triggerChange({
               type: 'insert',
-              index: _this3.data.indexOf(item),
+              index: newIndex,
               target: item,
               query: _this3
             });
@@ -36997,6 +37180,23 @@ var MessagesQuery = function (_Query) {
         });
       }
     }
+
+    /*
+     * Note: Earlier versions of this iterated over each item, inserted it and when all items were inserted,
+     * triggered events indicating the index at which they were inserted.
+     *
+     * This caused the following problem:
+     *
+     * 1. Insert messages newest message at position 0 and second newest message at position 1
+     * 2. Trigger events in the order they arrive: second newest gets inserted at index 1, newest gets inserted at index 0
+     * 3. UI on receiving the second newest event does yet have the newest event, and on inserting it at position 1
+     *    is actually inserting it at the wrong place because position 0 is occupied by an older message at this time.
+     *
+     * Solution: We must iterate over all items, and process them entirely one at a time.
+     * Drawback: After an Event.replay we may get a lot of add events, we may need a way to do an event that inserts a set of messages
+     * instead of triggering lots of individual rendering-causing events
+     */
+
   }, {
     key: '_handleAddEvent',
     value: function _handleAddEvent(name, evt) {
@@ -37029,18 +37229,15 @@ var MessagesQuery = function (_Query) {
           list.forEach(function (item) {
             var index = _this4._getInsertIndex(item, data);
             data.splice(index, 0, item);
-          });
+            if (index !== 0) Logger.warn('Index of ' + item.id + ' is ' + index + '; position is ' + item.position + '; compared to ' + data[0].position);
 
-          _this4.totalSize += list.length;
+            _this4.totalSize += 1;
 
-          // Index calculated above may shift after additional insertions.  This has
-          // to be done after the above insertions have completed.
-          list.forEach(function (item) {
             _this4._triggerChange({
               type: 'insert',
-              index: _this4.data.indexOf(item),
               target: item,
-              query: _this4
+              query: _this4,
+              index: index
             });
           });
         })();
@@ -38523,17 +38720,12 @@ var Query = function (_Root) {
         (function () {
           var data = _this4.data = _this4.dataType === Query.ObjectDataType ? [].concat(_this4.data) : _this4.data;
           list.forEach(function (item) {
-            return data.push(item);
-          });
+            data.push(item);
+            _this4.totalSize += 1;
 
-          _this4.totalSize += list.length;
-
-          // Index calculated above may shift after additional insertions.  This has
-          // to be done after the above insertions have completed.
-          list.forEach(function (item) {
             _this4._triggerChange({
               type: 'insert',
-              index: _this4.data.indexOf(item),
+              index: data.length - 1,
               target: item,
               query: _this4
             });
@@ -43350,7 +43542,7 @@ var SocketManager = function (_Root) {
     value: function _scheduleReconnect() {
       var _this6 = this;
 
-      if (this.isDestroyed || !this.client.isOnline) return;
+      if (this.isDestroyed || !this.client.isOnline || !this.client.isAuthenticated) return;
 
       var maxDelay = (this.client.onlineManager.pingFrequency - 1000) / 1000;
       var delay = Utils.getExponentialBackoffSeconds(maxDelay, Math.min(15, this._lostConnectionCount));
@@ -43376,7 +43568,7 @@ var SocketManager = function (_Root) {
     value: function _validateSessionBeforeReconnect() {
       var _this7 = this;
 
-      if (this.isDestroyed || !this.client.isOnline) return;
+      if (this.isDestroyed || !this.client.isOnline || !this.client.isAuthenticated) return;
 
       var maxDelay = 30 * 1000; // maximum delay of 30 seconds per ping
       var diff = Date.now() - this._lastValidateSessionRequest - maxDelay;

@@ -85,17 +85,17 @@ var el, testRoot, client, conversation, user;
     });
   });
 
-  describe("The newMetadata property", function() {
+  describe("The conversationMetadata property", function() {
     it("Should parse json string", function() {
-      el.newMetadata = JSON.stringify({hey: "ho"});
-      expect(el.newMetadata).toEqual({
+      el.conversationMetadata = JSON.stringify({hey: "ho"});
+      expect(el.conversationMetadata).toEqual({
         hey: "ho"
       });
     });
 
     it("Should accept an object", function() {
-      el.newMetadata = {hey: "ho"};
-      expect(el.newMetadata).toEqual({
+      el.conversationMetadata = {hey: "ho"};
+      expect(el.conversationMetadata).toEqual({
         hey: "ho"
       });
     });
@@ -177,8 +177,8 @@ var el, testRoot, client, conversation, user;
       expect(called).toBe(true);
     });
 
-    it("Should initialize newMetadata", function() {
-      expect(el.newMetadata).toEqual({});
+    it("Should initialize conversationMetadata", function() {
+      expect(el.conversationMetadata).toEqual({});
     });
 
     it("Should set the welcomeTab to open", function() {
@@ -203,8 +203,8 @@ var el, testRoot, client, conversation, user;
 
   describe("The _createConversationAndSendMessage() method", function() {
     it("Should create a suitable conversation", function() {
-      el.newParticipant = "layer:///identities/howdy"
-      el.newMetadata = {howdy: "ho"};
+      el.conversationParticipants = "layer:///identities/howdy"
+      el.conversationMetadata = {howdy: "ho"};
       expect(el.conversation).toBe(null);
       var preventSpy = jasmine.createSpy("spy");
 
@@ -224,8 +224,8 @@ var el, testRoot, client, conversation, user;
     });
 
     it("Should create a suitable message", function() {
-      el.newParticipant = "layer:///identities/howdy"
-      el.newMetadata = {howdy: "ho"};
+      el.conversationParticipants = "layer:///identities/howdy"
+      el.conversationMetadata = {howdy: "ho"};
       expect(el.conversation).toBe(null);
       var preventSpy = jasmine.createSpy("spy");
 
@@ -245,8 +245,8 @@ var el, testRoot, client, conversation, user;
       el.addEventListener('layer-create-conversation-and-message', function(evt) {
         evt.preventDefault();
       });
-      el.newParticipant = "layer:///identities/howdy"
-      el.newMetadata = {howdy: "ho"};
+      el.conversationParticipants = "layer:///identities/howdy"
+      el.conversationMetadata = {howdy: "ho"};
       expect(el.conversation).toBe(null);
       var preventSpy = jasmine.createSpy("spy");
 
@@ -261,8 +261,8 @@ var el, testRoot, client, conversation, user;
     });
 
     it("Should allow modification of conversation, message and notification", function() {
-      el.newParticipant = "layer:///identities/howdy"
-      el.newMetadata = {howdy: "ho"};
+      el.conversationParticipants = "layer:///identities/howdy"
+      el.conversationMetadata = {howdy: "ho"};
       expect(el.conversation).toBe(null);
       el.addEventListener('layer-create-conversation-and-message', function(evt) {
         var conversation = evt.detail.conversation;

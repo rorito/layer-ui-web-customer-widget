@@ -22,8 +22,8 @@
  *
  *
  * <layer-customer-single-conversation
- *     new-participant='jane-the-support-agent'
- *     new-metadata='{"conversationName": "New Customer"}'>
+ *     conversation-participants='jane-the-support-agent'
+ *     conversation-metadata='{"conversationName": "New Customer"}'>
  * </layer-customer-single-conversation>
  * ```
  *

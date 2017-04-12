@@ -88,7 +88,7 @@ layerUI.init({
 });
 </script>
 <body>
-    <layer-customer-single-conversation new-participant='customer-support-person-3' new-metadata='{"conversationName": "Help me..."}'></layer-customer-single-conversation>
+    <layer-customer-single-conversation conversation-participants='customer-support-person-3' conversation-metadata='{"conversationName": "Help me..."}'></layer-customer-single-conversation>
 </body>
 ```
 
@@ -106,8 +106,8 @@ const { CustomerSingleConversation, CustomerMultipleConversation } = LayerUI.ada
 
 render() {
     return <CustomerSingleConversation
-        newParticipant='customer-support-person-3'
-        newMetadata={{conversationName: "Help me..."}}>
+        conversationParticipants='customer-support-person-3, customer-support-person-4'
+        conversationMetadata={{conversationName: "Help me..."}}>
         </CustomerSingleConversation>;
 }
 ```
@@ -127,7 +127,7 @@ The above code initializes angular 1.x Directives which will be part of the “l
 load the widgets of this repository:
 
 ```html
-<layer-customer-single-conversation ng-new-participant='customer-support-person-3' ng-new-metadata='{"conversationName": "Help me..."}'></layer-customer-single-conversation>
+<layer-customer-single-conversation ng-conversation-participants='customer-support-person-3' ng-conversation-metadata='{"conversationName": "Help me..."}'></layer-customer-single-conversation>
 ```
 
 ### Backbone Adapter
@@ -149,8 +149,8 @@ The following properties need to be configured for your widget:
 
 * `welcomeNodes`:   Pass in an HTML Element (`<div />` for example) that contains all of your welcome message HTML,
                     including optionally any interactive elements you need there.
-* `newParticipant`: Pass in a string identifying the User ID of the staff member that this user will create a conversation with.
-* `newMetadata`:    Pass in an object with any initial metadata that the conversation should be created with.
+* `conversationParticipants`: Pass in a string identifying the User ID of the staff member that this user will create a conversation with. This can be a comma separated list of IDs.
+* `conversationMetadata`:    Pass in an object with any initial metadata that the conversation should be created with.
 
 These properties can be changed at runtime, as needed.
 

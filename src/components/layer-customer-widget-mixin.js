@@ -132,41 +132,46 @@ module.exports = {
      * Identity ID for the customer support staff (or bot) that the user will create a conversation with.
      *
      * ```
-     * widget.newParticipant = 'layer:///identities/support-beam';
+     * widget.conversationParticipants = ['layer:///identities/support-beam'];
      *
      * // OR
      * <widget
-     *     new-participant='layer:///identities/jane-the-support-agent'>
+     *     conversation-participants='layer:///identities/jane-the-support-agent'>
      * </widget>
      * ```
-     * ```
      *
-     * @property {String} newParticipant
+     * @property {String[]} conversationParticipants
      */
-    newParticipant: {},
+    conversationParticipants: {
+      set(value) {
+        if (typeof value === 'string') {
+          this.properties.conversationParticipants = value.split(/\s*,\s*/);
+        }
+      }
+    },
 
     /**
      * Metadata to create a Conversation with.  Has no impact on existing Conversations.
      *
      * ```
-     * widget.newMetadata = {
+     * widget.conversationMetadata = {
      *    "resolved": "false",
      *    "conversationName": "Support Call"
      * };
      *
      * // OR
      * <widget
-     *     new-metadata='{"resolved": "false", "conversationName": "Support Call"}'>
+     *     conversation-metadata='{"resolved": "false", "conversationName": "Support Call"}'>
      * </widget>
      * ```
      *
-     * @property {Object} newMetadata
+     * @property {Object} conversationMetadata
      */
-    newMetadata: {
+    conversationMetadata: {
       set(value) {
         if (typeof value === 'string') {
           try {
-            this.properties.newMetadata = JSON.parse(value);
+            this.properties.conversationMetadata = JSON.parse(value);
           } catch(e) {}
         }
       },
@@ -250,7 +255,8 @@ module.exports = {
     onCreate() {
       this.addEventListener('layer-customer-chat-button-click', this.toggleOpen.bind(this));
       this.addEventListener('layer-send-message', this._createConversationAndSendMessage.bind(this));
-      if (!this.properties.newMetadata) this.properties.newMetadata = {};
+      if (!this.properties.conversationMetadata) this.properties.conversationMetadata = {};
+      if (!this.properties.conversationParticipants) this.properties.conversationParticipants = [];
       this.nodes.welcomeTab.isOpen = true;
     },
 
@@ -301,8 +307,8 @@ module.exports = {
         evt.preventDefault();
         const conversation = this.client.createConversation({
           distinct: false,
-          participants: [this.client.user, this.newParticipant],
-          metadata: this.newMetadata
+          participants: this.conversationParticipants.concat(this.client.user),
+          metadata: this.conversationMetadata
         });
         const message =  conversation.createMessage({
           parts: evt.detail.parts,
