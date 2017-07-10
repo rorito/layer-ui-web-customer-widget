@@ -56,6 +56,19 @@ Not yet available
 
 ### Github
 
+#### Running the Sample
+
+1. `git clone git@github.com:layerhq/layer-ui-web-customer-widget.git`
+2. `npm install`
+3. Copy your LayerConfiguration.json file from your quickstart demo application that was generated for you from the Developer Dashboard; this goes in the root folder
+4. start a simple webserver that can serve simple files
+5. Load `single-conversation-demo.html` or `multiple-conversation-demo.html`
+
+#### Adding to your App
+
+It should be something like this, but there are probably some issues around `npm install` that need to be worked out.
+Especially insure that you don't get multiple copies of npm repos; one in `node_modules` and another in `node_modules/layer-ui-web-customer-widget/node_modules`.
+
 1. `git clone git@github.com:layerhq/layer-ui-web-customer-widget.git`
 1. `mv layer-ui-web-customer-widget myproject/node_modules`
 1. Import the library using either:
