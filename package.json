@@ -17,8 +17,8 @@
   },
   "homepage": "https://github.com/layerhq/layer-ui-web-customer-widget#readme",
   "dependencies": {
-    "layer-ui-web": "^0.10.1",
-    "layer-websdk": "^3.1.1"
+    "layer-ui-web": "^1.0",
+    "layer-websdk": "^3.3"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

@@ -59,10 +59,11 @@ Not yet available
 #### Running the Sample
 
 1. `git clone git@github.com:layerhq/layer-ui-web-customer-widget.git`
-2. `npm install`
-3. Copy your LayerConfiguration.json file from your quickstart demo application that was generated for you from the Developer Dashboard; this goes in the root folder
-4. start a simple webserver that can serve simple files
-5. Load `single-conversation-demo.html` or `multiple-conversation-demo.html`
+1. `npm install`
+1. `grunt build`
+1. Copy your LayerConfiguration.json file from your quickstart demo application that was generated for you from the Developer Dashboard; this goes in the root folder
+1. start a simple webserver that can serve simple files
+1. Load `single-conversation-demo.html` or `multiple-conversation-demo.html`
 
 #### Adding to your App
 
