@@ -1,6 +1,6 @@
 {
   "name": "layer-ui-web-customer-widget",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Customer facing chat widget for talking to support/staff",
   "main": "index.js",
   "scripts": {
@@ -17,8 +17,7 @@
   },
   "homepage": "https://github.com/layerhq/layer-ui-web-customer-widget#readme",
   "dependencies": {
-    "layer-ui-web": "^1.0",
-    "layer-websdk": "^3.3"
+    "@layerhq/web-xdk": "1.0.0-pre1"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",

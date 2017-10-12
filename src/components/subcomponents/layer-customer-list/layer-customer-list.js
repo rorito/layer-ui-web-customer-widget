@@ -8,10 +8,13 @@
  * @class layerUICustomer.ListTab
  * @mixin layerUICustomer.mixins.Tab
  * @mixin layerUI.mixins.FocusOnKeydown
- * @extends layerUI.components.Component
+ * @extends layer.UI.components.Component
  */
 
-import { registerComponent } from 'layer-ui-web';
+//import Layer from '@layerhq/web-xdk';
+import Layer from '../../../../node_modules/@layerhq/web-xdk/lib/index';
+const registerComponent = Layer.UI.registerComponent;
+
 import tab from '../../../mixins/tab';
 import FocusOnKeydown from 'layer-ui-web/lib-es5/mixins/focus-on-keydown';
 

@@ -44,7 +44,7 @@ Understanding how to use this widget will be easier if you first understand the 
 is built on top of Layer UI for Web, which is built using Webcomponents.  Layer UI for Web provides Adapters that can be used
 to easily add support for these widgets to a React, Backbone or Angular application.
 
-You can read more about how these adapters work at https://docs.layer.com/sdk/webui/ui_introduction.
+You can read more about how these adapters work at https://docs.layer.com/sdk/webxdk/ui_introduction.
 
 ### CDN
 
@@ -59,10 +59,12 @@ Not yet available
 #### Running the Sample
 
 1. `git clone git@github.com:layerhq/layer-ui-web-customer-widget.git`
+1. `git checkout web-xdk-pre1` (change branches)
 1. `npm install`
 1. `grunt build`
 1. Copy your LayerConfiguration.json file from your quickstart demo application that was generated for you from the Developer Dashboard; this goes in the root folder
 1. start a simple webserver that can serve simple files
+1. Setup User ID and Participant IDs in the sample files
 1. Load `single-conversation-demo.html` or `multiple-conversation-demo.html`
 
 #### Adding to your App
@@ -71,6 +73,7 @@ It should be something like this, but there are probably some issues around `npm
 Especially insure that you don't get multiple copies of npm repos; one in `node_modules` and another in `node_modules/layer-ui-web-customer-widget/node_modules`.
 
 1. `git clone git@github.com:layerhq/layer-ui-web-customer-widget.git`
+1. `git checkout web-xdk-pre1` (change branches)
 1. `mv layer-ui-web-customer-widget myproject/node_modules`
 1. Import the library using either:
     * `import 'layer-ui-web-customer-widget/lib-es5/layer-customer-single-conversation/layer-customer-single-conversation'`
@@ -88,18 +91,13 @@ The two demos included in this repository [single-conversation-demo.html] and [m
 ```
 <script>
 // Standard layer.Client initialization:
-var client = new layer.Client({
+var client = layer.init({
     appId: 'layer:///apps/staging/1d980162-c5ee-11e5-bb69-e08c0300541f'
 });
 client.on('challenge', function(evt) {
     myGetIdentityToken(client.appId, myUserId, evt.nonce, evt.callback);
 });
 client.connect();
-
-// Standard initialization of the Layer UI framework; this will also initialize any widgets defined by this repository.
-layerUI.init({
-    appId: 'layer:///apps/staging/1d980162-c5ee-11e5-bb69-e08c0300541f',
-});
 </script>
 <body>
     <layer-customer-single-conversation conversation-participants='customer-support-person-3' conversation-metadata='{"conversationName": "Help me..."}'></layer-customer-single-conversation>
@@ -109,12 +107,12 @@ layerUI.init({
 ### React Adapter
 
 ```javascript
-import LayerUI from 'layer-ui-web';
+import Layer from '@layerhq/web-xdk';
 import 'layer-ui-web-customer-widget/lib-es5/layer-customer-single-conversation/layer-customer-single-conversation';
 
-LayerUI.init({ appId: myAppId });
+const client = Layer.init({ appId: myAppId });
 
-const { CustomerSingleConversation, CustomerMultipleConversation } = LayerUI.adapters.react();
+const { CustomerSingleConversation, CustomerMultipleConversation } = Layer.UI.adapters.react();
 
 ...
 
@@ -129,11 +127,11 @@ render() {
 ### Angular 1.5 Adapter
 
 ```javascript
-import LayerUI from 'layer-ui-web'
+import Layer from '@layerhq/web-xdk';
 import 'layer-ui-web-customer-widget/lib-es5/layer-customer-single-conversation/layer-customer-single-conversation';
-LayerUI.init({ appId: 'layer:///apps/staging/UUID' });
+const client = Layer.init({ appId: 'layer:///apps/staging/UUID' });
 
-layerUI.adapters.angular(angular); // Creates the layerUIControllers controller
+Layer.UI.adapters.angular(angular); // Creates the layerUIControllers controller
 angular.module('MyApp', ['layerUIControllers']);
 ```
 
@@ -147,12 +145,12 @@ load the widgets of this repository:
 ### Backbone Adapter
 
 ```javascript
-import LayerUI from 'layer-ui-web';
+import Layer from '@layerhq/web-xdk';
 import 'layer-ui-web-customer-widget/lib-es5/layer-customer-single-conversation/layer-customer-single-conversation';
 
-LayerUI.init({ appId: myAppId });
+Layer.init({ appId: myAppId });
 
-const { CustomerSingleConversation, CustomerMultipleConversation } = LayerUI.backbone.react();
+const { CustomerSingleConversation, CustomerMultipleConversation } = Layer.UI.adapters.backbone();
 
 const singleConversationView = new CustomerSingleConversation(client);
 ```
@@ -168,10 +166,10 @@ The following properties need to be configured for your widget:
 
 These properties can be changed at runtime, as needed.
 
-These properties may be configured but are optional:
+Any `replaceableContent` values supported by the `<layer-conversation-view />` in the Web XDK are supported on these widgets and will be passed on the the Conversation View.  Most commonly, this will involve customizing:
 
-* `composeButtons`:     HTMLElements (buttons) to show next to the Composer in the Chat View
-* `composeButtonsLeft`: HTMLElements (buttons) to show left of the Composer in the Chat View
+* `replaceableContent.composerButtonPanelRight`: HTMLElements (buttons) to show next to the Composer in the Chat View
+* `replaceableContent.composerButtonPanelLeft`: HTMLElements (buttons) to show left of the Composer in the Chat View
 
 CustomerSingleConversation widget Only Properties:
 
@@ -191,10 +189,12 @@ CustomerMultipleConversation widget Only Properties:
 Finally, the following properties can be used to more directly control the widgets; these are not used for configuration, but rather, for control:
 
 * `isDialogShowing`:               Set to `true` to show the dialog, `false` to hide the dialog
-* `conversation`                   Set this to any `layer.Conversation` to transition to the Chat View so the user can
+* `conversation`                   Set this to any `layer.Core.Conversation` to transition to the Chat View so the user can
                                    start talking within this Conversation.
 
 More information about all of these docs can be viewed in the API reference.  You can generate this reference by:
+
+TODO: Docs are out of date and still focused on using Layer UI for Web 1.0 rather than Layer XDK 1.0.
 
 1. `git clone git@github.com:layerhq/layer-ui-web-customer-widget.git`
 1. `cd layer-ui-web-customer-widget`

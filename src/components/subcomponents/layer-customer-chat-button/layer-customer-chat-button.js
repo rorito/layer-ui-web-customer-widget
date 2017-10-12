@@ -12,10 +12,12 @@
  * TODO: Enable the event to be cancelable.  Currently intercepted by controller before anything can be done.
  *
  * @class layerUICustomer.ChatButton
- * @extends layerUI.components.Component
+ * @extends layer.UI.components.Component
  */
 
-import { registerComponent } from 'layer-ui-web';
+//import Layer from '@layerhq/web-xdk';
+import Layer from '../../../../node_modules/@layerhq/web-xdk/lib/index';
+const registerComponent = Layer.UI.registerComponent;
 
 registerComponent('layer-customer-chat-button', {
   mixins: [],

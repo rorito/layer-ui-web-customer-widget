@@ -28,7 +28,10 @@
  * @mixin layerUICustomer.CustomerWidgetMixin
  */
 
-import { registerComponent } from 'layer-ui-web';
+//import Layer from '@layerhq/web-xdk';
+import Layer from '../../../node_modules/@layerhq/web-xdk/lib/index';
+const registerComponent = Layer.UI.registerComponent;
+
 import '../subcomponents/layer-customer-chat-button/layer-customer-chat-button';
 import '../subcomponents/layer-customer-welcome/layer-customer-welcome';
 import '../subcomponents/layer-customer-chat/layer-customer-chat';
@@ -50,7 +53,7 @@ registerComponent('layer-customer-multiple-conversation', {
      *
      * This value can be set to a Conversation object, but is self populating if you do not set it.
      *
-     * @property {layer.Conversation} conversation
+     * @property {layer.Core.Conversation} conversation
      */
     conversation: {
       set(value) {
@@ -81,7 +84,7 @@ registerComponent('layer-customer-multiple-conversation', {
      * ```
      *
      * @property {Function} resolvedTest
-     * @property {layer.Conversation} resolvedTest.conversation
+     * @property {layer.Core.Conversation} resolvedTest.conversation
      */
     resolvedTest: {
       type: Function,
@@ -172,7 +175,7 @@ registerComponent('layer-customer-multiple-conversation', {
      * ```
      *
      * @property {Function} chatTitleCallback
-     * @property {layer.Conversation} chatTitleCallback.conversation   The conversation being viewed
+     * @property {layer.Core.Conversation} chatTitleCallback.conversation   The conversation being viewed
      * @property {Function} chatTitleCallback.callback                 The callback into which to provide the title string
      * @property {String} chatTitleCallback.callback.title             The title for the Chat View
      */

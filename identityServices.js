@@ -25,7 +25,7 @@ window.layerSample = {
   identityProviderUrl: config[0].identity_provider_url + '/authenticate',
   userId: null,
   getIdentityToken: function(appId, userId, pass, nonce, callback) {
-    layer.xhr({
+    layer.Core.xhr({
       url: window.layerSample.identityProviderUrl,
       headers: {
         'Content-type': 'application/json',

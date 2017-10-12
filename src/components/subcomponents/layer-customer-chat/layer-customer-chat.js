@@ -1,17 +1,20 @@
 /**
  * Adds a View where the user has their conversation
  *
- * This view wraps a LayerUI.components.ConversationPanel.
+ * This view wraps a LayerUI.components.ConversationView.
  *
- * TODO: Implement an elegant mechanism for automatically identifying all ConversationPanel properties and exposing them as properties on this view.
+ * TODO: Implement an elegant mechanism for automatically identifying all ConversationView properties and exposing them as properties on this view.
  *
  * @class layerUICustomer.ChatTab
  * @mixin layerUICustomer.mixins.Tab
  * @mixin layerUI.mixins.FocusOnKeydown
- * @extends layerUI.components.Component
+ * @extends layer.UI.components.Component
  */
 
-import { registerComponent } from 'layer-ui-web';
+//import Layer from '@layerhq/web-xdk';
+import Layer from '../../../../node_modules/@layerhq/web-xdk/lib/index';
+const registerComponent = Layer.UI.registerComponent;
+
 import tab from '../../../mixins/tab';
 import FocusOnKeydown from 'layer-ui-web/lib-es5/mixins/focus-on-keydown';
 
@@ -19,6 +22,12 @@ registerComponent('layer-customer-chat', {
   mixins: [tab, FocusOnKeydown],
   events: [],
   properties: {
+    replaceableContent: {
+      value: {
+        messageRowLeftSide: () => null,
+        messageRowRightSide: () => null,
+      },
+    },
 
     /**
      * Get/set the title for the tab.
@@ -48,11 +57,11 @@ registerComponent('layer-customer-chat', {
      * widget.conversation = myConversation;
      * ```
      *
-     * @property {layer.Conversation} conversation
+     * @property {layer.Core.Conversation} conversation
      */
     conversation: {
       set(newConversation, oldConversation) {
-        this.nodes.conversationPanel.conversation = newConversation;
+        this.nodes.conversationView.conversation = newConversation;
         this._updateTitle();
 
         if (oldConversation) oldConversation.off(null, null, this);
@@ -70,7 +79,7 @@ registerComponent('layer-customer-chat', {
      * ```
      *
      * @property {Function} titleCallback
-     * @property {layer.Conversation} titleCallback.conversation   The conversation being viewed
+     * @property {layer.Core.Conversation} titleCallback.conversation   The conversation being viewed
      * @property {Function} titleCallback.callback                 The callback into which to provide the title string
      * @property {String} titleCallback.callback.title             The title for this View
      */
@@ -117,7 +126,7 @@ registerComponent('layer-customer-chat', {
     isDialogShowing: {
       set(value) {
         var isShowing = this.isDialogShowing && this.isOpen;
-        this.nodes.conversationPanel.disable = !isShowing;
+        this.nodes.conversationView.disable = !isShowing;
       },
     },
 
@@ -137,53 +146,17 @@ registerComponent('layer-customer-chat', {
     isOpen: {
       set(value) {
         var isShowing = this.isDialogShowing && this.isOpen;
-        this.nodes.conversationPanel.disable = !isShowing;
+        this.nodes.conversationView.disable = !isShowing;
       },
-    },
-
-    /**
-     * An array of buttons (dom nodes) to be added to the Compose bar, right side.
-     *
-     * ```
-     * widget.composeButtons = [
-     *     document.createElement('button'),
-     *     document.createElement('button')
-     * ];
-     * ```
-     *
-     * @property {HTMLElement[]} [composeButtons=[]]
-     */
-    composeButtons: {
-      set(value) {
-        this.nodes.conversationPanel.composeButtons = value;
-      },
-    },
-
-    /**
-     * An array of buttons (dom nodes) to be added to the Compose bar, left side.
-     *
-     * ```
-     * widget.composeButtonsLeft = [
-     *     document.createElement('button'),
-     *     document.createElement('button')
-     * ];
-     * ```
-     *
-     * @property {HTMLElement[]} [composeButtonsLeft=[]]
-     */
-    composeButtonsLeft: {
-      set(value) {
-        this.nodes.conversationPanel.composeButtonsLeft = value;
-      },
-    },
+    }
   },
   methods: {
 
     // Setup initial values and event handlers
     onCreate() {
       this.nodes.backButton.addEventListener('click', this._handleBackClick.bind(this));
-      this.nodes.conversationPanel.getMessageDeleteEnabled = function() {return false;};
-      this.nodes.conversationPanel.disable = true;
+      this.nodes.conversationView.getMessageDeleteEnabled = function() {return false;};
+      this.nodes.conversationView.disable = true;
     },
 
     /**
@@ -213,13 +186,12 @@ registerComponent('layer-customer-chat', {
     },
 
     /**
-     * Whenever a keypress is detected that isn't received by an input, focus on the conversationPanel's composer.
+     * Whenever a keypress is detected that isn't received by an input, focus on the conversationView's composer.
      *
      * @method onKeyDown
      */
     onKeyDown() {
-      this.nodes.conversationPanel.focusText();
+      this.nodes.conversationView.focusText();
     },
   },
 });
-

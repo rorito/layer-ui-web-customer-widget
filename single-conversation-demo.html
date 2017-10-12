@@ -6,20 +6,16 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400" rel="stylesheet" type="text/css">
     <link href='themes/build/theme.css' rel="stylesheet" type="text/css">
-    <link  href='node_modules/layer-ui-web/themes/build/bubbles-compact.css' rel='stylesheet' />
     <!--<link rel="import" href="src/templates/layer-message-item.html">-->
 
     <script>
-      var client = new layer.Client({
+      var client = layer.init({
         appId: window.layerSample.appId
       });
       client.on('challenge', function(evt) {
         window.layerSample.getIdentityToken(client.appId, 'michael+customer@layer.com', 'mkantor1', evt.nonce, evt.callback);
       });
       client.connect();
-      layerUI.init({
-        appId: window.layerSample.appId
-      });
 
       document.addEventListener('DOMContentLoaded', function() {
         document.querySelector('layer-customer-single-conversation').welcomeNodes = document.querySelector('#layerWelcomeNote');
@@ -27,7 +23,10 @@
     </script>
   </head>
   <body>
-    <layer-customer-single-conversation conversation-participants='a8aaf37c-0d7a-4d87-8639-bab4c08f1765' conversation-metadata='{"conversationName": ""}'></layer-customer-single-conversation>
+    <layer-customer-single-conversation
+      replaceable-content='{"composerButtonPanelRight": "<layer-file-upload-button></layer-file-upload-button>"}'
+      conversation-participants='a8aaf37c-0d7a-4d87-8639-bab4c08f1765'
+      conversation-metadata='{"conversationName": ""}'></layer-customer-single-conversation>
 
     <div style='display:none'>
       <div id='layerWelcomeNote'>

@@ -2,12 +2,13 @@
  * Main Components of this library all use this mixin to provide a set of standard behaviors.
  *
  * @class layerUICustomer.CustomerWidgetMixin
- * @extends layerUI.components.Component
+ * @extends layer.UI.components.Component
  */
-
-import MainComponent from 'layer-ui-web/lib-es5/mixins/main-component';
-import { Query } from 'layer-websdk';
-
+//import Layer from '@layerhq/web-xdk';
+import Layer from '../../node_modules/@layerhq/web-xdk/lib/index';
+const MainComponent = Layer.UI.mixins.MainComponent;
+const Query = Layer.Core.Query;
+const TextModel = Layer.Core.Client.getMessageTypeModelClass('TextModel');
 
 module.exports = {
   mixins: [MainComponent],
@@ -42,8 +43,8 @@ module.exports = {
    * @event layer-create-conversation-and-message
    * @param {Event} evt
    * @param {Object} evt.detail
-   * @param {layer.Conversation} evt.detail.conversation   The conversation generated for this message
-   * @param {layer.Message} evt.detail.message             The message generated for this message
+   * @param {layer.Core.Conversation} evt.detail.conversation   The conversation generated for this message
+   * @param {layer.Core.Message} evt.detail.message             The message generated for this message
    * @param {Object} evt.detail.notification               The notification that will be sent with this message
    */
 
@@ -77,8 +78,8 @@ module.exports = {
    * @property {Function} onCreateConversationAndMessage
    * @property {Event} onCreateConversationAndMessage.evt
    * @property {Object} onCreateConversationAndMessage.evt.detail
-   * @property {layer.Conversation} onCreateConversationAndMessage.evt.detail.conversation   The conversation generated for this message
-   * @property {layer.Message} onCreateConversationAndMessage.evt.detail.message             The message generated for this message
+   * @property {layer.Core.Conversation} onCreateConversationAndMessage.evt.detail.conversation   The conversation generated for this message
+   * @property {layer.Core.Message} onCreateConversationAndMessage.evt.detail.message             The message generated for this message
    */
   events: ['layer-create-conversation-and-message'],
   properties: {
@@ -206,45 +207,6 @@ module.exports = {
         this.nodes.welcomeTab.isDialogShowing = value;
       },
     },
-
-    /**
-     * Add buttons to the right of the Chat window's composer.
-     *
-     * The composer is the panel where the user types their message.
-     *
-     * ```
-     * widget.composeButtons = [
-     *     document.createElement('button'),
-     *     document.createElement('button')
-     * ];
-     * ```
-     *
-     * @property {HTMLElement[]} [composeButtons=[]]
-     */
-    composeButtons: {
-      type: HTMLElement,
-      set(value) {
-        this.nodes.chatTab.composeButtons = value;
-      },
-    },
-
-    /**
-     * Add buttons to the left of the Chat window's composer.
-     *
-     * ```
-     * widget.composeButtonsLeft = [
-     *     document.createElement('button'),
-     *     document.createElement('button')
-     * ];
-     * ```
-     *
-     * @property {HTMLElement[]} [composeButtonsLeft=[]]
-     */
-    composeButtonsLeft: {
-      set(value) {
-        this.nodes.chatTab.composeButtonsLeft = value;
-      },
-    },
   },
   methods: {
 
@@ -313,9 +275,11 @@ module.exports = {
         const message =  conversation.createMessage({
           parts: evt.detail.parts,
         });
+        const textPart = message.parts.filter(item => item.mimeType === TextModel.MIMEType)[0];
+        const text = textPart ? JSON.parse(textPart).text : 'New File';
         const notification = {
           title: "New Conversation",
-          text: message.parts.filter(item => item.mimeType === 'text/plain')[0].body,
+          text,
         };
         if (this.trigger('layer-create-conversation-and-message', { conversation, message, notification })) {
           this.conversation = conversation;

@@ -5,8 +5,6 @@ var path = require('path');
 var babel = require('babel-core');
 
 var version = require('./package.json').version;
-var websdkVersion = require('layer-websdk/package.json').version;
-var uiVersion = require('layer-ui-web/package.json').version;
 var HTML_HEAD = fs.readFileSync('./jsduck-config/head.html').toString();
 var CSS = fs.readFileSync('./jsduck-config/style.css').toString();
 
@@ -107,7 +105,7 @@ module.exports = function (grunt) {
           'categories': ['jsduck-config/categories.json'],
           'head-html': HTML_HEAD,
           'css': [CSS],
-          'footer': 'Layer WebSDK v' + websdkVersion + '; Layer UI for Web v' + uiVersion + '; Layer Customer Widget v' + version
+          'footer': 'Layer Customer Widget v' + version
         }
       }
     },
@@ -168,7 +166,7 @@ module.exports = function (grunt) {
     grunt.file.write('node_modules/layer-websdk/index.js', newcode);
 
 
-    var newcode = 'module.exports = global.layerUI;';
+    var newcode = 'module.exports = global.layer.UI;';
     var contents = grunt.file.read('node_modules/layer-ui-web/lib-es5/index.js');
     if (contents != newcode) {
       grunt.file.write('node_modules/layer-ui-web/lib-es5/index-stashed.js', contents);
@@ -257,16 +255,16 @@ module.exports = function (grunt) {
 
             // Generate the <template /> and <style> objects
             output += '\n(function() {\n';
-            output += 'var layerUI = require(\'layer-ui-web\');\n';
-            output += 'layerUI.buildAndRegisterTemplate("' + className + '", ' + JSON.stringify(templateContents.replace(/\n/g,'').trim()) + ', "' + templateId + '");\n';
-            output += 'layerUI.buildStyle("' + className + '", ' + JSON.stringify(style.trim()) + ', "' + templateId + '");\n';
+            //output += 'var layer = require(\'@layerhq/web-xdk\');\n';
+            output += 'layer.UI.buildAndRegisterTemplate("' + className + '", ' + JSON.stringify(templateContents.replace(/\n/g,'').trim()) + ', "' + templateId + '");\n';
+            output += 'layer.UI.buildStyle("' + className + '", ' + JSON.stringify(style.trim()) + ', "' + templateId + '");\n';
             output += '})()';
           });
         });
 
         //var outputES5 = output.replace(/\/\*[\s\S]*?\*\//g, '');
         var outputES5 = output;
-        var outputES6 = output.replace(/import\s+Layer\s+from\s+'layer-websdk'\s*;/g, 'import Layer from \'layer-websdk/index-es6\'');
+        var outputES6 = output.replace(/import\s+Layer\s+from\s+'@layerhq\/web-xdk'\s*;/g, 'import Layer from \'@layerhq/web-xdk/lib-es6\'');
 
         if (!grunt.file.exists(outputFolderES6)) {
           grunt.file.mkdir(outputFolderES6);
@@ -320,7 +318,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('version', 'Assign Versions', function() {
     // var contents = grunt.file.read('src/base.js');
-    // var newContents = contents.replace(/layerUI\.version = (.*)$/m, "layerUI.version = '" + version + "';");
+    // var newContents = contents.replace(/layer.UI\.version = (.*)$/m, "layer.UI.version = '" + version + "';");
     // if (newContents != contents) grunt.file.write('src/base.js', newContents);
   });
 

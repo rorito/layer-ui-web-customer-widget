@@ -30,8 +30,10 @@
  * @class layerUICustomer.SingleConversationWidget
  * @mixin layerUICustomer.CustomerWidgetMixin
  */
+//import Layer from '@layerhq/web-xdk';
+import Layer from '../../../node_modules/@layerhq/web-xdk/lib/index';
+const registerComponent = Layer.UI.registerComponent;
 
-import { registerComponent } from 'layer-ui-web';
 import '../subcomponents/layer-customer-chat-button/layer-customer-chat-button';
 import '../subcomponents/layer-customer-welcome/layer-customer-welcome';
 import '../subcomponents/layer-customer-chat/layer-customer-chat';
@@ -52,7 +54,7 @@ registerComponent('layer-customer-single-conversation', {
      *
      * This value can be set to a Conversation object, but is self populating if you do not set it.
      *
-     * @property {layer.Conversation} conversation
+     * @property {layer.Core.Conversation} conversation
      */
     conversation: {
       set(value) {

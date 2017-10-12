@@ -6,32 +6,26 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400" rel="stylesheet" type="text/css">
     <link href='themes/build/theme.css' rel="stylesheet" type="text/css">
-    <link  href='node_modules/layer-ui-web/themes/build/bubbles-compact.css' rel='stylesheet' />
     <!--<link rel="import" href="src/templates/layer-message-item.html">-->
 
     <script>
-      var client = new layer.Client({
+      var client = layer.init({
         appId: window.layerSample.appId
       });
       client.on('challenge', function(evt) {
         window.layerSample.getIdentityToken(client.appId, 'michael+customer2@layer.com', 'mkantor1', evt.nonce, evt.callback);
       });
       client.connect();
-      layerUI.init({
-        appId: window.layerSample.appId
-      });
 
       document.addEventListener('DOMContentLoaded', function() {
         var widget = document.querySelector('layer-customer-multiple-conversation');
         widget.welcomeNodes = document.querySelector('#layerWelcomeNote');
-        widget.composeButtons = [
-          document.createElement('layer-file-upload-button')
-        ];
       });
     </script>
   </head>
   <body>
     <layer-customer-multiple-conversation
+      replaceable-content='{"composerButtonPanelRight": "<layer-file-upload-button></layer-file-upload-button>"}'
       conversation-participants='a8aaf37c-0d7a-4d87-8639-bab4c08f1765'
       conversation-metadata='{"conversationName": "", "resolved": "false"}'
       chat-title-callback="function(conversation, callback) {callback('A Title');}"
