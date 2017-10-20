@@ -256,8 +256,8 @@ module.exports = function (grunt) {
             // Generate the <template /> and <style> objects
             output += '\n(function() {\n';
             //output += 'var layer = require(\'@layerhq/web-xdk\');\n';
-            output += 'layer.UI.buildAndRegisterTemplate("' + className + '", ' + JSON.stringify(templateContents.replace(/\n/g,'').trim()) + ', "' + templateId + '");\n';
-            output += 'layer.UI.buildStyle("' + className + '", ' + JSON.stringify(style.trim()) + ', "' + templateId + '");\n';
+            output += 'Layer.UI.buildAndRegisterTemplate("' + className + '", ' + JSON.stringify(templateContents.replace(/\n/g,'').trim()) + ', "' + templateId + '");\n';
+            output += 'Layer.UI.buildStyle("' + className + '", ' + JSON.stringify(style.trim()) + ', "' + templateId + '");\n';
             output += '})()';
           });
         });

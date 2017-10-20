@@ -239,10 +239,10 @@ registerComponent('layer-customer-multiple-conversation', {
 });
 
 (function () {
-  layer.UI.buildAndRegisterTemplate("layer-customer-multiple-conversation", "<div class='layer-main-dialog'><layer-customer-welcome layer-id='welcomeTab'></layer-customer-welcome><layer-customer-chat layer-id='chatTab'></layer-customer-chat><layer-customer-list layer-id='listTab'></layer-customer-list></div><layer-customer-chat-button layer-id='floatingButton'></layer-customer-chat-button>", "");
-  layer.UI.buildStyle("layer-customer-multiple-conversation", "", "");
+  _index2.default.UI.buildAndRegisterTemplate("layer-customer-multiple-conversation", "<div class='layer-main-dialog'><layer-customer-welcome layer-id='welcomeTab'></layer-customer-welcome><layer-customer-chat layer-id='chatTab'></layer-customer-chat><layer-customer-list layer-id='listTab'></layer-customer-list></div><layer-customer-chat-button layer-id='floatingButton'></layer-customer-chat-button>", "");
+  _index2.default.UI.buildStyle("layer-customer-multiple-conversation", "", "");
 })();
-},{"../../../node_modules/@layerhq/web-xdk/lib/index":65,"../layer-customer-widget-mixin":3,"../subcomponents/layer-customer-chat-button/layer-customer-chat-button":4,"../subcomponents/layer-customer-chat/layer-customer-chat":5,"../subcomponents/layer-customer-list/layer-customer-list":6,"../subcomponents/layer-customer-welcome/layer-customer-welcome":7}],2:[function(require,module,exports){
+},{"../../../node_modules/@layerhq/web-xdk/lib/index":61,"../layer-customer-widget-mixin":3,"../subcomponents/layer-customer-chat-button/layer-customer-chat-button":4,"../subcomponents/layer-customer-chat/layer-customer-chat":5,"../subcomponents/layer-customer-list/layer-customer-list":6,"../subcomponents/layer-customer-welcome/layer-customer-welcome":7}],2:[function(require,module,exports){
 /**
                                                                * Add this widget to your page if your customer has a single conversation with your company's staff.
                                                                *
@@ -353,10 +353,10 @@ registerComponent('layer-customer-single-conversation', {
 });
 
 (function () {
-  layer.UI.buildAndRegisterTemplate("layer-customer-single-conversation", "<div class='layer-main-dialog'><layer-customer-welcome layer-id='welcomeTab'></layer-customer-welcome><layer-customer-chat layer-id='chatTab'></layer-customer-chat></div><layer-customer-chat-button layer-id='floatingButton'></layer-customer-chat-button>", "");
-  layer.UI.buildStyle("layer-customer-single-conversation", "", "");
+  _index2.default.UI.buildAndRegisterTemplate("layer-customer-single-conversation", "<div class='layer-main-dialog'><layer-customer-welcome layer-id='welcomeTab'></layer-customer-welcome><layer-customer-chat layer-id='chatTab'></layer-customer-chat></div><layer-customer-chat-button layer-id='floatingButton'></layer-customer-chat-button>", "");
+  _index2.default.UI.buildStyle("layer-customer-single-conversation", "", "");
 })();
-},{"../../../node_modules/@layerhq/web-xdk/lib/index":65,"../layer-customer-widget-mixin":3,"../subcomponents/layer-customer-chat-button/layer-customer-chat-button":4,"../subcomponents/layer-customer-chat/layer-customer-chat":5,"../subcomponents/layer-customer-welcome/layer-customer-welcome":7}],3:[function(require,module,exports){
+},{"../../../node_modules/@layerhq/web-xdk/lib/index":61,"../layer-customer-widget-mixin":3,"../subcomponents/layer-customer-chat-button/layer-customer-chat-button":4,"../subcomponents/layer-customer-chat/layer-customer-chat":5,"../subcomponents/layer-customer-welcome/layer-customer-welcome":7}],3:[function(require,module,exports){
 /**
                                                               * Main Components of this library all use this mixin to provide a set of standard behaviors.
                                                               *
@@ -689,7 +689,7 @@ module.exports = {
     }
   }
 };
-},{"../../node_modules/@layerhq/web-xdk/lib/index":65}],4:[function(require,module,exports){
+},{"../../node_modules/@layerhq/web-xdk/lib/index":61}],4:[function(require,module,exports){
 /**
                                                                * Floating button for opening up the chat UI.
                                                                *
@@ -724,10 +724,16 @@ registerComponent('layer-customer-chat-button', {
   events: [],
   properties: {
     openHTML: {
-      value: '\uF00D'
+      value: '\uF00D',
+      set: function set() {
+        this._udpateHtml();
+      }
     },
     closedHTML: {
-      value: '\uF0E5'
+      value: '\uF0E5',
+      set: function set() {
+        this._udpateHtml();
+      }
     },
     /**
      * isOpen property inidicates if the dialog is open or closed.
@@ -743,7 +749,7 @@ registerComponent('layer-customer-chat-button', {
       set: function set(value) {
         this.classList[value ? 'add' : 'remove']('floating-chat-icon-open');
         this.classList[value ? 'remove' : 'add']('floating-chat-icon-closed');
-        this.innerHTML = value ? this.openHTML : this.closedHTML;
+        this._udpateHtml();
       }
     },
 
@@ -775,15 +781,18 @@ registerComponent('layer-customer-chat-button', {
      */
     _handleClick: function _handleClick(evt) {
       this.trigger('layer-customer-chat-button-click', { open: !this.isOpen });
+    },
+    _udpateHtml: function _udpateHtml() {
+      this.innerHTML = this.isOpen ? this.openHTML : this.closedHTML;
     }
   }
 });
 
 (function () {
-  layer.UI.buildAndRegisterTemplate("layer-customer-chat-button", "", "");
-  layer.UI.buildStyle("layer-customer-chat-button", "layer-customer-chat-button {\nposition: absolute;\ndisplay: block;\nbottom: 20px;\nright: 20px;\ncursor: pointer;\n}", "");
+  _index2.default.UI.buildAndRegisterTemplate("layer-customer-chat-button", "", "");
+  _index2.default.UI.buildStyle("layer-customer-chat-button", "layer-customer-chat-button {\nposition: absolute;\ndisplay: block;\nbottom: 20px;\nright: 20px;\ncursor: pointer;\n}", "");
 })();
-},{"../../../../node_modules/@layerhq/web-xdk/lib/index":65}],5:[function(require,module,exports){
+},{"../../../../node_modules/@layerhq/web-xdk/lib/index":61}],5:[function(require,module,exports){
 /**
                                                                * Adds a View where the user has their conversation
                                                                *
@@ -1009,10 +1018,10 @@ registerComponent('layer-customer-chat', {
 });
 
 (function () {
-  layer.UI.buildAndRegisterTemplate("layer-customer-chat", "<div class='layer-chat-title layer-dialog-title' layer-id='chatTitle'><div class='layer-title-buttons'><span class=\"layer-title-button layer-back-button\" layer-id='backButton'></span></div><div class='layer-title-text' layer-id='titleText'>Your Conversations</div></div><layer-conversation-view layer-id='conversationView'></layer-conversation-view>", "");
-  layer.UI.buildStyle("layer-customer-chat", "layer-customer-chat {\ndisplay: flex;\nflex-direction: column;\n}\nlayer-customer-chat layer-conversation-view {\nflex-grow: 1;\n}", "");
+  _index2.default.UI.buildAndRegisterTemplate("layer-customer-chat", "<div class='layer-chat-title layer-dialog-title' layer-id='chatTitle'><div class='layer-title-buttons'><span class=\"layer-title-button layer-back-button\" layer-id='backButton'></span></div><div class='layer-title-text' layer-id='titleText'>Your Conversations</div></div><layer-conversation-view layer-id='conversationView'></layer-conversation-view>", "");
+  _index2.default.UI.buildStyle("layer-customer-chat", "layer-customer-chat {\ndisplay: flex;\nflex-direction: column;\n}\nlayer-customer-chat layer-conversation-view {\nflex-grow: 1;\n}", "");
 })();
-},{"../../../../node_modules/@layerhq/web-xdk/lib/index":65,"../../../mixins/tab":9,"layer-ui-web/lib-es5/mixins/focus-on-keydown":10}],6:[function(require,module,exports){
+},{"../../../../node_modules/@layerhq/web-xdk/lib/index":61,"../../../mixins/tab":9,"layer-ui-web/lib-es5/mixins/focus-on-keydown":10}],6:[function(require,module,exports){
 /**
                                                                * Adds a View where the user's conversations are listed.
                                                                *
@@ -1260,10 +1269,10 @@ registerComponent('layer-customer-list', {
 });
 
 (function () {
-  layer.UI.buildAndRegisterTemplate("layer-customer-list", "<div class='layer-list-title layer-dialog-title' layer-id='listTitle'><div class='layer-title-text' layer-id='titleText'></div><div class='layer-title-buttons layer-toggle-pannel'><button class='layer-toggle-selected' layer-id='filterOpenButton'></button><button layer-id='filterAllButton'></button></div></div><layer-conversation-list layer-id='listPanel'></layer-conversation-list><layer-compose-bar layer-id='listComposer' placeholder='Start a new conversation'></layer-compose-bar>", "");
-  layer.UI.buildStyle("layer-customer-list", "layer-customer-list {\ndisplay: flex;\nflex-direction: column;\n}\nlayer-conversation-list {\nflex-grow: 1;\n}\nlayer-customer-list .layer-list-toggles {\ndisplay: none;\n}\nlayer-customer-list.layer-list-filter-toggles-enabled .layer-list-toggles {\ndisplay: block;\n}", "");
+  _index2.default.UI.buildAndRegisterTemplate("layer-customer-list", "<div class='layer-list-title layer-dialog-title' layer-id='listTitle'><div class='layer-title-text' layer-id='titleText'></div><div class='layer-title-buttons layer-toggle-pannel'><button class='layer-toggle-selected' layer-id='filterOpenButton'></button><button layer-id='filterAllButton'></button></div></div><layer-conversation-list layer-id='listPanel'></layer-conversation-list><layer-compose-bar layer-id='listComposer' placeholder='Start a new conversation'></layer-compose-bar>", "");
+  _index2.default.UI.buildStyle("layer-customer-list", "layer-customer-list {\ndisplay: flex;\nflex-direction: column;\n}\nlayer-conversation-list {\nflex-grow: 1;\n}\nlayer-customer-list .layer-list-toggles {\ndisplay: none;\n}\nlayer-customer-list.layer-list-filter-toggles-enabled .layer-list-toggles {\ndisplay: block;\n}", "");
 })();
-},{"../../../../node_modules/@layerhq/web-xdk/lib/index":65,"../../../mixins/tab":9,"layer-ui-web/lib-es5/mixins/focus-on-keydown":10}],7:[function(require,module,exports){
+},{"../../../../node_modules/@layerhq/web-xdk/lib/index":61,"../../../mixins/tab":9,"layer-ui-web/lib-es5/mixins/focus-on-keydown":10}],7:[function(require,module,exports){
 /**
                                                                * The welcome view that welcomes the user to the chat experiences and prompts them to being.
                                                                *
@@ -1329,10 +1338,10 @@ registerComponent('layer-customer-welcome', {
 });
 
 (function () {
-  layer.UI.buildAndRegisterTemplate("layer-customer-welcome", "<div class='layer-customer-widget-welecome-message' layer-id='welcomeNote'></div><div class='layer-coustomer-widget-welcome-spacer'></div><layer-compose-bar layer-id='welcomeComposer'></layer-compose-bar>", "");
-  layer.UI.buildStyle("layer-customer-welcome", "", "");
+  _index2.default.UI.buildAndRegisterTemplate("layer-customer-welcome", "<div class='layer-customer-widget-welecome-message' layer-id='welcomeNote'></div><div class='layer-coustomer-widget-welcome-spacer'></div><layer-compose-bar layer-id='welcomeComposer'></layer-compose-bar>", "");
+  _index2.default.UI.buildStyle("layer-customer-welcome", "", "");
 })();
-},{"../../../../node_modules/@layerhq/web-xdk/lib/index":65,"../../../mixins/tab":9,"layer-ui-web/lib-es5/mixins/focus-on-keydown":10}],8:[function(require,module,exports){
+},{"../../../../node_modules/@layerhq/web-xdk/lib/index":61,"../../../mixins/tab":9,"layer-ui-web/lib-es5/mixins/focus-on-keydown":10}],8:[function(require,module,exports){
 'use strict';
 
 var LayerXDKCustomerChatWidget = {};
@@ -1442,747 +1451,6 @@ module.exports = {
   }
 };
 },{}],11:[function(require,module,exports){
-(function (global){
-'use strict';
-
-/**
- * Execute this function immediately after current processing is complete (setImmediate replacement).
- *
- * A depth of up to 10 is allowed.  That means that functions you schedule using defer
- * can in turn schedule further actions.  The original actions are depth = 0; the actions scheduled
- * by your actions are depth = 1.  These new actions may in turn schedule further actions, which happen at depth = 3.
- * But to avoid infinite loops, if depth reaches 10, it clears the queue and ignores them.
- *
- * @method defer
- * @param {Function} f
- */
-var setImmediate = global.getNativeSupport && global.getNativeSupport('setImmediate');
-if (setImmediate) {
-  module.exports = setImmediate;
-} else {
-
-  // Process all callbacks in the setImmediateQueue
-  var setImmediateProcessor = function setImmediateProcessor() {
-    // Processing the queue is no longer scheduled; clear any scheduling info.
-    setImmediateIsPending = false;
-    clearTimeout(setImmediateId);
-    setImmediateId = 0;
-
-    // Our initial depth is depth 0
-    setImmediateDepth = 0;
-    setImmediateQueue.push(setImmediateDepth);
-
-    // Process all functions and depths in the queue starting always with the item at index 0,
-    // and removing them from the queue before processing them.
-    while (setImmediateQueue.length) {
-      var item = setImmediateQueue.shift();
-      if (typeof item === 'function') {
-        try {
-          item();
-        } catch (err) {
-          console.error(err);
-        }
-      } else if (item >= setImmediateMaxDepth) {
-        setImmediateQueue = [];
-        console.error('Layer Error: setImmediate Max Queue Depth Exceded');
-      }
-    }
-  };
-  // Schedule the function to be called by adding it to the queue, and setting up scheduling if its needed.
-
-
-  var setImmediateId = 0,
-      setImmediateDepth = 0,
-
-
-  // Have we scheduled the queue to be processed? If not, this is false
-  setImmediateIsPending = false,
-
-
-  // Queue of functions to call and depth integers
-  setImmediateQueue = [];
-
-  // If a setImmediate callback itself calls setImmediate which in turn calls setImmediate, at what point do we suspect we have an infinite loop?
-  // A depth of 10 is currently considered OK, but this may need to be increased.
-  var setImmediateMaxDepth = 10;module.exports = function defer(func) {
-    if (typeof func !== 'function') throw new Error('Function expected in defer');
-
-    setImmediateQueue.push(func);
-
-    // If postMessage has not already been called, call it
-    if (!setImmediateIsPending) {
-      setImmediateIsPending = true;
-      if (typeof document !== 'undefined') {
-        window.postMessage({ type: 'layer-set-immediate' }, '*');
-      } else {
-        // React Native reportedly lacks a document, and throws errors on the second parameter
-        window.postMessage({ type: 'layer-set-immediate' });
-      }
-
-      // Having seen scenarios where postMessage failed to trigger, set a backup using setTimeout that will be canceled
-      // if postMessage is succesfully called.
-      setImmediateId = setTimeout(setImmediateProcessor, 0);
-    }
-  };
-
-  // For Unit Testing
-  module.exports.flush = function () {
-    return setImmediateProcessor();
-  };
-  module.exports.reset = function () {
-    setImmediateQueue = [];
-  };
-
-  addEventListener('message', function (event) {
-    if (event.data.type !== 'layer-set-immediate') return;
-    setImmediateProcessor();
-  });
-}
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],12:[function(require,module,exports){
-(function (global){
-'use strict';
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-/**
- * Utility methods
- *
- * @class layer.ClientUtils
- */
-
-var uuid = require('uuid');
-exports.atob = typeof atob === 'undefined' ? global.getNativeSupport('atob') : atob.bind(window);
-exports.btoa = typeof btoa === 'undefined' ? global.getNativeSupport('btoa') : btoa.bind(window);
-var LocalFileReader = typeof FileReader === 'undefined' ? global.getNativeSupport('FileReader') : FileReader;
-
-/**
- * Generate a random UUID
- *
- * @method
- * @return {string}
- */
-exports.generateUUID = uuid.v4;
-
-/**
- * Returns the 'type' portion of a Layer ID.
- *
- *         switch(Utils.typeFromID(id)) {
- *             case 'conversations':
- *                 ...
- *             case 'message':
- *                 ...
- *             case: 'queries':
- *                 ...
- *         }
- *
- * Does not currently handle Layer App IDs.
- *
- * @method
- * @param  {string} id
- * @return {string}
- */
-exports.typeFromID = function (id) {
-  var matches = id.match(/([^/]*)(\/[^/]*)$/);
-  return matches ? matches[1] : '';
-};
-
-/**
- * Returns the UUID portion of a Layer ID
- *
- * @method
- * @param  {string} id
- * @return {string}
- */
-exports.uuid = function (id) {
-  return (id || '').replace(/^.*\//, '');
-};
-
-exports.isEmpty = function (obj) {
-  return Object.prototype.toString.apply(obj) === '[object Object]' && Object.keys(obj).length === 0;
-};
-
-exports.camelCase = function (str) {
-  return str.replace(/[-_](.)/g, function (match, value) {
-    return value.toUpperCase();
-  });
-};
-
-/**
- * Turn a camel case name into a hyphenated name
- *
- * @method hyphenate
- * @static
- * @param {String} aCamelCasedString
- * @returns {String} a-hyphenated-string
- */
-var regexHyphenate = /([a-z])([A-Z])/g;
-exports.hyphenate = function (str) {
-  var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '-';
-  return str.replace(regexHyphenate, function (match, part1, part2) {
-    return part1 + separator + part2.toLowerCase();
-  });
-};
-
-/**
- * Simplified sort method.
- *
- * Provides a function to return the value to compare rather than do the comparison.
- *
- *      sortBy([{v: 3}, {v: 1}, v: 33}], function(value) {
- *          return value.v;
- *      }, false);
- *
- * @method
- * @param  {Mixed[]}   inArray      Array to sort
- * @param  {Function} fn            Function that will return a value to compare
- * @param  {Function} fn.value      Current value from inArray we are comparing, and from which a value should be extracted
- * @param  {boolean}  [reverse=false] Sort ascending (false) or descending (true)
- */
-exports.sortBy = function (inArray, fn, reverse) {
-  reverse = reverse ? -1 : 1;
-  return inArray.sort(function (valueA, valueB) {
-    var aa = fn(valueA);
-    var bb = fn(valueB);
-    if (aa === undefined && bb === undefined) return 0;
-    if (aa === undefined && bb !== undefined) return 1;
-    if (aa !== undefined && bb === undefined) return -1;
-    if (aa > bb) return 1 * reverse;
-    if (aa < bb) return -1 * reverse;
-    return 0;
-  });
-};
-
-/**
- * Quick and easy clone method.
- *
- * Does not work on circular references; should not be used
- * on objects with event listeners.
- *
- *      var newObj = Utils.clone(oldObj);
- *
- * @method
- * @param  {Object}     Object to clone
- * @return {Object}     New Object
- */
-exports.clone = function (obj) {
-  return JSON.parse(JSON.stringify(obj));
-};
-
-/**
- * Its necessary that the encoding algorithm for creating a URI matches the Layer Server's algorithm.
- * Failure to do that creates mismatching IDs that will then refer to different objects.
- *
- * Derived from https://github.com/kevva/strict-uri-encode
- *
- * @method strictEncodeURI
- * @param {String} str
- */
-exports.strictEncodeURI = function (str) {
-  return encodeURIComponent(str).replace(/[!~'()]/g, function (x) {
-    return '%' + x.charCodeAt(0).toString(16).toUpperCase();
-  });
-};
-
-/**
- * URL Decode a URL Encoded base64 string
- *
- * Copied from https://github.com/auth0-blog/angular-token-auth, but
- * appears in many places on the web.
- *
- * @method decode
- * @param {String} str   base64 string
- * @return str   Decoded string
- */
-/* istanbul ignore next */
-exports.decode = function (str) {
-  var reg1 = new RegExp('_', 'g');
-  var reg2 = new RegExp('-', 'g');
-  var output = str.replace(reg2, '+').replace(reg1, '/');
-  switch (output.length % 4) {
-    case 0:
-      break;
-    case 2:
-      output += '==';
-      break;
-    case 3:
-      output += '=';
-      break;
-    default:
-      throw new Error('Illegal base64url string!');
-  }
-  return exports.atob(output);
-};
-
-/**
- * Returns a delay in seconds needed to follow an exponential
- * backoff pattern of delays for retrying a connection.
- *
- * Algorithm has two motivations:
- *
- * 1. Retry with increasingly long intervals up to some maximum interval
- * 2. Randomize the retry interval enough so that a thousand clients
- * all following the same algorithm at the same time will not hit the
- * server at the exact same times.
- *
- * The following are results before jitter for some values of counter:
-
-      0: 0.1
-      1: 0.2
-      2: 0.4
-      3: 0.8
-      4: 1.6
-      5: 3.2
-      6: 6.4
-      7: 12.8
-      8: 25.6
-      9: 51.2
-      10: 102.4
-      11. 204.8
-      12. 409.6
-      13. 819.2
-      14. 1638.4 (27 minutes)
-
- * @method getExponentialBackoffSeconds
- * @param  {number} maxSeconds - This is not the maximum seconds delay, but rather
- * the maximum seconds delay BEFORE adding a randomized value.
- * @param  {number} counter - Current counter to use for calculating the delay; should be incremented up to some reasonable maximum value for each use.
- * @return {number}     Delay in seconds/fractions of a second
- */
-exports.getExponentialBackoffSeconds = function getExponentialBackoffSeconds(maxSeconds, counter) {
-  var secondsWaitTime = Math.pow(2, counter) / 10,
-      secondsOffset = Math.random(); // value between 0-1 seconds.
-  if (counter < 2) secondsOffset = secondsOffset / 4; // values less than 0.2 should be offset by 0-0.25 seconds
-  else if (counter < 6) secondsOffset = secondsOffset / 2; // values between 0.2 and 1.0 should be offset by 0-0.5 seconds
-
-  if (secondsWaitTime >= maxSeconds) secondsWaitTime = maxSeconds;
-
-  return secondsWaitTime + secondsOffset;
-};
-
-/**
- * Is this data a blob?
- *
- * @method isBlob
- * @param {Mixed} value
- * @returns {Boolean} - True if its a blob, false if not.
- */
-exports.isBlob = function (value) {
-  return typeof Blob !== 'undefined' && value instanceof Blob;
-};
-
-/**
- * Given a blob return a base64 string.
- *
- * @method blobToBase64
- * @param {Blob} blob - data to convert to base64
- * @param {Function} callback
- * @param {String} callback.result - Your base64 string result
- */
-exports.blobToBase64 = function (blob, callback) {
-  var reader = new LocalFileReader();
-  reader.readAsDataURL(blob);
-  reader.onloadend = function () {
-    return callback(reader.result.replace(/^.*?,/, ''));
-  };
-};
-
-/**
- * Given a base64 string return a blob.
- *
- * @method base64ToBlob
- * @param {String} b64Data - base64 string data without any type prefixes
- * @param {String} contentType - mime type of the data
- * @returns {Blob}
- */
-exports.base64ToBlob = function (b64Data, contentType) {
-  try {
-    var sliceSize = 512;
-    var byteCharacters = exports.atob(b64Data);
-    var byteArrays = [];
-    var offset = void 0;
-
-    for (offset = 0; offset < byteCharacters.length; offset += sliceSize) {
-      var i = void 0;
-      var slice = byteCharacters.slice(offset, offset + sliceSize);
-      var byteNumbers = new Array(slice.length);
-      for (i = 0; i < slice.length; i++) {
-        byteNumbers[i] = slice.charCodeAt(i);
-      }
-
-      var byteArray = new Uint8Array(byteNumbers);
-
-      byteArrays.push(byteArray);
-    }
-
-    var blob = new Blob(byteArrays, { type: contentType });
-    return blob;
-  } catch (e) {
-    // noop
-  }
-  return null;
-};
-
-/**
- * Does window.btao() in a unicode-safe way
- *
- * https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/btoa#Unicode_strings
- *
- * @method utoa
- * @param {String} str
- * @return {String}
- */
-exports.utoa = function (str) {
-  return exports.btoa(unescape(encodeURIComponent(str)));
-};
-
-/**
- * Does window.atob() in a way that can decode data from utoa()
- *
- * https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/btoa#Unicode_strings
- *
- * @method atou
- * @param {String} str
- * @return {String}
- */
-exports.atou = function (str) {
-  return decodeURIComponent(escape(exports.atob(str)));
-};
-
-/**
- * Given a File/Blob return a string.
- *
- * Assumes blob represents textual data.
- *
- * @method fetchTextFromFile
- * @param {Blob} file
- * @param {Function} callback
- * @param {String} callback.result
- */
-exports.fetchTextFromFile = function (file, callback) {
-  if (typeof file === 'string') return callback(file);
-  var reader = new LocalFileReader();
-  reader.addEventListener('loadend', function () {
-    callback(reader.result);
-  });
-  reader.readAsText(file);
-};
-
-/**
- * Execute this function immediately after current processing is complete (setImmediate replacement).
- *
- * A depth of up to 10 is allowed.  That means that functions you schedule using defer
- * can in turn schedule further actions.  The original actions are depth = 0; the actions scheduled
- * by your actions are depth = 1.  These new actions may in turn schedule further actions, which happen at depth = 3.
- * But to avoid infinite loops, if depth reaches 10, it clears the queue and ignores them.
- *
- * @method defer
- * @param {Function} f
- */
-exports.defer = require('./defer');
-
-/**
- * Run the Layer Parser on the request.
- *
- * Parameters here
- * are the parameters specied in [Layer-Patch](https://github.com/layerhq/node-layer-patch), plus
- * a client object.
- *
- *      Util.layerParse({
- *          object: conversation,
- *          type: 'Conversation',
- *          operations: layerPatchOperations,
- *          client: client
- *      });
- *
- * @method
- * @deprecated Use 'utils/layer-parser' instead
- * @param {Object} request - layer-patch parameters
- * @param {Object} request.object - Object being updated  by the operations
- * @param {string} request.type - Type of object being updated
- * @param {Object[]} request.operations - Array of change operations to perform upon the object
- * @param {layer.Client} request.client
- */
-exports.layerParse = require('./layer-parser');
-
-/**
- * Object comparison.
- *
- * Does a recursive traversal of two objects verifying that they are the same.
- * Is able to make metadata-restricted assumptions such as that
- * all values are either plain Objects or strings.
- *
- *      if (Utils.doesObjectMatch(conv1.metadata, conv2.metadata)) {
- *          alert('These two metadata objects are the same');
- *      }
- *
- * @method
- * @param  {Object} requestedData
- * @param  {Object} actualData
- * @return {boolean}
- */
-exports.doesObjectMatch = function (requestedData, actualData) {
-  if (!requestedData && actualData || requestedData && !actualData) return false;
-  var requestedKeys = Object.keys(requestedData).sort();
-  var actualKeys = Object.keys(actualData).sort();
-
-  // If there are a different number of keys, fail.
-  if (requestedKeys.length !== actualKeys.length) return false;
-
-  // Compare key name and value at each index
-  for (var index = 0; index < requestedKeys.length; index++) {
-    var k1 = requestedKeys[index];
-    var k2 = actualKeys[index];
-    var v1 = requestedData[k1];
-    var v2 = actualData[k2];
-    if (k1 !== k2) return false;
-    if (v1 && (typeof v1 === 'undefined' ? 'undefined' : _typeof(v1)) === 'object') {
-      // Array comparison is not used by the Web SDK at this time.
-      if (Array.isArray(v1)) {
-        throw new Error('Array comparison not handled yet');
-      } else if (!exports.doesObjectMatch(v1, v2)) {
-        return false;
-      }
-    } else if (v1 !== v2) {
-      return false;
-    }
-  }
-  return true;
-};
-
-/**
- * Simple array inclusion test
- * @method includes
- * @param {Mixed[]} items
- * @param {Mixed} value
- * @returns {boolean}
- */
-exports.includes = function (items, value) {
-  return items.indexOf(value) !== -1;
-};
-
-/**
- * Some ASCII art when client initializes
- */
-exports.asciiInit = function (version) {
-  if (!version) return 'Missing version';
-
-  var split = version.split('-');
-  var line1 = split[0] || '',
-      line2 = split[1] || '';
-
-  line1 += new Array(13 - line1.length).join(' ');
-  line2 += new Array(14 - line2.length).join(' ');
-
-  return '\n    /hNMMMMMMMMMMMMMMMMMMMms.\n  hMMy+/////////////////omMN-\n  MMN                    oMMo\n  MMN        Layer       oMMo\n  MMN       Web SDK      oMMo\n  MMM-                   oMMo\n  MMMy      v' + line1 + 'oMMo\n  MMMMo     ' + line2 + 'oMMo\n  MMMMMy.                oMMo\n  MMMMMMNy:\'             oMMo\n  NMMMMMMMMmy+:-.\'      \'yMM/\n  :dMMMMMMMMMMMMNNNNNNNNNMNs\n   -/+++++++++++++++++++:\'';
-};
-
-exports.logger = require('./logger');
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./defer":11,"./layer-parser":13,"./logger":14,"uuid":181}],13:[function(require,module,exports){
-'use strict';
-
-/**
- * Run the Layer Parser on the request.
- *
- * Parameters here
- * are the parameters specied in [Layer-Patch](https://github.com/layerhq/node-layer-patch), plus
- * a client object.
- *
- *      layerParse({
- *          object: conversation,
- *          type: 'Conversation',
- *          operations: layerPatchOperations,
- *          client: client
- *      });
- *
- * @method
- * @param {Object} request - layer-patch parameters
- * @param {Object} request.object - Object being updated  by the operations
- * @param {string} request.type - Type of object being updated
- * @param {Object[]} request.operations - Array of change operations to perform upon the object
- * @param {layer.Client} request.client
- */
-var LayerParser = require('layer-patch');
-
-var parser = void 0;
-
-/**
- * Creates a LayerParser
- *
- * @method
- * @private
- * @param {Object} request - see layer.ClientUtils.layerParse
- */
-function createParser(request) {
-  request.client.once('destroy', function () {
-    return parser = null;
-  });
-
-  parser = new LayerParser({
-    camelCase: true,
-    getObjectCallback: function getObjectCallback(id) {
-      return request.client.getObject(id);
-    },
-    createObjectCallback: function createObjectCallback(id, obj) {
-      return request.client._createObject(obj);
-    },
-    propertyNameMap: {
-      Conversation: {
-        unreadMessageCount: 'unreadCount'
-      },
-      Identity: {
-        presence: '_presence'
-      }
-    },
-    changeCallbacks: {
-      MessagePart: {
-        all: function all(updateObject, newValue, oldValue, paths) {
-          updateObject._handlePatchEvent(newValue, oldValue, paths);
-        }
-      },
-      Message: {
-        all: function all(updateObject, newValue, oldValue, paths) {
-          updateObject._handlePatchEvent(newValue, oldValue, paths);
-        }
-      },
-      Conversation: {
-        all: function all(updateObject, newValue, oldValue, paths) {
-          updateObject._handlePatchEvent(newValue, oldValue, paths);
-        }
-      },
-      Channel: {
-        all: function all(updateObject, newValue, oldValue, paths) {
-          updateObject._handlePatchEvent(newValue, oldValue, paths);
-        }
-      },
-      Identity: {
-        all: function all(updateObject, newValue, oldValue, paths) {
-          updateObject._handlePatchEvent(newValue, oldValue, paths);
-        }
-      }
-    }
-  });
-}
-
-// Docs in client-utils.js
-module.exports = function (request) {
-  if (!parser) createParser(request);
-  parser.parse(request);
-};
-},{"layer-patch":175}],14:[function(require,module,exports){
-'use strict';
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @class layer.Logger
- * @private
- *
- */
-var _require$LOG = require('../constants').LOG,
-    DEBUG = _require$LOG.DEBUG,
-    INFO = _require$LOG.INFO,
-    WARN = _require$LOG.WARN,
-    ERROR = _require$LOG.ERROR,
-    NONE = _require$LOG.NONE;
-
-// Pretty arbitrary test that IE/edge fails and others don't.  Yes I could do a more direct
-// test for IE/edge but its hoped that MS will fix this around the time they cleanup their internal console object.
-// Note that uglifyjs with drop_console=true will throw an error on console.assert.toString().match; so we instead do (console.assert.toString() || "") which drop_console
-// on replacing console.assert.toString() with (void 0) will still work
-
-
-var supportsConsoleFormatting = Boolean(console.assert && (console.assert.toString() || "").match(/assert/));
-var LayerCss = 'color: #888; font-weight: bold;';
-var Black = 'color: black';
-/* istanbulify ignore next */
-
-var Logger = function () {
-  function Logger() {
-    _classCallCheck(this, Logger);
-  }
-
-  _createClass(Logger, [{
-    key: 'log',
-    value: function log(msg, obj, type, color) {
-      /* istanbul ignore else */
-      if ((typeof msg === 'undefined' ? 'undefined' : _typeof(msg)) === 'object') {
-        obj = msg;
-        msg = '';
-      }
-      var timestamp = new Date().toLocaleTimeString();
-      var op = void 0;
-      switch (type) {
-        case DEBUG:
-          op = 'debug';
-          break;
-        case INFO:
-          op = 'info';
-          break;
-        case WARN:
-          op = 'warn';
-          break;
-        case ERROR:
-          op = 'error';
-          break;
-        default:
-          op = 'log';
-      }
-      if (obj) {
-        if (supportsConsoleFormatting) {
-          console[op]('%cLayer%c ' + op.toUpperCase() + '%c [' + timestamp + ']: ' + msg, LayerCss, 'color: ' + color, Black, obj);
-        } else {
-          console[op]('Layer ' + op.toUpperCase() + ' [' + timestamp + ']: ' + msg, obj);
-        }
-      } else if (supportsConsoleFormatting) {
-        console[op]('%cLayer%c ' + op.toUpperCase() + '%c [' + timestamp + ']: ' + msg, LayerCss, 'color: ' + color, Black);
-      } else {
-        console[op]('Layer ' + op.toUpperCase() + ' [' + timestamp + ']: ' + msg);
-      }
-    }
-  }, {
-    key: 'debug',
-    value: function debug(msg, obj) {
-      /* istanbul ignore next */
-      if (this.level >= DEBUG) this.log(msg, obj, DEBUG, '#888');
-    }
-  }, {
-    key: 'info',
-    value: function info(msg, obj) {
-      /* istanbul ignore next */
-      if (this.level >= INFO) this.log(msg, obj, INFO, 'black');
-    }
-  }, {
-    key: 'warn',
-    value: function warn(msg, obj) {
-      /* istanbul ignore next */
-      if (this.level >= WARN) this.log(msg, obj, WARN, 'orange');
-    }
-  }, {
-    key: 'error',
-    value: function error(msg, obj) {
-      /* istanbul ignore next */
-      if (this.level >= ERROR) this.log(msg, obj, ERROR, 'red');
-    }
-  }]);
-
-  return Logger;
-}();
-
-/* istanbul ignore next */
-
-
-Logger.prototype.level = typeof jasmine === 'undefined' ? ERROR : NONE;
-
-var logger = new Logger();
-
-module.exports = logger;
-},{"../constants":15}],15:[function(require,module,exports){
 'use strict';
 
 /**
@@ -2278,7 +1546,7 @@ module.exports = {
     MY_DEVICES: 'my_devices'
   }
 };
-},{}],16:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -2792,16 +2060,21 @@ var ClientAuthenticator = function (_Root) {
 
       // Report an error if no identityToken provided
       if (!identityToken) {
+        logger.error(LayerError.dictionary.identityTokenMissing);
         throw new Error(LayerError.dictionary.identityTokenMissing);
       } else {
         var userData = Util.decode(identityToken.split('.')[1]);
         var identityObj = JSON.parse(userData);
 
         if (!identityObj.prn) {
-          throw new Error('Your identity token prn (user id) is empty');
+          // TODO: Move to dictionary
+          var err = 'Your identity token prn (user id) is empty';
+          logger.error(err);
+          throw new Error(err);
         }
 
         if (this.user.userId && this.user.userId !== identityObj.prn) {
+          logger.error(LayerError.dictionary.invalidUserIdChange);
           throw new Error(LayerError.dictionary.invalidUserIdChange);
         }
 
@@ -3531,6 +2804,12 @@ var ClientAuthenticator = function (_Root) {
         // is still authenticated on the customer's app even if not on Layer.
         if (result.status === 401 && this._wantsToBeAuthenticated) {
           if (this.isAuthenticated) {
+            var hasOldSessionToken = result.request.headers && result.request.headers.authorization;
+            var oldSessionToken = hasOldSessionToken ? result.request.headers.authorization.replace(/^.*"(.*)".*$/, "$1") : '';
+
+            // Ignore auth errors if in response to a no longer in use sessionToken
+            if (oldSessionToken && this.isReady && this.sessionToken && oldSessionToken !== this.sessionToken) return;
+
             logger.warn('SESSION EXPIRED!');
             this.isAuthenticated = false;
             this.isReady = false;
@@ -3968,7 +3247,7 @@ Root.initClass.apply(ClientAuthenticator, [ClientAuthenticator, 'ClientAuthentic
 
 module.exports = ClientAuthenticator;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../constants":15,"../util":165,"./db-manager":19,"./layer-error":21,"./models/identity":38,"./online-state-manager":44,"./root":53,"./sync-event":54,"./sync-manager":55,"./websockets/change-manager":61,"./websockets/request-manager":62,"./websockets/socket-manager":63,"./xhr":64}],17:[function(require,module,exports){
+},{"../constants":11,"../util":161,"./db-manager":15,"./layer-error":17,"./models/identity":34,"./online-state-manager":40,"./root":49,"./sync-event":50,"./sync-manager":51,"./websockets/change-manager":57,"./websockets/request-manager":58,"./websockets/socket-manager":59,"./xhr":60}],13:[function(require,module,exports){
 'use strict';
 
 /**
@@ -4070,7 +3349,7 @@ module.exports = {
   addListener: addListener,
   removeListener: removeListener
 };
-},{"../util":165}],18:[function(require,module,exports){
+},{"../util":161}],14:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -4560,10 +3839,10 @@ var Client = function (_ClientAuth) {
 
       if (object.isSaved()) {
         if (this._scheduleCheckAndPurgeCacheAt < Date.now()) {
-          this._scheduleCheckAndPurgeCacheAt = Date.now() + Client.QUERIED_CACHE_PURGE_INTERVAL;
+          this._scheduleCheckAndPurgeCacheAt = Date.now() + Client.CACHE_PURGE_INTERVAL;
           setTimeout(function () {
             return _this4._runScheduledCheckAndPurgeCache();
-          }, Client.QUERIED_CACHE_PURGE_INTERVAL);
+          }, Client.CACHE_PURGE_INTERVAL);
         }
         this._scheduleCheckAndPurgeCacheItems.push(object);
       }
@@ -4872,7 +4151,7 @@ Client._supportedEvents = [
 Client.mixins = [require('./mixins/client-queries'), require('./mixins/client-identities'), require('./mixins/client-members'), require('./mixins/client-conversations'), require('./mixins/client-channels'), require('./mixins/client-messages'), require('./mixins/websocket-operations'), require('./mixins/client-message-type-models')];
 Root.initClass.apply(Client, [Client, 'Client']);
 module.exports = Client;
-},{"../util":165,"./client-authenticator":16,"./client-registry":17,"./layer-error":21,"./mixins/client-channels":23,"./mixins/client-conversations":24,"./mixins/client-identities":25,"./mixins/client-members":26,"./mixins/client-message-type-models":27,"./mixins/client-messages":28,"./mixins/client-queries":29,"./mixins/websocket-operations":30,"./models/announcement":31,"./models/channel":33,"./models/channel-message":32,"./models/conversation":37,"./models/conversation-message":36,"./models/identity":38,"./models/membership":39,"./models/message-part":40,"./root":53,"./telemetry-monitor":56,"./typing-indicators/typing-indicator-listener":57,"./typing-indicators/typing-listener":59,"./typing-indicators/typing-publisher":60}],19:[function(require,module,exports){
+},{"../util":161,"./client-authenticator":12,"./client-registry":13,"./layer-error":17,"./mixins/client-channels":19,"./mixins/client-conversations":20,"./mixins/client-identities":21,"./mixins/client-members":22,"./mixins/client-message-type-models":23,"./mixins/client-messages":24,"./mixins/client-queries":25,"./mixins/websocket-operations":26,"./models/announcement":27,"./models/channel":29,"./models/channel-message":28,"./models/conversation":33,"./models/conversation-message":32,"./models/identity":34,"./models/membership":35,"./models/message-part":36,"./root":49,"./telemetry-monitor":52,"./typing-indicators/typing-indicator-listener":53,"./typing-indicators/typing-listener":55,"./typing-indicators/typing-publisher":56}],15:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -6475,7 +5754,7 @@ DbManager._supportedEvents = ['open', 'error'].concat(Root._supportedEvents);
 
 Root.initClass.apply(DbManager, [DbManager, 'DbManager']);
 module.exports = DbManager;
-},{"../constants":15,"../util":165,"./models/announcement":31,"./root":53,"./sync-event":54}],20:[function(require,module,exports){
+},{"../constants":11,"../util":161,"./models/announcement":27,"./root":49,"./sync-event":50}],16:[function(require,module,exports){
 'use strict';
 
 var Core = {};
@@ -6517,7 +5796,7 @@ Core.TypingIndicators.TypingListener = require('./typing-indicators/typing-liste
 Core.TypingIndicators.TypingPublisher = require('./typing-indicators/typing-publisher');
 
 module.exports = Core;
-},{"./client":18,"./client-authenticator":16,"./db-manager":19,"./layer-error":21,"./layer-event":22,"./models/announcement":31,"./models/channel":33,"./models/channel-message":32,"./models/container":34,"./models/content":35,"./models/conversation":37,"./models/conversation-message":36,"./models/identity":38,"./models/membership":39,"./models/message":42,"./models/message-part":40,"./models/message-type-model":41,"./models/syncable":43,"./online-state-manager":44,"./queries/query":52,"./queries/query-builder":51,"./root":53,"./sync-event":54,"./sync-manager":55,"./typing-indicators/typing-indicators":58,"./typing-indicators/typing-listener":59,"./typing-indicators/typing-publisher":60,"./websockets/change-manager":61,"./websockets/request-manager":62,"./websockets/socket-manager":63,"./xhr":64}],21:[function(require,module,exports){
+},{"./client":14,"./client-authenticator":12,"./db-manager":15,"./layer-error":17,"./layer-event":18,"./models/announcement":27,"./models/channel":29,"./models/channel-message":28,"./models/container":30,"./models/content":31,"./models/conversation":33,"./models/conversation-message":32,"./models/identity":34,"./models/membership":35,"./models/message":38,"./models/message-part":36,"./models/message-type-model":37,"./models/syncable":39,"./online-state-manager":40,"./queries/query":48,"./queries/query-builder":47,"./root":49,"./sync-event":50,"./sync-manager":51,"./typing-indicators/typing-indicators":54,"./typing-indicators/typing-listener":55,"./typing-indicators/typing-publisher":56,"./websockets/change-manager":57,"./websockets/request-manager":58,"./websockets/socket-manager":59,"./xhr":60}],17:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -6724,7 +6003,7 @@ LayerError.dictionary = {
 };
 
 module.exports = LayerError;
-},{"../util":165}],22:[function(require,module,exports){
+},{"../util":161}],18:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -6933,7 +6212,7 @@ LayerEvent.prototype.target = null;
 LayerEvent.prototype.eventName = '';
 
 module.exports = LayerEvent;
-},{}],23:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 'use strict';
 
 /**
@@ -7349,7 +6628,7 @@ module.exports = {
     }
   }
 };
-},{"../layer-error":21,"../models/channel":33}],24:[function(require,module,exports){
+},{"../layer-error":17,"../models/channel":29}],20:[function(require,module,exports){
 'use strict';
 
 /**
@@ -7765,7 +7044,7 @@ module.exports = {
     }
   }
 };
-},{"../layer-error":21,"../models/conversation":37}],25:[function(require,module,exports){
+},{"../layer-error":17,"../models/conversation":33}],21:[function(require,module,exports){
 'use strict';
 
 /**
@@ -8070,7 +7349,7 @@ module.exports = {
     }
   }
 };
-},{"../../util":165,"../layer-error":21,"../models/identity":38,"../sync-event":54}],26:[function(require,module,exports){
+},{"../../util":161,"../layer-error":17,"../models/identity":34,"../sync-event":50}],22:[function(require,module,exports){
 'use strict';
 
 /**
@@ -8231,7 +7510,7 @@ module.exports = {
     }
   }
 };
-},{"../layer-error":21,"../models/membership":39,"../models/syncable":43}],27:[function(require,module,exports){
+},{"../layer-error":17,"../models/membership":35,"../models/syncable":39}],23:[function(require,module,exports){
 'use strict';
 
 /**
@@ -8366,7 +7645,7 @@ module.exports = {
     }
   }
 };
-},{"../../util":165,"../layer-error":21,"../models/message-type-model":41}],28:[function(require,module,exports){
+},{"../../util":161,"../layer-error":17,"../models/message-type-model":37}],24:[function(require,module,exports){
 'use strict';
 
 /**
@@ -8743,7 +8022,7 @@ module.exports = {
     }
   }
 };
-},{"../layer-error":21,"../models/message":42,"../models/syncable":43}],29:[function(require,module,exports){
+},{"../layer-error":17,"../models/message":38,"../models/syncable":39}],25:[function(require,module,exports){
 'use strict';
 
 /**
@@ -8894,7 +8173,7 @@ module.exports = {
     }
   }
 };
-},{"../layer-error":21,"../queries/announcements-query":45,"../queries/channels-query":46,"../queries/conversations-query":47,"../queries/identities-query":48,"../queries/members-query":49,"../queries/messages-query":50,"../queries/query":52}],30:[function(require,module,exports){
+},{"../layer-error":17,"../queries/announcements-query":41,"../queries/channels-query":42,"../queries/conversations-query":43,"../queries/identities-query":44,"../queries/members-query":45,"../queries/messages-query":46,"../queries/query":48}],26:[function(require,module,exports){
 'use strict';
 
 /**
@@ -8994,7 +8273,7 @@ module.exports = {
     }
   }
 };
-},{"../../constants":15,"../../util":165,"../layer-error":21,"../models/identity":38,"../sync-event":54}],31:[function(require,module,exports){
+},{"../../constants":11,"../../util":161,"../layer-error":17,"../models/identity":34,"../sync-event":50}],27:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -9170,7 +8449,7 @@ Announcement.inObjectIgnore = ConversationMessage.inObjectIgnore;
 Root.initClass.apply(Announcement, [Announcement, 'Announcement']);
 Syncable.subclasses.push(Announcement);
 module.exports = Announcement;
-},{"../layer-error":21,"../root":53,"./conversation-message":36,"./syncable":43}],32:[function(require,module,exports){
+},{"../layer-error":17,"../root":49,"./conversation-message":32,"./syncable":39}],28:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -9194,7 +8473,7 @@ var ClientRegistry = require('../client-registry');
 var LayerError = require('../layer-error');
 var Constants = require('../../constants');
 
-var _require = require('../../Util'),
+var _require = require('../../util'),
     logger = _require.logger;
 
 var ChannelMessage = function (_Message) {
@@ -9352,7 +8631,7 @@ ChannelMessage.inObjectIgnore = Message.inObjectIgnore;
 ChannelMessage._supportedEvents = [].concat(Message._supportedEvents);
 Root.initClass.apply(ChannelMessage, [ChannelMessage, 'ChannelMessage']);
 module.exports = ChannelMessage;
-},{"../../Util":12,"../../constants":15,"../client-registry":17,"../layer-error":21,"../root":53,"./message":42}],33:[function(require,module,exports){
+},{"../../constants":11,"../../util":161,"../client-registry":13,"../layer-error":17,"../root":49,"./message":38}],29:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -10046,7 +9325,7 @@ Channel._supportedEvents = [
 Root.initClass.apply(Channel, [Channel, 'Channel']);
 Syncable.subclasses.push(Channel);
 module.exports = Channel;
-},{"../../constants":15,"../../util":165,"../layer-error":21,"../layer-event":22,"../root":53,"./channel-message":32,"./container":34,"./syncable":43}],34:[function(require,module,exports){
+},{"../../constants":11,"../../util":161,"../layer-error":17,"../layer-event":18,"../root":49,"./channel-message":28,"./container":30,"./syncable":39}],30:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -10688,7 +9967,7 @@ Container.FOUND_WITHOUT_REQUESTED_METADATA = 'FoundMismatch';
 Root.initClass.apply(Container, [Container, 'Container']);
 Syncable.subclasses.push(Container);
 module.exports = Container;
-},{"../../constants":15,"../../util":165,"../layer-error":21,"../root":53,"./syncable":43}],35:[function(require,module,exports){
+},{"../../constants":11,"../../util":161,"../layer-error":17,"../root":49,"./syncable":39}],31:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -10888,7 +10167,7 @@ Content.prototype.expiration = null;
 
 Root.initClass.apply(Content, [Content, 'Content']);
 module.exports = Content;
-},{"../root":53,"../xhr":64}],36:[function(require,module,exports){
+},{"../root":49,"../xhr":60}],32:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -11157,11 +10436,11 @@ var ConversationMessage = function (_Message) {
     key: '__updateIsRead',
     value: function __updateIsRead(value) {
       if (value) {
-        if (!this._inPopulateFromServer && !this.getConversation()._inMarkAllAsRead) {
+        var conversation = this.getConversation();
+        if (!this._inPopulateFromServer && (!conversation || !conversation._inMarkAllAsRead)) {
           this._sendReceipt(Constants.RECEIPT_STATE.READ);
         }
         this._triggerMessageRead();
-        var conversation = this.getConversation(false);
         if (conversation) conversation.unreadCount--;
       }
     }
@@ -11435,7 +10714,7 @@ ConversationMessage.inObjectIgnore = Message.inObjectIgnore;
 ConversationMessage._supportedEvents = [].concat(Message._supportedEvents);
 Root.initClass.apply(ConversationMessage, [ConversationMessage, 'ConversationMessage']);
 module.exports = ConversationMessage;
-},{"../../constants":15,"../../util":165,"../client-registry":17,"../layer-error":21,"../root":53,"./message":42}],37:[function(require,module,exports){
+},{"../../constants":11,"../../util":161,"../client-registry":13,"../layer-error":17,"../root":49,"./message":38}],33:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -12574,7 +11853,7 @@ Conversation._supportedEvents = [
 Root.initClass.apply(Conversation, [Conversation, 'Conversation']);
 Syncable.subclasses.push(Conversation);
 module.exports = Conversation;
-},{"../../constants":15,"../../util":165,"../layer-error":21,"../layer-event":22,"../root":53,"./container":34,"./conversation-message":36,"./syncable":43}],38:[function(require,module,exports){
+},{"../../constants":11,"../../util":161,"../layer-error":17,"../layer-event":18,"../root":49,"./container":30,"./conversation-message":32,"./syncable":39}],34:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -13242,7 +12521,7 @@ Root.initClass.apply(Identity, [Identity, 'Identity']);
 Syncable.subclasses.push(Identity);
 
 module.exports = Identity;
-},{"../../constants":15,"../../util":165,"../layer-error":21,"../root":53,"./syncable":43}],39:[function(require,module,exports){
+},{"../../constants":11,"../../util":161,"../layer-error":17,"../root":49,"./syncable":39}],35:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -13476,7 +12755,7 @@ Root.initClass.apply(Membership, [Membership, 'Membership']);
 Syncable.subclasses.push(Membership);
 
 module.exports = Membership;
-},{"../../constants":15,"../layer-error":21,"../root":53,"./syncable":43}],40:[function(require,module,exports){
+},{"../../constants":11,"../layer-error":17,"../root":49,"./syncable":39}],36:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -14446,6 +13725,7 @@ MessagePart.prototype.updatedAt = null;
 MessagePart.prototype.size = 0;
 
 MessagePart.prototype.parentId = '';
+MessagePart.prototype.nodeId = '';
 MessagePart.prototype.role = '';
 
 /**
@@ -14463,7 +13743,7 @@ MessagePart.prototype.role = '';
  * @static
  * @type {Mixed[]}
  */
-MessagePart.TextualMimeTypes = [/^text\/.+$/, /^application\/json(\+.+)?$/];
+MessagePart.TextualMimeTypes = [/^text\/.+$/, /^application\/json(\+.+)?$/, /\+json$/, /-json$/];
 
 /**
  * Number of retry attempts to make before giving up on uploading Rich Content to Google Cloud Storage.
@@ -14476,7 +13756,7 @@ MessagePart._supportedEvents = ['parts:send', 'content-loaded', 'url-loaded', 'c
 Root.initClass.apply(MessagePart, [MessagePart, 'MessagePart']);
 
 module.exports = MessagePart;
-},{"../../util":165,"../client-registry":17,"../layer-error":21,"../root":53,"../xhr":64,"./content":35}],41:[function(require,module,exports){
+},{"../../util":161,"../client-registry":13,"../layer-error":17,"../root":49,"../xhr":60,"./content":31}],37:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -14497,6 +13777,7 @@ var Root = require('../root');
 var Util = require('../../util');
 var Message = require('../models/message');
 var MessagePart = require('../models/message-part');
+var LayerError = require('../layer-error');
 
 // FIXME: this doesn't really need to extend root probably
 
@@ -14538,6 +13819,8 @@ var MessageTypeModel = function (_Root) {
     value: function generateMessage(conversation, callback) {
       var _this2 = this;
 
+      if (!conversation) throw new Error(LayerError.dictionary.conversationMissing);
+      if (!(conversation instanceof Root)) throw new Error(LayerError.dictionary.conversationMissing);
       this._generateParts(function (parts) {
         _this2.childParts = parts;
         _this2.part.mimeAttributes.role = 'root';
@@ -14569,7 +13852,7 @@ var MessageTypeModel = function (_Root) {
         this.id = MessageTypeModel.prefixUUID + this.part.id.replace(/^.*messages\//, '');
         this.role = this.part.mimeAttributes.role;
         this.childParts = this.message.getPartsMatchingAttribute({
-          'parent-node-id': Util.uuid(this.id)
+          'parent-node-id': this.nodeId
         });
 
         // Call handlePartChanges any message edits that update a part.
@@ -14881,7 +14164,7 @@ var MessageTypeModel = function (_Root) {
 }(Root);
 
 /**
- * If a model is created without a Part, it may still need to know what its parent part is.
+ * Property to reference the Parent node this model's Message Part's Parent Message Part within the Message Part Tree.
  *
  * @protected
  * @type {String}
@@ -14889,6 +14172,16 @@ var MessageTypeModel = function (_Root) {
 
 
 MessageTypeModel.prototype.parentId = null;
+
+MessageTypeModel.prototype.nodeId = null;
+
+/**
+ * Node Identifier to uniquely identify this Message Part such that a Parent ID can reference it.
+ *
+ * @protected
+ * @type {String}
+ */
+MessageTypeModel.prototype.nodeId = null;
 
 /**
  * Message for this Message Model
@@ -14986,7 +14279,7 @@ MessageTypeModel.prefixUUID = 'layer:///MessageTypeModels/';
 MessageTypeModel._supportedEvents = ['change'].concat(Root._supportedEvents);
 Root.initClass.apply(MessageTypeModel, [MessageTypeModel, 'MessageTypeModel']);
 module.exports = MessageTypeModel;
-},{"../../util":165,"../models/message":42,"../models/message-part":40,"../root":53}],42:[function(require,module,exports){
+},{"../../util":161,"../layer-error":17,"../models/message":38,"../models/message-part":36,"../root":49}],38:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -16293,7 +15586,7 @@ Message._supportedEvents = [
 Root.initClass.apply(Message, [Message, 'Message']);
 Syncable.subclasses.push(Message);
 module.exports = Message;
-},{"../../constants":15,"../../util":165,"../layer-error":21,"../root":53,"./identity":38,"./message-part":40,"./syncable":43}],43:[function(require,module,exports){
+},{"../../constants":11,"../../util":161,"../layer-error":17,"../root":49,"./identity":34,"./message-part":36,"./syncable":39}],39:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -16852,7 +16145,7 @@ Syncable.subclasses = [];
 Syncable._supportedEvents = [].concat(Root._supportedEvents);
 Syncable.inObjectIgnore = Root.inObjectIgnore;
 module.exports = Syncable;
-},{"../../constants":15,"../client-registry":17,"../layer-error":21,"../root":53}],44:[function(require,module,exports){
+},{"../../constants":11,"../client-registry":13,"../layer-error":17,"../root":49}],40:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -17261,7 +16554,7 @@ OnlineStateManager._supportedEvents = [
 Root.initClass.apply(OnlineStateManager, [OnlineStateManager, 'OnlineStateManager']);
 module.exports = OnlineStateManager;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../constants":15,"../util":165,"./root":53,"./xhr":64}],45:[function(require,module,exports){
+},{"../constants":11,"../util":161,"./root":49,"./xhr":60}],41:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -17354,7 +16647,7 @@ AnnouncementsQuery.prototype.model = Query.Announcement;
 Root.initClass.apply(AnnouncementsQuery, [AnnouncementsQuery, 'AnnouncementsQuery']);
 
 module.exports = AnnouncementsQuery;
-},{"../root":53,"./messages-query":50,"./query":52}],46:[function(require,module,exports){
+},{"../root":49,"./messages-query":46,"./query":48}],42:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -17651,7 +16944,7 @@ ChannelsQuery.prototype.model = Query.Channel;
 Root.initClass.apply(ChannelsQuery, [ChannelsQuery, 'ChannelsQuery']);
 
 module.exports = ChannelsQuery;
-},{"../../constants":15,"../root":53,"./conversations-query":47,"./query":52}],47:[function(require,module,exports){
+},{"../../constants":11,"../root":49,"./conversations-query":43,"./query":48}],43:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -17981,7 +17274,7 @@ ConversationsQuery.prototype.model = Query.Conversation;
 Root.initClass.apply(ConversationsQuery, [ConversationsQuery, 'ConversationsQuery']);
 
 module.exports = ConversationsQuery;
-},{"../../constants":15,"../../util":165,"../root":53,"./query":52}],48:[function(require,module,exports){
+},{"../../constants":11,"../../util":161,"../root":49,"./query":48}],44:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -18100,7 +17393,7 @@ IdentitiesQuery.prototype.model = Query.Identity;
 Root.initClass.apply(IdentitiesQuery, [IdentitiesQuery, 'IdentitiesQuery']);
 
 module.exports = IdentitiesQuery;
-},{"../root":53,"./query":52}],49:[function(require,module,exports){
+},{"../root":49,"./query":48}],45:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -18141,7 +17434,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 var Root = require('../root');
 var LayerError = require('../layer-error');
 
-var _require = require('../../Util'),
+var _require = require('../../util'),
     logger = _require.logger;
 
 var Query = require('./query');
@@ -18278,7 +17571,7 @@ MembersQuery.prototype.model = Query.Membership;
 Root.initClass.apply(MembersQuery, [MembersQuery, 'MembersQuery']);
 
 module.exports = MembersQuery;
-},{"../../Util":12,"../layer-error":21,"../root":53,"./query":52}],50:[function(require,module,exports){
+},{"../../util":161,"../layer-error":17,"../root":49,"./query":48}],46:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -18762,7 +18055,7 @@ MessagesQuery.prototype.model = Query.Message;
 Root.initClass.apply(MessagesQuery, [MessagesQuery, 'MessagesQuery']);
 
 module.exports = MessagesQuery;
-},{"../../util":165,"../layer-error":21,"../root":53,"./query":52}],51:[function(require,module,exports){
+},{"../../util":161,"../layer-error":17,"../root":49,"./query":48}],47:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -19448,7 +18741,7 @@ var QueryBuilder = {
 };
 
 module.exports = QueryBuilder;
-},{"./query":52}],52:[function(require,module,exports){
+},{"./query":48}],48:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -20624,7 +19917,7 @@ Query._supportedEvents = [
 Root.initClass.apply(Query, [Query, 'Query']);
 
 module.exports = Query;
-},{"../../util":165,"../layer-error":21,"../root":53}],53:[function(require,module,exports){
+},{"../../util":161,"../layer-error":17,"../root":49}],49:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -21459,7 +20752,7 @@ Root._supportedEvents = ['destroy', 'all'];
 Root._ignoredEvents = [];
 module.exports = Root;
 module.exports.initClass = initClass;
-},{"../util":165,"./layer-error":21,"./layer-event":22,"backbone-events-standalone/backbone-events-standalone":169}],54:[function(require,module,exports){
+},{"../util":161,"./layer-error":17,"./layer-event":18,"backbone-events-standalone/backbone-events-standalone":165}],50:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -21859,7 +21152,7 @@ var WebsocketSyncEvent = function (_SyncEvent2) {
 WebsocketSyncEvent.prototype.returnChangesArray = false;
 
 module.exports = { SyncEvent: SyncEvent, XHRSyncEvent: XHRSyncEvent, WebsocketSyncEvent: WebsocketSyncEvent };
-},{"../util":165}],55:[function(require,module,exports){
+},{"../util":161}],51:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -22862,7 +22155,7 @@ SyncManager._supportedEvents = [
 
 Root.initClass(SyncManager);
 module.exports = SyncManager;
-},{"../util":165,"./root":53,"./sync-event":54,"./xhr":64}],56:[function(require,module,exports){
+},{"../util":161,"./root":49,"./sync-event":50,"./xhr":60}],52:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -23374,7 +22667,7 @@ TelemetryMonitor._supportedEvents = Root._supportedEvents.concat(['telemetry-env
 Root.initClass.apply(TelemetryMonitor, [TelemetryMonitor, 'TelemetryMonitor']);
 module.exports = TelemetryMonitor;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../util":165,"./root":53,"./xhr":64}],57:[function(require,module,exports){
+},{"../util":161,"./root":49,"./xhr":60}],53:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -23697,7 +22990,7 @@ TypingIndicatorListener._supportedEvents = [
 
 Root.initClass.apply(TypingIndicatorListener, [TypingIndicatorListener, 'TypingIndicatorListener']);
 module.exports = TypingIndicatorListener;
-},{"../client-registry":17,"../root":53,"./typing-indicators":58}],58:[function(require,module,exports){
+},{"../client-registry":13,"../root":49,"./typing-indicators":54}],54:[function(require,module,exports){
 'use strict';
 
 /**
@@ -23732,7 +23025,7 @@ module.exports = {
    */
   FINISHED: 'finished'
 };
-},{}],59:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -23952,7 +23245,7 @@ var TypingListener = function () {
 }();
 
 module.exports = TypingListener;
-},{"./typing-indicators":58,"./typing-publisher":60}],60:[function(require,module,exports){
+},{"./typing-indicators":54,"./typing-publisher":56}],56:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -24217,7 +23510,7 @@ var TypingPublisher = function () {
 }();
 
 module.exports = TypingPublisher;
-},{"../client-registry":17,"./typing-indicators":58}],61:[function(require,module,exports){
+},{"../client-registry":13,"./typing-indicators":54}],57:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -24430,7 +23723,7 @@ var WebsocketChangeManager = function () {
 WebsocketChangeManager.prototype.client = null;
 
 module.exports = WebsocketChangeManager;
-},{"../../util":165,"../models/channel":33,"../models/conversation":37,"../models/message":42}],62:[function(require,module,exports){
+},{"../../util":161,"../models/channel":29,"../models/conversation":33,"../models/message":38}],58:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -24799,7 +24092,7 @@ WebsocketRequestManager.prototype._callbackCleanupId = 0;
 WebsocketRequestManager.prototype.socketManager = null;
 
 module.exports = WebsocketRequestManager;
-},{"../../util":165,"../layer-error":21}],63:[function(require,module,exports){
+},{"../../util":161,"../layer-error":17}],59:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -24984,7 +24277,8 @@ var SocketManager = function (_Root) {
 
       // Load up our websocket component or shim
       /* istanbul ignore next */
-      var WS = typeof WebSocket === 'undefined' ? require('websocket').w3cwebsocket : WebSocket;
+      //const WS = typeof WebSocket === 'undefined' ? require('websocket').w3cwebsocket : WebSocket;
+      var WS = WebSocket;
 
       this._socket = new WS(url, WEBSOCKET_PROTOCOL);
 
@@ -25739,7 +25033,7 @@ SocketManager._supportedEvents = [
 'synced'].concat(Root._supportedEvents);
 Root.initClass.apply(SocketManager, [SocketManager, 'SocketManager']);
 module.exports = SocketManager;
-},{"../../constants":15,"../../util":165,"../layer-error":21,"../root":53,"websocket":183}],64:[function(require,module,exports){
+},{"../../constants":11,"../../util":161,"../layer-error":17,"../root":49}],60:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -25791,10 +25085,6 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
  * 3. Should only access link headers if requested; annoying having it throw errors every other time.
  */
 
-// Don't set xhr to window.XMLHttpRequest as it will bypass jasmine's
-// ajax library
-var Xhr = typeof window === 'undefined' ? require('xhr2') : null;
-
 function parseLinkHeaders(linkHeader) {
   if (!linkHeader) return {};
 
@@ -25816,7 +25106,7 @@ function parseLinkHeaders(linkHeader) {
 
 module.exports = function (request, callback) {
   var startTime = Date.now();
-  var req = Xhr ? new Xhr() : new XMLHttpRequest();
+  var req = new XMLHttpRequest();
   var method = (request.method || 'GET').toUpperCase();
 
   var onload = function onload() {
@@ -25900,7 +25190,7 @@ module.exports = function (request, callback) {
       if (links) result.Links = parseLinkHeaders(links);
     }
     result.xhr = this;
-
+    result.request = request;
     if (callback) callback(result);
   };
 
@@ -25975,7 +25265,7 @@ module.exports.trigger = function (evt) {
     return func(evt);
   });
 };
-},{"xhr2":186}],65:[function(require,module,exports){
+},{}],61:[function(require,module,exports){
 (function (global){
 'use strict';
 
@@ -25997,7 +25287,7 @@ var _ui2 = _interopRequireDefault(_ui);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var version = '1.0.0-pre1';
+var version = '1.0.0-pre1.7';
 
 function init(options) {
   var client = _core2.default.Client.getClient(options.appId) || new _core2.default.Client(options);
@@ -26006,9 +25296,9 @@ function init(options) {
 }
 
 module.exports = { UI: _ui2.default, Core: _core2.default, Util: _util2.default, Constants: _constants2.default, init: init, version: version };
-if (typeof global !== 'undefined') global.layer = module.exports;
+if (typeof global !== 'undefined') global.Layer = module.exports;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./constants":15,"./core":20,"./ui":114,"./util":165}],66:[function(require,module,exports){
+},{"./constants":11,"./core":16,"./ui":110,"./util":161}],62:[function(require,module,exports){
 'use strict';
 
 var _base = require('../base');
@@ -26041,7 +25331,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *   Now you can put `<layer-conversation-view>` and other widgets into angular templates and expect them to work.
  *   Prefix ALL property names with `ng-` to insure that scope is evaluated prior to passing the value on to the webcomponent.
  *
- * @class layerUI.adapters.angular
+ * @class layer.UI.adapters.angular
  * @singleton
  * @param {Object} angular     Pass in the AngularJS library
  */
@@ -26126,7 +25416,7 @@ function initAngular(angular) {
 
 module.exports = initAngular;
 _base2.default.addAdapter('angular', initAngular);
-},{"../base":69}],67:[function(require,module,exports){
+},{"../base":65}],63:[function(require,module,exports){
 'use strict';
 
 var _base = require('../base');
@@ -26153,10 +25443,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
 * Calling this will expose the following React Components:
  *
- * * ConversationPanelView: A wrapper around a layerUI.components.ConversationPanel
- * * ConversationsListView: A wrapper around a layerUI.components.ConversationsListPanel
- * * IdentitiesListView: A wrapper around a layerUI.components.IdentitiesListPanel
- * * NotifierView: A wrapper around a layerUI.components.misc.Notifier
+ * * ConversationPanelView: A wrapper around a layer.UI.components.ConversationPanel
+ * * ConversationsListView: A wrapper around a layer.UI.components.ConversationsListPanel
+ * * IdentitiesListView: A wrapper around a layer.UI.components.IdentitiesListPanel
+ * * NotifierView: A wrapper around a layer.UI.components.misc.Notifier
  * * SendButton: An optional button that can be provided to ConversationPanelView's `composeButtons` property
  *   to add a simple Send button to the Composer
  * * FileUploadButton: An optional button that can be provided to ConversationPanelView's `composeButtons` property
@@ -26173,7 +25463,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * < layer-conversation-view conversation-id="layer:///conversations/UUID"></layer-conversation-view>
  * ```
  *
- * @class layerUI.adapters.backbone
+ * @class layer.UI.adapters.backbone
  * @singleton
  * @param {Object} backbone     Pass in the backbone library
  */
@@ -26221,23 +25511,27 @@ function initBackbone(backbone) {
 
 module.exports = initBackbone;
 _base2.default.addAdapter('backbone', initBackbone);
-},{"../base":69}],68:[function(require,module,exports){
+},{"../base":65}],64:[function(require,module,exports){
 'use strict';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _base = require('../base');
 
 var _base2 = _interopRequireDefault(_base);
 
-var _index = require('../../core/index');
-
-var _index2 = _interopRequireDefault(_index);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 /**
  * Call this function to initialize all of the react components needed to handle the Layer UI for Web widgets.
  *
- * Before using this, please note that layerUI.init() must be called prior to calling layerUI.adapters.react().
+ * Before using this, please note that layer.UI.init() must be called prior to calling layerUI.adapters.react().
  *
  * Initialize with:
  *
@@ -26249,12 +25543,12 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * Calling this will expose the following React Components:
  *
- * * ConversationPanel: A wrapper around a layerUI.components.ConversationPanel
- * * ConversationsList: A wrapper around a layerUI.components.ConversationsListPanel
- * * IdentitiesList: A wrapper around a layerUI.components.IdentitiesListPanel
- * * Notifier: A wrapper around a layerUI.components.misc.Notifier
- * * SendButton: A wrapper around a layerUI.components.SendButton
- * * FileUploadButton: A wrapper around a layerUI.components.FileUploadButton
+ * * ConversationPanel: A wrapper around a layer.UI.components.ConversationPanel
+ * * ConversationsList: A wrapper around a layer.UI.components.ConversationsListPanel
+ * * IdentitiesList: A wrapper around a layer.UI.components.IdentitiesListPanel
+ * * Notifier: A wrapper around a layer.UI.components.misc.Notifier
+ * * SendButton: A wrapper around a layer.UI.components.SendButton
+ * * FileUploadButton: A wrapper around a layer.UI.components.FileUploadButton
  *
  * You can then use:
  *
@@ -26286,7 +25580,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Now anywhere you need access to the LayerUIWidgets library can import this module and expect everything to
  * evaluate at the correct time, correct order, and only evaluate once.
  *
- * @class layerUI.adapters.react
+ * @class layer.UI.adapters.react
  * @singleton
  * @param {Object} React - Pass in the reactJS library
  * @param {Object} ReactDom - Pass in the ReactDom library
@@ -26305,18 +25599,19 @@ function initReact(React, ReactDom) {
       return value.toUpperCase();
     })).replace(/^Layer/, '');
 
-    libraryResult[className] = React.createClass({
+    libraryResult[className] = function (_React$Component) {
+      _inherits(_class, _React$Component);
 
-      // hacky putting this here, but unable to provide a constructor in this environment and this is the only gaurenteed call.
-      getInitialState: function getInitialState() {
-        var _this = this;
+      function _class(props) {
+        _classCallCheck(this, _class);
 
-        if (this.props.replaceableContent && !this.replaceableContent) {
-          this.replaceableContent = {};
-          Object.keys(this.props.replaceableContent).forEach(function (nodeName) {
+        var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, props));
+
+        if (_this.props.replaceableContent && !_this.replaceableContent) {
+          _this.replaceableContent = {};
+          Object.keys(_this.props.replaceableContent).forEach(function (nodeName) {
             var value = _this.props.replaceableContent[nodeName];
             if (typeof value === 'function' && !value.replaceableIsSetup) {
-
               _this.replaceableContent[nodeName] = function (widget, parent) {
                 var result = value(widget);
                 if (result && !(result instanceof HTMLElement)) {
@@ -26339,125 +25634,137 @@ function initReact(React, ReactDom) {
             }
           });
         }
-        return null;
-      },
-
+        return _this;
+      }
 
       /**
        * On mounting, copy in all properties, and optionally setup a Query.
        *
        * Delay added to prevent Webcomponents property setters from being blown away in safari and firefox
        */
-      componentDidMount: function componentDidMount() {
-        var _this2 = this;
-
-        this.node.componentDidMount = true;
-        // Get the properties/attributes that match those used in this.props
-        var props = component.properties.filter(function (property) {
-          return property.propertyName in _this2.props || property.attributeName in _this2.props;
-        });
-
-        // Set the webcomponent properties
-        props.forEach(function (propDef) {
-          var value = propDef.propertyName in _this2.props ? _this2.props[propDef.propertyName] : _this2.props[propDef.attributeName];
-          if (propDef.propertyName === 'replaceableContent' && _this2.replaceableContent) value = _this2.replaceableContent;
-          if (propDef.type === HTMLElement && value) {
-            value = _this2.handleReactDom(propDef, value);
-          }
-          if (!_this2.node.properties) _this2.node.properties = {};
-          if (!_this2.node.properties._internalState) {
-            _this2.node.properties[propDef.propertyName] = value;
-          } else {
-            _this2.node[propDef.propertyName] = value;
-          }
-        });
-
-        // Browsers running the polyfil may not yet have initialized the component at this point.
-        // Force them to be initialized so that by the time the parent component's didComponentMount
-        // is called, this will be an initialized widget.
-        if (!this.node._onAfterCreate) {
-          var evt = document.createEvent('CustomEvent');
-          evt.initCustomEvent('HTMLImportsLoaded', true, true, null);
-          document.dispatchEvent(evt);
-        }
-
-        // The webcomponents polyfil is unable to initilize a component thats in
-        // a DocumentFragment so it must follow a more typical lifecycle
-        if (this.node._onAfterCreate) this.node._onAfterCreate();
-      },
 
 
-      /**
-       * Copy all properties into the dom node, but never let React recreate this widget.
-       */
-      shouldComponentUpdate: function shouldComponentUpdate(nextProps) {
-        var _this3 = this;
+      _createClass(_class, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+          var _this2 = this;
 
-        // Get the properties/attributes that match those used in this.props
-        var props = component.properties.filter(function (property) {
-          return _this3.props[property.propertyName] || _this3.props[property.attributeName];
-        });
+          this.node.componentDidMount = true;
+          // Get the properties/attributes that match those used in this.props
+          var props = component.properties.filter(function (property) {
+            return property.propertyName in _this2.props || property.attributeName in _this2.props;
+          });
 
-        // Set the webcomponent properties if they have changed
-        props.forEach(function (propDef) {
-          var name = propDef.propertyName in _this3.props ? propDef.propertyName : propDef.attributeName;
-          var value = nextProps[name];
-          if (propDef.propertyName === 'replaceableContent' && _this3.replaceableContent) value = _this3.replaceableContent;
-          if (propDef.type === HTMLElement && value) {
-            value = _this3.handleReactDom(propDef, value);
-          }
-
-          if (value !== _this3.props[name]) {
-            _this3.node[propDef.propertyName] = value;
-          }
-        }, this);
-        return false;
-      },
-      handleReactDom: function handleReactDom(propDef, value) {
-        if (!this.layerUIGeneratedNodes) this.layerUIGeneratedNodes = {};
-
-        if (Array.isArray(value)) {
-          var array = [];
-          if (!this.layerUIGeneratedNodes[propDef.propertyName]) {
-            this.layerUIGeneratedNodes[propDef.propertyName] = array;
-          }
-          array.length = value.length;
-          value.forEach(function (item, index) {
-            if (item.tagName) {
-              array[index] = item;
+          // Set the webcomponent properties
+          props.forEach(function (propDef) {
+            var value = propDef.propertyName in _this2.props ? _this2.props[propDef.propertyName] : _this2.props[propDef.attributeName];
+            if (propDef.propertyName === 'replaceableContent' && _this2.replaceableContent) value = _this2.replaceableContent;
+            if (propDef.type === HTMLElement && value) {
+              value = _this2.handleReactDom(propDef, value);
+            }
+            if (!_this2.node.properties) _this2.node.properties = {};
+            if (!_this2.node.properties._internalState) {
+              _this2.node.properties[propDef.propertyName] = value;
             } else {
-              var node = array[index] || document.createElement('div');
-              ReactDom.render(typeof item === 'function' ? React.createElement(item) : item, node);
-              array[index] = node;
+              _this2.node[propDef.propertyName] = value;
             }
           });
-        } else if (value.tagName === undefined) {
-          if (!this.layerUIGeneratedNodes[propDef.propertyName]) {
-            this.layerUIGeneratedNodes[propDef.propertyName] = document.createElement('div');
-          }
-          ReactDom.render(value, this.layerUIGeneratedNodes[propDef.propertyName]);
-        }
-        return this.layerUIGeneratedNodes[propDef.propertyName];
-      },
-      render: function render() {
-        var _this4 = this;
 
-        return React.createElement(componentName, {
-          ref: function ref(node) {
-            _this4.node = node;
-          },
-          id: this.props.id,
-          children: this.props.children
-        });
-      }
-    });
+          // Browsers running the polyfil may not yet have initialized the component at this point.
+          // Force them to be initialized so that by the time the parent component's didComponentMount
+          // is called, this will be an initialized widget.
+          if (!this.node._onAfterCreate) {
+            var evt = document.createEvent('CustomEvent');
+            evt.initCustomEvent('HTMLImportsLoaded', true, true, null);
+            document.dispatchEvent(evt);
+          }
+
+          // The webcomponents polyfil is unable to initilize a component thats in
+          // a DocumentFragment so it must follow a more typical lifecycle
+          if (this.node._onAfterCreate) this.node._onAfterCreate();
+        }
+
+        /**
+         * Copy all properties into the dom node, but never let React recreate this widget.
+         */
+
+      }, {
+        key: 'shouldComponentUpdate',
+        value: function shouldComponentUpdate(nextProps) {
+          var _this3 = this;
+
+          // Get the properties/attributes that match those used in this.props
+          var props = component.properties.filter(function (property) {
+            return _this3.props[property.propertyName] || _this3.props[property.attributeName];
+          });
+
+          // Set the webcomponent properties if they have changed
+          props.forEach(function (propDef) {
+            var name = propDef.propertyName in _this3.props ? propDef.propertyName : propDef.attributeName;
+            var value = nextProps[name];
+            if (propDef.propertyName === 'replaceableContent' && _this3.replaceableContent) value = _this3.replaceableContent;
+            if (propDef.type === HTMLElement && value) {
+              value = _this3.handleReactDom(propDef, value);
+            }
+
+            if (value !== _this3.props[name]) {
+              _this3.node[propDef.propertyName] = value;
+            }
+          }, this);
+          return false;
+        }
+      }, {
+        key: 'handleReactDom',
+        value: function handleReactDom(propDef, value) {
+          if (!this.layerUIGeneratedNodes) this.layerUIGeneratedNodes = {};
+
+          if (Array.isArray(value)) {
+            var array = [];
+            if (!this.layerUIGeneratedNodes[propDef.propertyName]) {
+              this.layerUIGeneratedNodes[propDef.propertyName] = array;
+            }
+            array.length = value.length;
+            value.forEach(function (item, index) {
+              if (item.tagName) {
+                array[index] = item;
+              } else {
+                var node = array[index] || document.createElement('div');
+                ReactDom.render(typeof item === 'function' ? React.createElement(item) : item, node);
+                array[index] = node;
+              }
+            });
+          } else if (value.tagName === undefined) {
+            if (!this.layerUIGeneratedNodes[propDef.propertyName]) {
+              this.layerUIGeneratedNodes[propDef.propertyName] = document.createElement('div');
+            }
+            ReactDom.render(value, this.layerUIGeneratedNodes[propDef.propertyName]);
+          }
+          return this.layerUIGeneratedNodes[propDef.propertyName];
+        }
+      }, {
+        key: 'render',
+        value: function render() {
+          var _this4 = this;
+
+          return React.createElement(componentName, {
+            ref: function ref(node) {
+              _this4.node = node;
+            },
+            id: this.props.id,
+            children: this.props.children
+          });
+        }
+      }]);
+
+      return _class;
+    }(React.Component);
   });
   return libraryResult;
 }
 
 module.exports = initReact;
 _base2.default.addAdapter('react', initReact);
-},{"../../core/index":20,"../base":69}],69:[function(require,module,exports){
+},{"../base":65}],65:[function(require,module,exports){
 'use strict';
 
 var _core = require('../core');
@@ -26478,7 +25785,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *   needs scope but won't have it.
  */
 /**
- * @class layerUI
+ * @class layer.UI
  * @static
  *
  * The layerUI contains utilities for working with the layerUI components.
@@ -26486,31 +25793,31 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * The key method to know here is the `init()` method.  Any use of the library will need a call:
  *
  * ```
- * layerUI.init({
+ * layer.UI.init({
  *   appId: 'layer:///apps/staging/my-app-id'
  * });
  * ```
  *
  * Or
  *
- * layerUI.init({
+ * layer.UI.init({
  *   appId: 'layer:///apps/staging/my-app-id'
  * });
  * ```
  *
- * See layerUI.settings for more options to layerUI.init.
+ * See layerUI.settings for more options to layer.UI.init.
  *
  * One other property deserving special mention: layerUI.adapters.  Adapters help you to use these widgets within other UI frameworks.
  * It is not required to use an adapter, but it solves many inconsistencies in how these frameworks handle webcomponents built using this framework.
  *
- * While there are many other methods defined here, for new projects ignore everything except layerUI.settings, layerUI.init and layerUI.adapters.
+ * While there are many other methods defined here, for new projects ignore everything except layerUI.settings, layer.UI.init and layerUI.adapters.
  */
 var layerUI = {};
 
 /**
  * The settings object stores a hash of configurable properties to change widget Behaviors.
  *
- * The settings object is typically set using layerUI.init().
+ * The settings object is typically set using layer.UI.init().
  *
  * Below are the available settings and their defintions.
  *
@@ -26581,7 +25888,7 @@ layerUI.textHandlers = {};
 layerUI.messageActionHandlers = {};
 
 /**
- * Hash of components defined using layerUI.components.Component.
+ * Hash of components defined using layer.UI.components.Component.
  *
  * @property {Object} components
  * @private
@@ -26711,7 +26018,7 @@ layerUI.addListItemSeparator = function addListItemSeparator(listItemNode, conte
  *
  * @property {Object} adapters
  */
-var adapterError = 'You must call layerUI.init() before you can use an adapter';
+var adapterError = 'You must call layer.UI.init() before you can use an adapter';
 layerUI.adapters = {
   angular: function angular() {
     throw new Error(adapterError);
@@ -26869,7 +26176,7 @@ layerUI.registerMessageActionHandler = function registerMessageActionHandler(act
 /**
  * Register your template for use by an existing Component.
  *
- * Assumes that the specified Component has already been defined using layerUI.components.Component.
+ * Assumes that the specified Component has already been defined using layer.UI.components.Component.
  *
  * This can be used to associate a template with the Component, or to overwrite the default template
  * with your custom template.
@@ -26884,7 +26191,7 @@ layerUI.registerMessageActionHandler = function registerMessageActionHandler(act
  * </template>
  * < script >
  *    // Register the template in this *.html file to be the layer-avatar template.
- *    window.layerUI.registerTemplate('layer-avatar')
+ *    window.layer.UI.registerTemplate('layer-avatar')
  * </script>
  *
  * ```
@@ -27018,12 +26325,12 @@ layerUI.addAdapter = function (name, adapter) {
  * prior to putting any webcomponents into your document.
  *
  * ```javascript
- * layerUI.init({
+ * layer.UI.init({
  *   appId: 'layer:///apps/staging/my-app-id'
  * });
  * ```
  *
- * See layerUI.settings for more options to layerUI.init.
+ * See layerUI.settings for more options to layer.UI.init.
  *
  * @method init
  * @static
@@ -27041,15 +26348,8 @@ layerUI.init = function init(settings) {
  */
 layerUI.version = '1.0.0-beta1';
 
-var clientVersions = _core2.default.Client.version.split('.').map(function (value) {
-  return Number(value);
-});
-if (clientVersions[0] !== 3 && _core2.default.Client.version !== '3.1.1') {
-  console.error('This version or Layer UI for Web requires Layer WebSDK version 3.1.1 or up');
-}
-
 /**
- * This method is shorthand for accessing layerUI.components.Component.registerComponent
+ * This method is shorthand for accessing layer.UI.components.Component.registerComponent
  *
  * Note: This code is actually in components/component.js and is only attached to layerUI
  * if you require `layer-ui-web/index.js` or just `layer-ui-web`, else you have to directly
@@ -27059,7 +26359,7 @@ if (clientVersions[0] !== 3 && _core2.default.Client.version !== '3.1.1') {
  */
 
 module.exports = layerUI;
-},{"../core":20,"../util":165}],70:[function(require,module,exports){
+},{"../core":16,"../util":161}],66:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../core');
@@ -27197,7 +26497,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                                                                                                                                                                                                      *
                                                                                                                                                                                                      * ### Events
                                                                                                                                                                                                      *
-                                                                                                                                                                                                     * As part of your layerUI.components.Component.registerComponents call you can pass in an `events` array; this is an array of strings representing events to listen for,
+                                                                                                                                                                                                     * As part of your layer.UI.components.Component.registerComponents call you can pass in an `events` array; this is an array of strings representing events to listen for,
                                                                                                                                                                                                      * and provide as property-based event listeners.
                                                                                                                                                                                                      *
                                                                                                                                                                                                      * Example:
@@ -27250,7 +26550,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                                                                                                                                                                                                      * Mixins can be added to a widget in two ways:
                                                                                                                                                                                                      *
                                                                                                                                                                                                      * * A Component may add a `mixins` array to its definition
-                                                                                                                                                                                                     * * An Application, initializing the framework via `layerUI.init()` may pass in mixins into the `init` call.
+                                                                                                                                                                                                     * * An Application, initializing the framework via `layer.UI.init()` may pass in mixins into the `init` call.
                                                                                                                                                                                                      *
                                                                                                                                                                                                      * #### Using Mixins from the Component
                                                                                                                                                                                                      *
@@ -27290,7 +26590,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                                                                                                                                                                                                      * registerComponent(tagName, componentDefinition);
                                                                                                                                                                                                      * ```
                                                                                                                                                                                                      *
-                                                                                                                                                                                                     * An app can modify an existing component by adding custom mixins to it using `layerUI.init()`.  The `mixins` parameter
+                                                                                                                                                                                                     * An app can modify an existing component by adding custom mixins to it using `layer.UI.init()`.  The `mixins` parameter
                                                                                                                                                                                                      * takes as keys, the tag-name for any widget you want to customize;
                                                                                                                                                                                                      * (e.g `layer-message-item`, `layer-message-list`, `layer-conversation-view`, etc...)
                                                                                                                                                                                                      *
@@ -27308,7 +26608,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                                                                                                                                                                                                      *     }
                                                                                                                                                                                                      * });
                                                                                                                                                                                                      *
-                                                                                                                                                                                                     * layerUI.init({
+                                                                                                                                                                                                     * layer.UI.init({
                                                                                                                                                                                                      *   appId: 'my-app-id',
                                                                                                                                                                                                      *   mixins: {
                                                                                                                                                                                                      *     'layer-messages-item': mixinObj
@@ -27532,7 +26832,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
                                                                                                                                                                                                      * layerUI.buildAndRegisterTemplate('my-widget', '<div><button />Click me</div>');
                                                                                                                                                                                                      * ```
                                                                                                                                                                                                      *
-                                                                                                                                                                                                     * @class layerUI.components.Component
+                                                                                                                                                                                                     * @class layer.UI.components.Component
                                                                                                                                                                                                      */
 
 /**
@@ -28582,7 +27882,7 @@ var standardClassMethods = {
    * });
    * ```
    *
-   * layerUI.components.Component.events can be used to generate properties to go with your events, allowing
+   * layer.UI.components.Component.events can be used to generate properties to go with your events, allowing
    * the following widget property to be used:
    *
    * ```
@@ -28820,7 +28120,7 @@ module.exports = {
   registerAll: registerAll,
   unregisterComponent: unregisterComponent
 };
-},{"../../core":20,"../../util":165,"../base":69,"../mixins/state-manager":159}],71:[function(require,module,exports){
+},{"../../core":16,"../../util":161,"../base":65,"../mixins/state-manager":155}],67:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../../components/component');
@@ -28843,7 +28143,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * The Layer Channel Item widget renders a single Channel, typically for use representing a
  * channel within a list of channels.
  *
- * This is designed to go inside of the layerUI.components.ConversationsListPanel.List widget, and be a
+ * This is designed to go inside of the layer.UI.components.ConversationsListPanel.List widget, and be a
  * concise enough summary that it can be scrolled through along
  * with hundreds of other Conversations Item widgets.
  *
@@ -28851,9 +28151,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * * Badges for unread messages (currently just adds a css class so styling can change if there are any unread messages)
  *
- * @class layerUI.components.ConversationsListPanel.Item.Channel
+ * @class layer.UI.components.ConversationsListPanel.Item.Channel
  * @experimental
- * @extends layerUI.components.Component
+ * @extends layer.UI.components.Component
  */
 (0, _component.registerComponent)('layer-channel-item', {
   mixins: [_listItem2.default, _listItemSelection2.default, _sizeProperty2.default],
@@ -28934,7 +28234,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-channel-item", "<div class='layer-list-item' layer-id='innerNode'><div class='layer-channel-item-content'><div layer-id='title' class='layer-channel-title'></div></div></div>", "");
   layerUI.buildStyle("layer-channel-item", "layer-channel-item {\ndisplay: flex;\nflex-direction: column;\n}\nlayer-channel-item .layer-list-item {\ndisplay: flex;\nflex-direction: row;\nalign-items: center;\n}\nlayer-channel-item  .layer-list-item .layer-channel-item-content {\nflex-grow: 1;\nwidth: 100px; \n}\nlayer-channel-item.layer-item-filtered .layer-list-item {\ndisplay: none;\n}", "");
 })();
-},{"../../../base":69,"../../../components/component":70,"../../../mixins/list-item":151,"../../../mixins/list-item-selection":150,"../../../mixins/size-property":158}],72:[function(require,module,exports){
+},{"../../../base":65,"../../../components/component":66,"../../../mixins/list-item":147,"../../../mixins/list-item-selection":146,"../../../mixins/size-property":154}],68:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../../components/component');
@@ -28965,7 +28265,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * The Layer Conversation Item widget renders a single Conversation, typically for use representing a
  * conversation within a list of conversations.
  *
- * This is designed to go inside of the layerUI.components.ConversationsListPanel.List widget, and be a
+ * This is designed to go inside of the layer.UI.components.ConversationsListPanel.List widget, and be a
  * concise enough summary that it can be scrolled through along
  * with hundreds of other Conversations Item widgets.
  *
@@ -28973,8 +28273,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * * Badges for unread messages (currently just adds a css class so styling can change if there are any unread messages)
  *
- * @class layerUI.components.ConversationsListPanel.Item.Conversation
- * @extends layerUI.components.Component
+ * @class layer.UI.components.ConversationsListPanel.Item.Conversation
+ * @extends layer.UI.components.Component
  */
 (0, _component.registerComponent)('layer-conversation-item', {
   mixins: [_listItem2.default, _listItemSelection2.default, _sizeProperty2.default],
@@ -29005,7 +28305,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      *
      * By default, only text/plain last-messages are fully rendered in the Conversation List.
      *
-     * All other messages are rendered using the `label` passed in with their layerUI.registerMessageHandler call.
+     * All other messages are rendered using the `label` passed in with their layer.UI.registerMessageHandler call.
      *
      * ```javascript
      * listItem.canFullyRenderLastMessage = function(message) {
@@ -29038,7 +28338,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     /**
      * Set the date format for the Conversation Item.
      *
-     * Note that typically you'd set layerUI.components.ConversationsListPanel.List.dateFormat instead.
+     * Note that typically you'd set layer.UI.components.ConversationsListPanel.List.dateFormat instead.
      *
      * @property {Object} [dateFormat]
      */
@@ -29171,7 +28471,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-conversation-item", "<div class='layer-list-item' layer-id='innerNode'><layer-replaceable-content  class='layer-conversation-left-side' name='conversationRowLeftSide'></layer-replaceable-content><div class='layer-conversation-item-content'><div class='layer-conversation-title-row'><layer-conversation-title layer-id='title'></layer-conversation-title><layer-date layer-id='date'></layer-date></div><layer-conversation-last-message layer-id='lastMessage'></layer-conversation-last-message></div><layer-replaceable-content  class='layer-conversation-right-side' name='conversationRowRightSide'></layer-replaceable-content></div>", "");
   layerUI.buildStyle("layer-conversation-item", "layer-conversation-item {\ndisplay: flex;\nflex-direction: column;\n}\nlayer-conversation-item .layer-list-item {\ndisplay: flex;\nflex-direction: row;\nalign-items: center;\n}\nlayer-conversation-item  .layer-list-item .layer-conversation-item-content {\nflex-grow: 1;\nwidth: 100px; \n}\nlayer-conversation-item .layer-conversation-title-row {\ndisplay: flex;\nflex-direction: row;\n}\nlayer-conversation-item .layer-conversation-title-row layer-conversation-title {\nflex-grow: 1;\nwidth: 100px; \n}\nlayer-conversation-item.layer-item-filtered .layer-list-item {\ndisplay: none;\n}\nlayer-conversation-item layer-presence, layer-conversation-item .layer-group-counter {\ndisplay: none;\n}\nlayer-conversation-item layer-avatar layer-presence {\ndisplay: block;\n}\nlayer-conversation-item.layer-size-tiny.layer-group-conversation .layer-group-counter {\ndisplay: block;\n}\nlayer-conversation-item.layer-size-tiny.layer-direct-message-conversation layer-presence {\ndisplay: block;\n}\nlayer-conversation-item.layer-size-tiny layer-avatar {\ndisplay: none;\n}", "");
 })();
-},{"../../../base":69,"../../../components/component":70,"../../../mixins/list-item":151,"../../../mixins/list-item-selection":150,"../../../mixins/size-property":158,"../../layer-avatar/layer-avatar":78,"../../layer-conversation-last-message/layer-conversation-last-message":81,"../../layer-conversation-title/layer-conversation-title":82,"../../layer-menu-button/layer-menu-button":87}],73:[function(require,module,exports){
+},{"../../../base":65,"../../../components/component":66,"../../../mixins/list-item":147,"../../../mixins/list-item-selection":146,"../../../mixins/size-property":154,"../../layer-avatar/layer-avatar":74,"../../layer-conversation-last-message/layer-conversation-last-message":77,"../../layer-conversation-title/layer-conversation-title":78,"../../layer-menu-button/layer-menu-button":83}],69:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../../../core');
@@ -29244,7 +28544,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * ## Common Properties
  *
- * The most common property of this widget is layerUI.components.ConversationsListPanel.onConversationSelected, as typical use
+ * The most common property of this widget is layer.UI.components.ConversationsListPanel.onConversationSelected, as typical use
  * of this widget is to prompt the user to select a Conversation, and use that selection elsewhere.
  *
  * Note that you can also listen for `layer-conversation-selected` to achieve the same result:
@@ -29261,8 +28561,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * conversationList.selectedConversationId = myConversation.id;
  * ```
  *
- * @class layerUI.components.ConversationsListPanel.List
- * @extends layerUI.components.Component
+ * @class layer.UI.components.ConversationsListPanel.List
+ * @extends layer.UI.components.Component
  * @mixin layerUI.mixins.List
  * @mixin layerUI.mixins.MainComponent
  * @mixin layerUI.mixins.ListSelection
@@ -29305,7 +28605,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
    */
 
   /**
-   * See layerUI.components.ConversationsListPanel.onConversationSelected.
+   * See layer.UI.components.ConversationsListPanel.onConversationSelected.
    *
    * @event layer-conversation-selected
    * @param {Event} evt
@@ -29348,7 +28648,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
    */
 
   /**
-   * See layerUI.components.ConversationsListPanel.List.onConversationDeleted.
+   * See layer.UI.components.ConversationsListPanel.List.onConversationDeleted.
    *
    * @event layer-conversation-deleted
    * @param {Event} evt
@@ -29375,7 +28675,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * The above code will set the selected Conversation and render the conversation as selected.
      *
      * @property {String} [selectedConversationId='']
-     * @deprecated see layerUI.components.ConversationsListPanel.ListSelection.selectedId
+     * @deprecated see layer.UI.components.ConversationsListPanel.ListSelection.selectedId
      */
     selectedConversationId: {
       set: function set(value) {
@@ -29397,7 +28697,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * });
      * ```
      *
-     * If delete is enabled, the layerUI.components.misc.Delete.enabled property is changed, causing
+     * If delete is enabled, the layer.UI.components.misc.Delete.enabled property is changed, causing
      * the `layer-delete-enabled` css class to be added/removed on that widget.
      *
      * @property {Function} [deleteConversationEnabled=null]
@@ -29467,7 +28767,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * in the Message List to render that same image in the Conversation List.
      *
      * If you prevent rendering of a Message, it will instead render the `label` attribute for that message handler;
-     * see layerUI.registerMessageHandler for more info on the `label`.
+     * see layer.UI.registerMessageHandler for more info on the `label`.
      *
      * TODO: Should test to see what handler is returned rather than testing the mimeType
      *
@@ -29617,7 +28917,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-conversation-list", "<div class='layer-list-meta' layer-id='listMeta'><!-- Rendered when the list is empty --><layer-replaceable-content layer-id='emptyNode' class='layer-empty-list' name='emptyNode'>      No Conversations yet    </layer-replaceable-content><div class='layer-header-toggle'><!-- Rendered when there are no more results to page to --><layer-replaceable-content layer-id='endOfResultsNode' class='layer-end-of-results-indicator' name='endOfResultsNode'></layer-replaceable-content><!-- Rendered when waiting for server data --><layer-replaceable-content layer-id='loadIndicator' class='layer-load-indicator' name='loadIndicator'><layer-loading-indicator></layer-loading-indicator></layer-replaceable-content></div></div>", "");
   layerUI.buildStyle("layer-conversation-list", "layer-conversation-list {\noverflow-y: auto;\ndisplay: block;\n}\nlayer-conversation-list:not(.layer-loading-data) .layer-load-indicator {\ndisplay: none;\n}", "");
 })();
-},{"../../../../constants":15,"../../../../core":20,"../../../base":69,"../../../mixins/empty-list":146,"../../../mixins/list":154,"../../../mixins/list-load-indicator":152,"../../../mixins/list-selection":153,"../../../mixins/main-component":155,"../../../mixins/query-end-indicator":157,"../../../mixins/size-property":158,"../../component":70,"../layer-channel-item/layer-channel-item":71,"../layer-conversation-item/layer-conversation-item":72}],74:[function(require,module,exports){
+},{"../../../../constants":11,"../../../../core":16,"../../../base":65,"../../../mixins/empty-list":142,"../../../mixins/list":150,"../../../mixins/list-load-indicator":148,"../../../mixins/list-selection":149,"../../../mixins/main-component":151,"../../../mixins/query-end-indicator":153,"../../../mixins/size-property":154,"../../component":66,"../layer-channel-item/layer-channel-item":67,"../layer-conversation-item/layer-conversation-item":68}],70:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../../../core');
@@ -29655,9 +28955,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * This widget includes a checkbox for selection.
  *
- * @class layerUI.components.IdentitiesListPanel.Item
+ * @class layer.UI.components.IdentitiesListPanel.Item
  * @mixin layerUI.mixins.ListItem
- * @extends layerUI.components.Component
+ * @extends layer.UI.components.Component
  */
 (0, _component.registerComponent)('layer-identity-item', {
   mixins: [_listItem2.default, _sizeProperty2.default, _clickable2.default],
@@ -29822,7 +29122,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-identity-item", "<div class='layer-list-item' layer-id='listItem'><layer-avatar layer-id='avatar' show-presence='true'></layer-avatar><layer-presence layer-id='presence' class='presence-without-avatar' size='medium'></layer-presence><label class='layer-identity-name' layer-id='title'></label><layer-age layer-id='age'></layer-age><layer-replaceable-content layer-id='rightSide' class='layer-identity-right-side' name='identityRowRightSide'></layer-replaceable-content></div>", "");
   layerUI.buildStyle("layer-identity-item", "layer-identity-item {\ndisplay: flex;\nflex-direction: column;\n}\nlayer-identity-item .layer-list-item {\ndisplay: flex;\nflex-direction: row;\nalign-items: center;\n}\nlayer-identity-item .layer-list-item label {\nflex-grow: 1;\nwidth: 100px; \n}\nlayer-identity-item.layer-item-filtered .layer-list-item {\ndisplay: none;\n}\nlayer-identity-item.layer-identity-item-empty {\ndisplay: none;\n}\nlayer-identity-item layer-presence.presence-without-avatar {\ndisplay: none;\n}\nlayer-identity-item.layer-size-tiny layer-presence {\ndisplay: block;\n}\nlayer-identity-item.layer-size-tiny layer-avatar {\ndisplay: none;\n}\nlayer-identity-item.layer-size-tiny layer-age {\ndisplay: none;\n}", "");
 })();
-},{"../../../../core":20,"../../../../util":165,"../../../base":69,"../../../mixins/clickable":145,"../../../mixins/list-item":151,"../../../mixins/size-property":158,"../../component":70,"../../layer-age/layer-age":77,"../../layer-avatar/layer-avatar":78}],75:[function(require,module,exports){
+},{"../../../../core":16,"../../../../util":161,"../../../base":65,"../../../mixins/clickable":141,"../../../mixins/list-item":147,"../../../mixins/size-property":154,"../../component":66,"../../layer-age/layer-age":73,"../../layer-avatar/layer-avatar":74}],71:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../../../core');
@@ -29905,7 +29205,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   /**
    * A identity selection change has occurred
    *
-   * See the {@link layerUI.components.IdentitiesListPanel.List#layer-identity-selected layer-identity-selected} event for more detail.
+   * See the {@link layer.UI.components.IdentitiesListPanel.List#layer-identity-selected layer-identity-selected} event for more detail.
    *
    * @property {Function} onIdentitySelected
    * @param {Event} evt
@@ -29944,7 +29244,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   /**
    * A identity selection change has occurred
    *
-   * See the {@link layerUI.components.IdentitiesListPanel.List#layer-identity-deselected layer-identity-deselected} event for more detail.
+   * See the {@link layer.UI.components.IdentitiesListPanel.List#layer-identity-deselected layer-identity-deselected} event for more detail.
    *
    * @property {Function} onIdentityDeselected
    * @param {Event} evt
@@ -30066,7 +29366,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
     /**
-     * Handle a user Selection event triggered by a layerUI.components.IdentitiesListPanel.Item.
+     * Handle a user Selection event triggered by a layer.UI.components.IdentitiesListPanel.Item.
      *
      * Adds the Identity to the selectedIdentities array.
      *
@@ -30092,7 +29392,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
     /**
-     * Handle a user Deselection event triggered by a layerUI.components.IdentitiesListPanel.Item
+     * Handle a user Deselection event triggered by a layer.UI.components.IdentitiesListPanel.Item
      *
      * Removes the identity from the selectedIdentities array.
      *
@@ -30118,7 +29418,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 
     /**
-     * Append a layerUI.components.IdentitiesListPanel.Item to the Document Fragment
+     * Append a layer.UI.components.IdentitiesListPanel.Item to the Document Fragment
      *
      * @method _generateItem
      * @param {layer.Core.Identity} identity
@@ -30217,11 +29517,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      *
      * Events listed here come from either this component, or its subcomponents.
      *
-     * * {@link layerUI.components.IdentitiesListPanel.List#layer-identity-deselected layer-identity-deselected}: User has clicked to unselect an Identity
-     * * {@link layerUI.components.IdentitiesListPanel.List#layer-identity-selected layer-identity-selected}: User has clicked to select an Identity
+     * * {@link layer.UI.components.IdentitiesListPanel.List#layer-identity-deselected layer-identity-deselected}: User has clicked to unselect an Identity
+     * * {@link layer.UI.components.IdentitiesListPanel.List#layer-identity-selected layer-identity-selected}: User has clicked to select an Identity
      *
-     * @class layerUI.components.IdentitiesListPanel.List
-     * @extends layerUI.components.Component
+     * @class layer.UI.components.IdentitiesListPanel.List
+     * @extends layer.UI.components.Component
      * @mixin layerUI.mixins.List
      * @mixin layerUI.mixins.MainComponent
      * @mixin layerUI.mixins.ListLoadIndicator
@@ -30233,7 +29533,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-identity-list", "<div class='layer-list-meta' layer-id='listMeta'><div class='layer-empty-list' layer-id='emptyNode'></div><div class='layer-meta-toggle'><!-- Rendered when the list is empty --><layer-replaceable-content layer-id='emptyNode' class='layer-empty-list' name='emptyNode'>        No Users yet      </layer-replaceable-content><!-- Rendered when there are no more results to page to --><layer-replaceable-content layer-id='endOfResultsNode' class='layer-end-of-results-indicator' name='endOfResultsNode'></layer-replaceable-content><!-- Rendered when waiting for server data --><layer-replaceable-content layer-id='loadIndicator' class='layer-load-indicator' name='loadIndicator'><layer-loading-indicator></layer-loading-indicator></layer-replaceable-content></div></div>", "");
   layerUI.buildStyle("layer-identity-list", "layer-identity-list {\noverflow-y: auto;\ndisplay: block;\n}\nlayer-identity-list:not(.layer-loading-data) .layer-load-indicator,\nlayer-identity-list:not(.layer-end-of-results) .layer-end-of-results-indicator {\ndisplay: none;\n}", "");
 })();
-},{"../../../../core":20,"../../../../util":165,"../../../base":69,"../../../mixins/empty-list":146,"../../../mixins/has-query":149,"../../../mixins/list":154,"../../../mixins/list-load-indicator":152,"../../../mixins/main-component":155,"../../../mixins/query-end-indicator":157,"../../../mixins/size-property":158,"../../component":70,"../layer-identity-item/layer-identity-item":74}],76:[function(require,module,exports){
+},{"../../../../core":16,"../../../../util":161,"../../../base":65,"../../../mixins/empty-list":142,"../../../mixins/has-query":145,"../../../mixins/list":150,"../../../mixins/list-load-indicator":148,"../../../mixins/main-component":151,"../../../mixins/query-end-indicator":153,"../../../mixins/size-property":154,"../../component":66,"../layer-identity-item/layer-identity-item":70}],72:[function(require,module,exports){
 'use strict';
 
 var _component = require('../component');
@@ -30247,7 +29547,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  *
  * @class
- * @extends layerUI.components.Component
+ * @extends layer.UI.components.Component
  */
 (0, _component.registerComponent)('layer-action-button', {
   mixins: [_clickable2.default],
@@ -30314,7 +29614,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
   }
 });
-},{"../../mixins/clickable":145,"../component":70}],77:[function(require,module,exports){
+},{"../../mixins/clickable":141,"../component":66}],73:[function(require,module,exports){
 'use strict';
 
 var _component = require('../component');
@@ -30326,8 +29626,8 @@ function getMonthsDiff(a, b) {
    *
    * TODO: Document this
    *
-   * @class layerUI.components.Age
-   * @extends layerUI.components.Component
+   * @class layer.UI.components.Age
+   * @extends layer.UI.components.Component
    */
 
 
@@ -30420,7 +29720,7 @@ function getMonthsDiff(a, b) {
   layerUI.buildAndRegisterTemplate("layer-age", "", "");
   layerUI.buildStyle("layer-age", "layer-age {\ndisplay: block;\nwhite-space: nowrap;\ntext-overflow: ellipsis;\noverflow: hidden;\n}", "");
 })();
-},{"../../base":69,"../component":70}],78:[function(require,module,exports){
+},{"../../base":65,"../component":66}],74:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../../core');
@@ -30591,7 +29891,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * You can replace Layer's method for coming up with initials with your own:
      *
      * ```
-     * layerUI.init({
+     * layer.UI.init({
      *   mixins: {
      *     'layer-avatar': {
      *        methods: {
@@ -30651,9 +29951,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      *
      * This widget appears within
      *
-     * * layerUI.components.MessagesListPanel.Item: Represents the sender of a Message
-     * * layerUI.components.ConversationsListPanel.Item.Conversation: Represents the participants of a Conversation
-     * * layerUI.components.IdentitiesListPanel.Item: Represents a user in a User List
+     * * layer.UI.components.MessagesListPanel.Item: Represents the sender of a Message
+     * * layer.UI.components.ConversationsListPanel.Item.Conversation: Represents the participants of a Conversation
+     * * layer.UI.components.IdentitiesListPanel.Item: Represents a user in a User List
      *
      * Rendering is done using data from the `layer.Core.Identity` object for each user, using the layer.Core.Identity.avatarUrl if available to
      * add an image, or first initials from layer.Core.Identity.firstName, layer.Core.Identity.lastName if no avatarUrl is available.
@@ -30662,7 +29962,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * The simplest way to customize this widget is to replace it with your own implementation of the `<layer-avatar />` tag.
      *
      * ```javascript
-     * layerUI.registerComponent('layer-avatar', {
+     * layer.UI.registerComponent('layer-avatar', {
      *    properties: {
      *      users: {
      *        set: function(value) {
@@ -30678,7 +29978,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * });
      *
      * // Call init after custom components are defined
-     * layerUI.init({
+     * layer.UI.init({
      *   appId:  'layer:///apps/staging/UUID'
      * });
      * ```
@@ -30688,8 +29988,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * * When used in a Messages List or Identities List, there will be only one user in the list
      * * When used in a Conversations List, there may be multiple users who are participants of the Conversation.
      *
-     * @class layerUI.components.Avatar
-     * @extends layerUI.components.Component
+     * @class layer.UI.components.Avatar
+     * @extends layer.UI.components.Component
      */
 
 
@@ -30698,7 +29998,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-avatar", "", "");
   layerUI.buildStyle("layer-avatar", "layer-avatar {\ndisplay: block;\n}\nlayer-avatar layer-presence {\nposition: absolute;\nbottom: 0px;\nright: 0px;\n}", "");
 })();
-},{"../../../core":20,"../../base":69,"../../mixins/main-component":155,"../../mixins/size-property":158,"../component":70,"../layer-presence/layer-presence":91}],79:[function(require,module,exports){
+},{"../../../core":16,"../../base":65,"../../mixins/main-component":151,"../../mixins/size-property":154,"../component":66,"../layer-presence/layer-presence":87}],75:[function(require,module,exports){
 'use strict';
 
 var _component = require('../component');
@@ -30712,7 +30012,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  *
  * @class
- * @extends layerUI.components.Component
+ * @extends layer.UI.components.Component
  */
 (0, _component.registerComponent)('layer-choice-button', {
   mixins: [_clickable2.default],
@@ -30764,7 +30064,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * @method
      */
     onRerender: function onRerender() {
-      this.toggleClass('layer-choice-display-complete', this.model.selectedAnswer);
+      this.toggleClass('layer-choice-view-complete', this.model.selectedAnswer);
 
       for (var i = 0; i < this.childNodes.length; i++) {
         var child = this.childNodes[i];
@@ -30796,7 +30096,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
   }
 });
-},{"../../mixins/clickable":145,"../component":70}],80:[function(require,module,exports){
+},{"../../mixins/clickable":141,"../component":66}],76:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../../core');
@@ -30810,7 +30110,7 @@ var _base = require('../../base');
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var ENTER = 13; /**
-                 * The Layer Composer widget provides the textarea for layerUI.components.ConversationPanel.
+                 * The Layer Composer widget provides the textarea for layer.UI.components.ConversationPanel.
                  *
                  * It provides a self-resizing text area that resizes to the size of the entered text, and sends typing indicators as the user types.
                  *
@@ -30819,12 +30119,12 @@ var ENTER = 13; /**
                  * * CSS Class `layer-compose-bar-one-line-of-text`: If there is only a single line's worth of text, then this CSS class is applied to
                  *   help center the text
                  * * Event `layer-file-selected`: This widget listens for this event, and if it receives it, uses that event to retrieve a file to send in
-                 *   the Conversation.  Event comes from layerUI.components.FileUploadButton or from your custom widgets.
+                 *   the Conversation.  Event comes from layer.UI.components.FileUploadButton or from your custom widgets.
                  * * Keyboard Handling: ENTER: Sends message unless its accompanied by a modifier key.  TAB: Enters a \t character unless you
                  *   set `layerUI.settings.disableTabAsWhiteSpace` to true
                  *
-                 * @class layerUI.components.Composer
-                 * @extends layerUI.components.Component
+                 * @class layer.UI.components.Composer
+                 * @extends layer.UI.components.Component
                  */
 
 var TAB = 9;
@@ -31038,11 +30338,11 @@ var TAB = 9;
             items: optionalModels
           });
           if (this.conversation) {
-            this.generateMessage(this.conversation, function (message) {
+            model.generateMessage(this.conversation, function (message) {
               return _this._send(message, message.parts);
             });
           } else {
-            this._generateParts(function (parts) {
+            model._generateParts(function (parts) {
               return _this._send(null, parts);
             });
           }
@@ -31057,7 +30357,7 @@ var TAB = 9;
             return _this._send(message, message.parts);
           });
         } else {
-          this._generateParts(function (parts) {
+          _model._generateParts(function (parts) {
             return _this._send(null, parts);
           });
         }
@@ -31242,7 +30542,7 @@ var TAB = 9;
   layerUI.buildAndRegisterTemplate("layer-compose-bar", "<layer-replaceable-content class='layer-button-panel layer-button-panel-left' name='composerButtonPanelLeft'></layer-replaceable-content><div class='layer-compose-edit-panel' layer-id='editPanel'><div class='hidden-resizer' layer-id='resizer'>&nbsp;&nbsp;</div><div class='hidden-lineheighter' layer-id='lineHeighter'>&nbsp;</div><textarea rows=\"1\" layer-id='input'></textarea></div><layer-replaceable-content class='layer-button-panel layer-button-panel-right' name='composerButtonPanelRight'><layer-send-button></layer-send-button></layer-replaceable-content>", "");
   layerUI.buildStyle("layer-compose-bar", "layer-compose-bar {\ndisplay: flex;\nflex-direction: row;\n}\nlayer-compose-bar .layer-compose-edit-panel {\nposition: relative;\nflex-grow: 1;\nwidth: 100px; \npadding: 1px 0px;\n}\nlayer-compose-bar textarea, layer-compose-bar .hidden-resizer, layer-compose-bar .hidden-lineheighter {\nmin-height: 20px;\noverflow: hidden;\nborder-width: 1px;\nborder-color: transparent;\nmargin: 0px;\nwidth: 100%;\nwhite-space: pre-wrap;\nword-wrap: break-word;\n}\nlayer-compose-bar textarea {\nresize: none;\noutline: none;\nposition: absolute;\nz-index: 2;\ntop: 0px;\nleft: 0px;\nheight: 100%;\noverflow-y: auto;\n}\nlayer-compose-bar.layer-compose-bar-one-line-of-text textarea {\noverflow-y: hidden;\n}\nlayer-compose-bar .hidden-resizer {\nopacity: 0.1;\nwhite-space: pre-wrap;\nword-wrap: break-word;\nmax-height: 250px;\n}\nlayer-compose-bar .layer-compose-edit-panel .hidden-lineheighter {\ntop: 0px;\nopacity: 0.1;\nwhite-space: nowrap;\nposition: absolute;\nright: 10000px;\n}\nlayer-compose-bar .layer-button-panel .layer-replaceable-inner {\ndisplay: flex;\nflex-direction: row;\nalign-items: stretch;\n}", "");
 })();
-},{"../../../core":20,"../../base":69,"../component":70}],81:[function(require,module,exports){
+},{"../../../core":16,"../../base":65,"../component":66}],77:[function(require,module,exports){
 'use strict';
 
 var _base = require('../../base');
@@ -31260,7 +30560,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * provide your own Conversation Last Message rendering:
  *
  * ```
- * layerUI.registerComponent('layer-conversation-last-message', {
+ * layer.UI.registerComponent('layer-conversation-last-message', {
  *   properties: {
  *      item: {}
  *   },
@@ -31272,13 +30572,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * });
  *
  * // Call init after custom components are defined
- * layerUI.init({
+ * layer.init({
  *   appId:  'layer:///apps/staging/UUID'
  * });
  * ```
  *
- * @class layerUI.components.ConversationLastMessage
- * @extends layerUI.components.Component
+ * @class layer.UI.components.ConversationLastMessage
+ * @extends layer.UI.components.Component
  */
 (0, _component.registerComponent)('layer-conversation-last-message', {
   properties: {
@@ -31364,7 +30664,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-conversation-last-message", "", "");
   layerUI.buildStyle("layer-conversation-last-message", "layer-conversation-last-message, .layer-custom-mime-type {\ndisplay: block;\nwhite-space: nowrap;\ntext-overflow: ellipsis;\noverflow: hidden;\n}", "");
 })();
-},{"../../base":69,"../component":70}],82:[function(require,module,exports){
+},{"../../base":65,"../component":66}],78:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../components/component');
@@ -31465,7 +30765,7 @@ var _component = require('../../components/component');
      * provide your own Conversation titles:
      *
      * ```
-     * layerUI.registerComponent('layer-conversation-title', {
+     * layer.UI.registerComponent('layer-conversation-title', {
      *    properties: {
      *      item: {
      *        set: function(value) {
@@ -31476,13 +30776,13 @@ var _component = require('../../components/component');
      * });
      *
      * // Call init after custom components are defined
-     * layerUI.init({
+     * layer.init({
      *   appId:  'layer:///apps/staging/UUID'
      * });
      * ```
      *
-     * @class layerUI.components.ConversationTitle
-     * @extends layerUI.components.Component
+     * @class layer.UI.components.ConversationTitle
+     * @extends layer.UI.components.Component
      */
 
 
@@ -31491,7 +30791,7 @@ var _component = require('../../components/component');
   layerUI.buildAndRegisterTemplate("layer-conversation-title", "", "");
   layerUI.buildStyle("layer-conversation-title", "layer-conversation-title {\ndisplay: block;\n}", "");
 })();
-},{"../../base":69,"../../components/component":70}],83:[function(require,module,exports){
+},{"../../base":65,"../../components/component":66}],79:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../../core');
@@ -31720,7 +31020,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * This Conversation ID specifies what conversation to render and interact with.
      * This property needs to be changed any time you change to view a different Conversation.
      *
-     * Alternative: See layerUI.components.LayerConversation.conversation property.  Strings however are easier to stick
+     * Alternative: See layer.UI.components.LayerConversation.conversation property.  Strings however are easier to stick
      * into html template files.
      *
      * ```
@@ -31777,7 +31077,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * This Conversation ID specifies what conversation to render and interact with.
      * This property needs to be changed any time you change to view a different Conversation.
      *
-     * Alternative: See layerUI.components.LayerConversation.conversationId property for an easier property to use
+     * Alternative: See layer.UI.components.LayerConversation.conversationId property for an easier property to use
      * within html templates.
      *
      * ```
@@ -31853,7 +31153,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * ```
      *
      * @property {Function} onRenderListItem
-     * @property {layerUI.components.MessagesListPanel.Item} onRenderListItem.widget
+     * @property {layer.UI.components.MessagesListPanel.Item} onRenderListItem.widget
      *    One row of the list
      * @property {layer.Message[]} onRenderListItem.items
      *    full set of messages in the list
@@ -32291,8 +31591,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      *
      * ## Key Properties
      *
-     * * layerUI.components.ConversationPanel.conversationId (attribute-name: `conversation-id`): Set what conversation is being viewed
-     * * layerUI.components.ConversationPanel.queryId (attribute-name: `query-id`): If your app already has a layer.Core.Query, you can provide it to this widget to render and page through its Messages.  If you don't have a layer.Core.Query instance, this widget will generate one for you.
+     * * layer.UI.components.ConversationPanel.conversationId (attribute-name: `conversation-id`): Set what conversation is being viewed
+     * * layer.UI.components.ConversationPanel.queryId (attribute-name: `query-id`): If your app already has a layer.Core.Query, you can provide it to this widget to render and page through its Messages.  If you don't have a layer.Core.Query instance, this widget will generate one for you.
      *
      * NOTE: If you provide your own Query, you must update its predicate when changing Conversations.
      *
@@ -32300,11 +31600,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      *
      * Events listed here come from either this component, or its subcomponents.
      *
-     * * {@link layerUI.components.Composer#layer-send-message layer-send-message}: User has requested their Message be sent
-     * * {@link layerUI.components.TypingIndicator#layer-typing-indicator-change layer-typing-indicator-change}: Someone in the Conversation has started/stopped typing
+     * * {@link layer.UI.components.Composer#layer-send-message layer-send-message}: User has requested their Message be sent
+     * * {@link layer.UI.components.TypingIndicator#layer-typing-indicator-change layer-typing-indicator-change}: Someone in the Conversation has started/stopped typing
      *
-     * @class layerUI.components.ConversationPanel
-     * @extends layerUI.components.Component
+     * @class layer.UI.components.ConversationPanel
+     * @extends layer.UI.components.Component
      * @mixin layerUI.mixins.MainComponent
      * @mixin layerUI.mixins.HasQuery
      * @mixin layerUI.mixins.FileDropTarget
@@ -32316,7 +31616,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-conversation-view", "<layer-message-list layer-id='list'></layer-message-list><layer-typing-indicator layer-id='typingIndicators'></layer-typing-indicator><layer-compose-bar layer-id='composer'></layer-compose-bar>", "");
   layerUI.buildStyle("layer-conversation-view", "layer-conversation-view {\ndisplay: flex;\nflex-direction: column;\noutline: none; \n}\nlayer-message-list {\nflex-grow: 1;\nheight: 100px;\n}\nlayer-compose-bar {\nborder-top: 1px solid #dedede;\nmin-height: 30px;\n}", "");
 })();
-},{"../../../constants":15,"../../../core":20,"../../base":69,"../../mixins/file-drop-target":147,"../../mixins/focus-on-keydown":148,"../../mixins/has-query":149,"../../mixins/main-component":155,"../../mixins/throttler":160,"../component":70,"../layer-compose-bar/layer-compose-bar":80,"../layer-typing-indicator/layer-typing-indicator":94,"../message-list/layer-message-list/layer-message-list":102}],84:[function(require,module,exports){
+},{"../../../constants":11,"../../../core":16,"../../base":65,"../../mixins/file-drop-target":143,"../../mixins/focus-on-keydown":144,"../../mixins/has-query":145,"../../mixins/main-component":151,"../../mixins/throttler":156,"../component":66,"../layer-compose-bar/layer-compose-bar":76,"../layer-typing-indicator/layer-typing-indicator":90,"../message-list/layer-message-list/layer-message-list":98}],80:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../components/component');
@@ -32451,10 +31751,10 @@ var _component = require('../../components/component');
      *
      * This is provided as a specialized component so that it can be easily redefined by your app to
      * provide your own date formatting.  Note that most customization of date rendering can be accomplished instead
-     * using layerUI.components.ConversationPanel.dateRenderer.
+     * using layer.UI.components.ConversationPanel.dateRenderer.
      *
      * ```
-     * layerUI.registerComponent('layer-date', {
+     * layer.UI.registerComponent('layer-date', {
      *    properties: {
      *      date: {
      *        set: function(value) {
@@ -32468,13 +31768,13 @@ var _component = require('../../components/component');
      * });
      *
      * // Call init after custom components are defined
-     * layerUI.init({
+     * layer.init({
      *   appId:  'layer:///apps/staging/UUID'
      * });
      * ```
      *
-     * @class layerUI.components.Date
-     * @extends layerUI.components.Component
+     * @class layer.UI.components.Date
+     * @extends layer.UI.components.Component
      */
 
 
@@ -32483,7 +31783,7 @@ var _component = require('../../components/component');
   layerUI.buildAndRegisterTemplate("layer-date", "", "");
   layerUI.buildStyle("layer-date", "layer-date {\ndisplay: block;\nwhite-space: nowrap;\ntext-overflow: ellipsis;\noverflow: hidden;\n}", "");
 })();
-},{"../../base":69,"../../components/component":70}],85:[function(require,module,exports){
+},{"../../base":65,"../../components/component":66}],81:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../../core');
@@ -32575,7 +31875,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
       /**
        * This widget triggers a `layer-file-selected` event when the user selects files.
-       * This event is captured and stopped from propagating by the layerUI.components.Composer.
+       * This event is captured and stopped from propagating by the layer.UI.components.Composer.
        * If using it outside of the composer, this event can be used to receive the MessageParts generated
        * for the selected files.
        *
@@ -32590,7 +31890,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 }); /**
      * The Layer file upload button widget allows users to select a File to send.
      *
-     * Its assumed that this button will be used within the layerUI.components.ComposeButtonPanel:
+     * Its assumed that this button will be used within the layer.UI.components.ComposeButtonPanel:
      *
      * ```
      * myConversationPanel.composeButtons = [
@@ -32608,8 +31908,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * }
      * ```
      *
-     * @class layerUI.components.FileUploadButton
-     * @extends layerUI.components.Component
+     * @class layer.UI.components.FileUploadButton
+     * @extends layer.UI.components.Component
      */
 
 
@@ -32618,7 +31918,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-file-upload-button", "<label layer-id='label'>+</label><input layer-id='input' type='file'></input>", "");
   layerUI.buildStyle("layer-file-upload-button", "layer-file-upload-button {\ncursor: pointer;\ndisplay: flex;\nflex-direction: column;\njustify-content: center;\n}\nlayer-file-upload-button input {\nwidth: 0.1px;\nheight: 0.1px;\nopacity: 0;\noverflow: hidden;\nposition: absolute;\nz-index: -1;\n}\nlayer-file-upload-button label {\ndisplay: block;\npointer-events: none;\ntext-align: center;\n}", "");
 })();
-},{"../../../core":20,"../../../util":165,"../../base":69,"../../mixins/clickable":145,"../component":70}],86:[function(require,module,exports){
+},{"../../../core":16,"../../../util":161,"../../base":65,"../../mixins/clickable":141,"../component":66}],82:[function(require,module,exports){
 'use strict';
 
 var _base = require('../../base');
@@ -32632,8 +31932,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * The Layer Loading Spinner/indicator
  *
- * @class layerUI.components.LoadingIndicator
- * @extends layerUI.components.Component
+ * @class layer.UI.components.LoadingIndicator
+ * @extends layer.UI.components.Component
  */
 (0, _component.registerComponent)('layer-loading-indicator', {});
 
@@ -32642,7 +31942,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-loading-indicator", "<div></div>", "");
   layerUI.buildStyle("layer-loading-indicator", "@-webkit-keyframes layer-loader {\nto { -webkit-transform: rotate(360deg); }\n}\n@keyframes layer-loader {\nto { transform: rotate(360deg); }\n}\nlayer-loading-indicator {\ndisplay: block;\nmargin: 15px 0px;\nwidth: 50px;\nheight: 50px;\n}\nlayer-loading-indicator > div {\nbox-sizing: border-box;\nwidth: 48px;\nheight: 48px;\nborder-radius: 50%;\nbackground: transparent;\nborder-width: 4px;\nborder-style: solid;\n-webkit-animation: layer-loader 1.2s infinite linear;\nanimation: layer-loader 1.2s infinite linear;\n}", "");
 })();
-},{"../../base":69,"../component":70}],87:[function(require,module,exports){
+},{"../../base":65,"../component":66}],83:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../../core');
@@ -32670,13 +31970,15 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * ```
  * var menuButton = document.createElement('layer-menu-button');
  * menuButton.item = message;
- * menuButton.options = [
- *   {text: "delete", method: function(item) {item.delete(Layer.Constants.DELETION_MODE.ALL);}
- * ];
+ * menuButton.getMenuOptions = function() {
+ *     return [
+ *       {text: "delete", method: function(item) {item.delete(Layer.Constants.DELETION_MODE.ALL);}
+ *     ];
+ * };
  * ```
  *
- * @class layerUI.components.MenuButton
- * @extends layerUI.components.Component
+ * @class layer.UI.components.MenuButton
+ * @extends layer.UI.components.Component
  */
 (0, _component.registerComponent)('layer-menu-button', {
   mixins: [_clickable2.default],
@@ -32749,7 +32051,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-menu-button", "<span>&#8285;</span>", "");
   layerUI.buildStyle("layer-menu-button", "layer-menu-button {\ndisplay: block;\ncursor: pointer;\nposition: relative;\nwidth: 0px;\nheight: 14px;\n}\nlayer-menu-button span {\npadding: 0px 8px;\nuser-select: none;\n-webkit-user-select: none;\nposition: absolute;\ntop: -9px;\nleft: -9px;\n}", "");
 })();
-},{"../../../core":20,"../../base":69,"../../components/component":70,"../../mixins/clickable":145,"../layer-menu/layer-menu":88}],88:[function(require,module,exports){
+},{"../../../core":16,"../../base":65,"../../components/component":66,"../../mixins/clickable":141,"../layer-menu/layer-menu":84}],84:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../../core');
@@ -32779,8 +32081,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * ];
  * ```
  *
- * @class layerUI.components.MenuButton
- * @extends layerUI.components.Component
+ * @class layer.UI.components.MenuButton
+ * @extends layer.UI.components.Component
  */
 (0, _component.registerComponent)('layer-menu', {
   mixins: [_clickable2.default],
@@ -32884,7 +32186,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-menu", "", "");
   layerUI.buildStyle("layer-menu", "layer-menu {\ndisplay: none;\nposition: absolute;\n}\nlayer-menu.layer-menu-list-showing {\ndisplay: block;\nz-index: 10;\n}", "");
 })();
-},{"../../../constants":15,"../../../core":20,"../../base":69,"../../components/component":70,"../../mixins/clickable":145}],89:[function(require,module,exports){
+},{"../../../constants":11,"../../../core":16,"../../base":65,"../../components/component":66,"../../mixins/clickable":141}],85:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../../core');
@@ -32947,7 +32249,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     /**
      * There are many ways to render the status of a Message.
      *
-     * See layerUI.components.ConversationPanel.messageStatusRenderer to customize this.
+     * See layer.UI.components.ConversationPanel.messageStatusRenderer to customize this.
      *
      * @method
      * @private
@@ -32994,10 +32296,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      *
      * This is provided as a specialized component so that it can be easily redefined by your app to
      * provide your own date formatting.  Note that most customization of message status rendering can be accomplished instead
-     * using layerUI.components.ConversationPanel.messageStatusRenderer.
+     * using layer.UI.components.ConversationPanel.messageStatusRenderer.
      *
      * ```
-     * layerUI.registerComponent('layer-message-status', {
+     * layer.UI.registerComponent('layer-message-status', {
      *    properties: {
      *      message: {
      *        set: function(value) {
@@ -33015,13 +32317,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * });
      *
      * // Call init after custom components are defined
-     * layerUI.init({
+     * layer.init({
      *   appId:  'layer:///apps/staging/UUID'
      * });
      * ```
      *
-     * @class layerUI.components.MessageStatus
-     * @extends layerUI.components.Component
+     * @class layer.UI.components.MessageStatus
+     * @extends layer.UI.components.Component
      */
 
 
@@ -33030,7 +32332,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-message-status", "", "");
   layerUI.buildStyle("layer-message-status", "layer-message-status {\ndisplay: inline;\n}", "");
 })();
-},{"../../../constants":15,"../../../core":20,"../../base":69,"../component":70}],90:[function(require,module,exports){
+},{"../../../constants":11,"../../../core":16,"../../base":65,"../component":66}],86:[function(require,module,exports){
 'use strict';
 
 var _notifyjs = require('notifyjs');
@@ -33077,11 +32379,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * and the new message is already visible to the user.  However,
  * this widget does not know what conversation is currently visible, so its up to you to manage this.
  *
- * Provide a layerUI.components.misc.Notifier.onMessageNotification handler to perform tests to see
+ * Provide a layer.UI.components.misc.Notifier.onMessageNotification handler to perform tests to see
  * if notifications are required, and then call `evt.preventDefault()` to prevent the notification from showing.
  *
- * @class layerUI.components.Notifier
- * @extends layerUI.components.Component
+ * @class layer.UI.components.Notifier
+ * @extends layer.UI.components.Component
  */
 var Notify = _notifyjs2.default;
 if ('default' in Notify) Notify = Notify.default; // Annoying difference between webpack and browserify...
@@ -33236,7 +32538,7 @@ if ('default' in Notify) Notify = Notify.default; // Annoying difference between
      * after reloading the app; its assumed that the user who reloads your app has seen what they want
      * to see, and that the purpose of this indicator is to flag new stuff that should bring them back to your window.
      *
-     * See layerUI.components.Notifier.notifyCharacterForTitlebar for more controls.
+     * See layer.UI.components.Notifier.notifyCharacterForTitlebar for more controls.
      *
      * @property {String} notifyInTitleBar
      */
@@ -33248,7 +32550,7 @@ if ('default' in Notify) Notify = Notify.default; // Annoying difference between
     /**
      * Set a character or string to prefix your window titlebar with when there are unread messages.
      *
-     * This property is used if layerUI.components.Notifier.notifyInTitlebar is enabled.
+     * This property is used if layer.UI.components.Notifier.notifyInTitlebar is enabled.
      *
      * @property {String} notifyCharacterForTitlebar
      */
@@ -33259,10 +32561,10 @@ if ('default' in Notify) Notify = Notify.default; // Annoying difference between
     /**
      * Set to true to force the notifier to show the unread badge in the titlebar, or set to false to force it to remove this.
      *
-     * Use this at runtime to modify the badging behavior, use layerUI.components.Notifier.notifyInTitlebar to enable/disable
+     * Use this at runtime to modify the badging behavior, use layer.UI.components.Notifier.notifyInTitlebar to enable/disable
      * badging.  Treat this as state rather than setting.
      *
-     * If you want to just set the badge until the message is marked as read, use layerUI.components.Notifier.flagTitlebarForMessage
+     * If you want to just set the badge until the message is marked as read, use layer.UI.components.Notifier.flagTitlebarForMessage
      *
      * @property {Boolean} flagTitlebar
      */
@@ -33583,7 +32885,7 @@ if ('default' in Notify) Notify = Notify.default; // Annoying difference between
   layerUI.buildAndRegisterTemplate("layer-notifier", "<div class='layer-message-item-main' layer-id='container'><div class='layer-notifier-title'><layer-avatar layer-id='avatar' size='small'></layer-avatar><span layer-id='title'></span></div><layer-message-viewer layer-id='card'></layer-message-viewer></div>", "");
   layerUI.buildStyle("layer-notifier", "layer-notifier {\nposition: fixed;\nz-index: 1000;\nright: 10px;\ntop: -10000px;\nmax-width: 40%;\ndisplay: flex;\nopacity: 0;\ntransition: opacity 500ms;\n}\nlayer-notifier.layer-notifier-toast-fade {\ntop: 10px;\n}\nlayer-notifier.layer-notifier-toast {\ntop: 10px;\nflex-direction: row;\nopacity: 1;\ntransition: opacity 1s;\n}\nlayer-notifier .layer-message-item-main {\ndisplay: flex;\nflex-direction: column;\nflex-grow: 1;\n}\nlayer-notifier layer-message-text-plain {\noverflow: hidden;\nmax-height: 200px;\n}", "");
 })();
-},{"../../base":69,"../../mixins/clickable":145,"../../mixins/main-component":155,"../component":70,"../layer-avatar/layer-avatar":78,"notifyjs":176}],91:[function(require,module,exports){
+},{"../../base":65,"../../mixins/clickable":141,"../../mixins/main-component":151,"../component":66,"../layer-avatar/layer-avatar":74,"notifyjs":172}],87:[function(require,module,exports){
 'use strict';
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; /**
@@ -33598,7 +32900,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                                                                                                                                                                                                                                                                                * The simplest way to customize this widget is to replace it with your own implementation of the `<layer-presence />` tag.
                                                                                                                                                                                                                                                                                *
                                                                                                                                                                                                                                                                                * ```javascript
-                                                                                                                                                                                                                                                                               * layerUI.registerComponent('layer-presence', {
+                                                                                                                                                                                                                                                                               * layer.UI.registerComponent('layer-presence', {
                                                                                                                                                                                                                                                                                *    properties: {
                                                                                                                                                                                                                                                                                *      item: {
                                                                                                                                                                                                                                                                                *        set: function(value) {
@@ -33618,13 +32920,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                                                                                                                                                                                                                                                                                * });
                                                                                                                                                                                                                                                                                *
                                                                                                                                                                                                                                                                                * // Call init after custom components are defined
-                                                                                                                                                                                                                                                                               * layerUI.init({
+                                                                                                                                                                                                                                                                               * layer.init({
                                                                                                                                                                                                                                                                                *   appId:  'layer:///apps/staging/UUID'
                                                                                                                                                                                                                                                                                * });
                                                                                                                                                                                                                                                                                * ```
                                                                                                                                                                                                                                                                                *
-                                                                                                                                                                                                                                                                               * @class layerUI.components.Presence
-                                                                                                                                                                                                                                                                               * @extends layerUI.components.Component
+                                                                                                                                                                                                                                                                               * @class layer.UI.components.Presence
+                                                                                                                                                                                                                                                                               * @extends layer.UI.components.Component
                                                                                                                                                                                                                                                                                * @mixin layerUI.mixins.MainComponent
                                                                                                                                                                                                                                                                                */
 
@@ -33764,7 +33066,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-presence", "", "");
   layerUI.buildStyle("layer-presence", "layer-presence {\ndisplay: inline-block;\nborder-radius: 30px;\n}", "");
 })();
-},{"../../../core":20,"../../base":69,"../../mixins/clickable":145,"../../mixins/size-property":158,"../component":70}],92:[function(require,module,exports){
+},{"../../../core":16,"../../base":65,"../../mixins/clickable":141,"../../mixins/size-property":154,"../component":66}],88:[function(require,module,exports){
 'use strict';
 
 var _component = require('../component');
@@ -33872,8 +33174,8 @@ var _component = require('../component');
      *
      * TODO: Should be able to access mainComponent's originalChildNodes and find matching children
      *
-     * @class layerUI.components.ReplaceableContent
-     * @extends layerUI.components.Component
+     * @class layer.UI.components.ReplaceableContent
+     * @extends layer.UI.components.Component
      */
 
 
@@ -33882,7 +33184,7 @@ var _component = require('../component');
   layerUI.buildAndRegisterTemplate("layer-replaceable-content", "<div class='layer-replaceable-inner' layer-id='content'></div>", "");
   layerUI.buildStyle("layer-replaceable-content", "layer-replaceable-content {\ndisplay: flex;\nflex-direction: row;\n}\n.layer-replaceable-inner {\ndisplay: flex;\nflex-direction: row;\n}", "");
 })();
-},{"../../base":69,"../component":70}],93:[function(require,module,exports){
+},{"../../base":65,"../component":66}],89:[function(require,module,exports){
 'use strict';
 
 var _component = require('../component');
@@ -33896,7 +33198,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * The Layer Send button widget provides an alternative to hitting a keyboard `ENTER` key for sending a message.
  *
- * Its assumed that this button will be used within the layerUI.components.ComposeButtonPanel.
+ * Its assumed that this button will be used within the layer.UI.components.ComposeButtonPanel.
  * If using it elsewhere, note that it triggers a `layer-send-click` event that you would listen for to do your own processing.
  * If using it in the ComposeButtonPanel, this event will be received and handled by the Composer and will not propagate any further.
  *
@@ -33915,8 +33217,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * ];
  * ```
  *
- * @class layerUI.components.SendButton
- * @extends layerUI.components.Component
+ * @class layer.UI.components.SendButton
+ * @extends layer.UI.components.Component
  */
 (0, _component.registerComponent)('layer-send-button', {
   mixins: [_clickable2.default],
@@ -33957,7 +33259,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-send-button", "<div></div>", "");
   layerUI.buildStyle("layer-send-button", "layer-send-button {\ncursor: pointer;\ndisplay: flex;\nflex-direction: row;\nalign-items: center;\n}\nlayer-send-button div {\ntext-align: center;\n}", "");
 })();
-},{"../../base":69,"../../mixins/clickable":145,"../component":70}],94:[function(require,module,exports){
+},{"../../base":65,"../../mixins/clickable":141,"../component":66}],90:[function(require,module,exports){
 'use strict';
 
 var _component = require('../component');
@@ -34085,10 +33387,10 @@ var _component = require('../component');
      *
      * The simplest way to customize the behavior of this widget is using the `layer-typing-indicator-change` event.
      *
-     * TODO: Provide a layerUI.components.ConversationPanel.typingIndicatorRenderer property
+     * TODO: Provide a layer.UI.components.ConversationPanel.typingIndicatorRenderer property
      *
-     * @class layerUI.components.TypingIndicator
-     * @extends layerUI.components.Component
+     * @class layer.UI.components.TypingIndicator
+     * @extends layer.UI.components.Component
      */
 
 /**
@@ -34126,7 +33428,7 @@ var _component = require('../component');
   layerUI.buildAndRegisterTemplate("layer-typing-indicator", "<span class='layer-typing-message' layer-id='panel'></span>", "");
   layerUI.buildStyle("layer-typing-indicator", "layer-typing-indicator {\ndisplay: block;\n}\nlayer-typing-indicator span {\ndisplay: none;\n}\nlayer-typing-indicator.layer-typing-occuring span {\ndisplay: inline;\n}", "");
 })();
-},{"../../base":69,"../component":70}],95:[function(require,module,exports){
+},{"../../base":65,"../component":66}],91:[function(require,module,exports){
 'use strict';
 
 var _component = require('../component');
@@ -34165,9 +33467,9 @@ var _component = require('../component');
 }); /**
      *
      * @class
-     * @extends layerUI.components.Component
+     * @extends layer.UI.components.Component
      */
-},{"../component":70}],96:[function(require,module,exports){
+},{"../component":66}],92:[function(require,module,exports){
 'use strict';
 
 var _listItem = require('../../../mixins/list-item');
@@ -34188,10 +33490,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * The Layer Membership Item represents a single user within a Membership List.
  *
  *
- * @class layerUI.components.MembershipListPanel.Item
+ * @class layer.UI.components.MembershipListPanel.Item
  * @experimental
  * @mixin layerUI.mixins.ListItem
- * @extends layerUI.components.Component
+ * @extends layer.UI.components.Component
  */
 (0, _component.registerComponent)('layer-membership-item', {
   mixins: [_listItem2.default, _listItemSelection2.default],
@@ -34255,7 +33557,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-membership-item", "<div class='layer-list-item'><layer-avatar layer-id='avatar'></layer-avatar><label class='layer-membership-name' layer-id='title'></label></div>", "");
   layerUI.buildStyle("layer-membership-item", "layer-membership-item {\ndisplay: flex;\nflex-direction: column;\n}\nlayer-membership-item .layer-list-item {\ndisplay: flex;\nflex-direction: row;\nalign-items: center;\n}\nlayer-membership-item .layer-list-item layer-avatar {\nmargin-right: 20px;\n}\nlayer-membership-item .layer-list-item label {\nflex-grow: 1;\nwidth: 100px; \n}\nlayer-membership-item.layer-item-filtered .layer-list-item {\ndisplay: none;\n}\nlayer-membership-item.layer-membership-item-empty {\ndisplay: none;\n}", "");
 })();
-},{"../../../base":69,"../../../mixins/list-item":151,"../../../mixins/list-item-selection":150,"../../component":70,"../../layer-avatar/layer-avatar":78}],97:[function(require,module,exports){
+},{"../../../base":65,"../../../mixins/list-item":147,"../../../mixins/list-item-selection":146,"../../component":66,"../../layer-avatar/layer-avatar":74}],93:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../../../core');
@@ -34296,9 +33598,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * var membersList = document.createElement('layer-membership-list');
  * ```
  *
- * @class layerUI.components.MembershipListPanel.List
+ * @class layer.UI.components.MembershipListPanel.List
  * @experimental This feature is incomplete, and available as Preview only.
- * @extends layerUI.components.Component
+ * @extends layer.UI.components.Component
  * @mixin layerUI.mixins.List
  * @mixin layerUI.mixins.MainComponent
  * @mixin layerUI.mixins.ListSelection
@@ -34339,7 +33641,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   /**
    * A membership selection change has occurred
    *
-   * See the {@link layerUI.components.MembershipListPanel.List#layer-membership-selected layer-membership-selected} event for more detail.
+   * See the {@link layer.UI.components.MembershipListPanel.List#layer-membership-selected layer-membership-selected} event for more detail.
    *
    * @property {Function} onMembershipSelected
    * @param {Event} evt
@@ -34354,7 +33656,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      *
      * This property may need to be changed any time you change to view a different Channel.
      *
-     * Alternative: See layerUI.components.MembershipListPanel.List.channel property.  Strings however are easier to stick
+     * Alternative: See layer.UI.components.MembershipListPanel.List.channel property.  Strings however are easier to stick
      * into html template files.
      *
      * ```
@@ -34389,7 +33691,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      *
      * This property may need to be changed any time you change to view a different channel.
      *
-     * Alternative: See layerUI.components.MembershipListPanel.List.channelId property for an easier property to use
+     * Alternative: See layer.UI.components.MembershipListPanel.List.channelId property for an easier property to use
      * within html templates.
      *
      * ```
@@ -34438,7 +33740,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   methods: {
 
     /**
-     * Append a layerUI.components.IdentitiesListPanel.Item to the Document Fragment
+     * Append a layer.UI.components.IdentitiesListPanel.Item to the Document Fragment
      *
      * @method _generateItem
      * @param {layer.Membership} membership
@@ -34459,7 +33761,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-membership-list", "<div class='layer-load-indicator' layer-id='loadIndicator'>Loading users...</div>", "");
   layerUI.buildStyle("layer-membership-list", "layer-membership-list {\noverflow-y: auto;\ndisplay: block;\n}\nlayer-membership-list .layer-load-indicator {\ndisplay: none;\n}\nlayer-membership-list.layer-loading-data .layer-load-indicator {\ndisplay: block;\n}", "");
 })();
-},{"../../../../core":20,"../../../base":69,"../../../mixins/list":154,"../../../mixins/list-selection":153,"../../../mixins/main-component":155,"../../component":70,"../layer-membership-item/layer-membership-item":96}],98:[function(require,module,exports){
+},{"../../../../core":16,"../../../base":65,"../../../mixins/list":150,"../../../mixins/list-selection":149,"../../../mixins/main-component":151,"../../component":66,"../layer-membership-item/layer-membership-item":92}],94:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../../core');
@@ -34519,18 +33821,18 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Any method of this class can be enhanced using a Custom Mixin, however the following methods are recommended
  * as sufficient for most solutions:
  *
- * * layerUI.components.MessagesListPanel.List.onCreate: Your widget has just been created; it has a DOM node, it has child
+ * * layer.UI.components.MessagesListPanel.List.onCreate: Your widget has just been created; it has a DOM node, it has child
  *   nodes, *it has no properties*, nor does not yet have a `parentNode`.
  *   Provide an `onCreate` if there is any DOM manipulation you want to do any initialization.  (DOM Manipulation here should NOT depend
  *   upon property values).
- * * layerUI.components.MessagesListPanel.List.onAttach: Your widget now has a `parentNode`.  This is solely for initialization
+ * * layer.UI.components.MessagesListPanel.List.onAttach: Your widget now has a `parentNode`.  This is solely for initialization
  *   code that depends upon looking at the `parentNode`, and is not commonly used.
- * * layerUI.components.MessagesListPanel.List.onRender: Your Message Item widget has just been rendered for the first time.
+ * * layer.UI.components.MessagesListPanel.List.onRender: Your Message Item widget has just been rendered for the first time.
  *   Your widget should have an `item` at this point and any property-based dom manipulation can be done at this time.
  *
  * The following example adds a search bar to the Message List
  * ```
- * layerUI.init({
+ * layer.UI.init({
  *   appId: 'my-app-id',
  *   mixins: {
  *     'layer-messages-item': {
@@ -34573,9 +33875,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * });
  * ```
  *
- * @class layerUI.components.MessagesListPanel.Item
+ * @class layer.UI.components.MessagesListPanel.Item
  * @mixins layerUI.mixins.ListItem
- * @extends layerUI.components.Component
+ * @extends layer.UI.components.Component
  */
 module.exports = {
   properties: {
@@ -34783,7 +34085,7 @@ module.exports = {
     }
   }
 };
-},{"../../../constants":15,"../../../core":20,"../../../util":165,"../layer-replaceable-content/layer-replaceable-content":92}],99:[function(require,module,exports){
+},{"../../../constants":11,"../../../core":16,"../../../util":161,"../layer-replaceable-content/layer-replaceable-content":88}],95:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../../components/component');
@@ -34811,7 +34113,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-message-item-received", "<div class='layer-list-item' layer-id='innerNode'><!-- Header --><layer-replaceable-content class='layer-message-header' name='messageRowHeader'></layer-replaceable-content><!-- Body --><div class='layer-message-row' layer-id='messageRow'><!-- Body: Left Side --><layer-replaceable-content class='layer-message-left-side' name='messageRowLeftSide'></layer-replaceable-content><!-- Body: Message Contents --><div class='layer-message-item-main'><layer-message-viewer layer-id='messageViewer'></layer-message-viewer><div class='layer-message-item-content' layer-id='content'></div></div><!-- Body: Right Side --><layer-replaceable-content class='layer-message-right-side' name='messageRowRightSide'></layer-replaceable-content></div><!-- Footer --><layer-replaceable-content class='layer-message-footer' name='messageRowFooter'></layer-replaceable-content></div>", "");
   layerUI.buildStyle("layer-message-item-received", "layer-message-item-received {\ndisplay: flex;\nflex-direction: column;\nalign-content: stretch;\n}\nlayer-message-item-received .layer-list-item {\ndisplay: flex;\nflex-direction: column;\nalign-content: stretch;\n}\nlayer-message-item-received .layer-message-row {\ndisplay: flex;\nflex-direction: row;\nalign-items: flex-end;\n}\nlayer-message-item-received  .layer-message-item-main {\nflex-grow: 1;\noverflow: hidden;\n}\nlayer-message-item-received layer-message-text-plain {\ndisplay: block;\n}", "");
 })();
-},{"../../../base":69,"../../../components/component":70,"../../../mixins/list-item":151,"../../layer-avatar/layer-avatar":78,"../../layer-date/layer-date":84,"../layer-message-item-mixin":98}],100:[function(require,module,exports){
+},{"../../../base":65,"../../../components/component":66,"../../../mixins/list-item":147,"../../layer-avatar/layer-avatar":74,"../../layer-date/layer-date":80,"../layer-message-item-mixin":94}],96:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../component');
@@ -34841,7 +34143,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-message-item-sent", "<div class='layer-list-item' layer-id='innerNode'><!-- Header --><layer-replaceable-content class='layer-message-header' name='messageRowHeader'></layer-replaceable-content><!-- Body --><div class='layer-message-row' layer-id='messageRow'><!-- Body: left Side --><layer-replaceable-content class='layer-message-left-side' name='messageRowLeftSide'></layer-replaceable-content><!-- Body: Message Contents --><div class='layer-message-item-main'><layer-message-viewer layer-id='messageViewer'></layer-message-viewer><div class='layer-message-item-content' layer-id='content'></div></div><!-- Body: Right Side --><layer-replaceable-content class='layer-message-right-side' name='messageRowRightSide'></layer-replaceable-content></div><!-- Footer --><layer-replaceable-content class='layer-message-footer' name='messageRowFooter'></layer-replaceable-content></div>", "");
   layerUI.buildStyle("layer-message-item-sent", "layer-message-item-sent {\ndisplay: flex;\nflex-direction: column;\nalign-content: stretch;\n}\nlayer-message-item-sent img.emoji {\nmargin: 0 .05em 0 .1em;\nvertical-align: -0.1em;\n}\nlayer-message-item-sent .layer-list-item {\ndisplay: flex;\nflex-direction: column;\nalign-items: stretch;\n}\nlayer-message-item-sent .layer-message-row {\ndisplay: flex;\nflex-direction: row;\nalign-items: flex-end;\nflex-grow: 1;\n}\nlayer-message-item-sent .layer-message-item-main {\ntext-align: right;\nflex-grow: 1;\noverflow: hidden;\n}\nlayer-message-item-sent .layer-message-item-main .layer-message-item-content {\ndisplay: flex;\nflex-direction: row;\njustify-content: flex-end;\n}\nlayer-message-item-sent layer-message-text-plain {\ndisplay: block;\n}\nlayer-message-item-sent .layer-message-right-side > div {\ndisplay: flex;\nflex-direction: row;\nalign-items: center;\n}", "");
 })();
-},{"../../../base":69,"../../../mixins/list-item":151,"../../component":70,"../../layer-avatar/layer-avatar":78,"../../layer-date/layer-date":84,"../../layer-message-status/layer-message-status":89,"../layer-message-item-mixin":98}],101:[function(require,module,exports){
+},{"../../../base":65,"../../../mixins/list-item":147,"../../component":66,"../../layer-avatar/layer-avatar":74,"../../layer-date/layer-date":80,"../../layer-message-status/layer-message-status":85,"../layer-message-item-mixin":94}],97:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../../components/component');
@@ -34865,7 +34167,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-message-item-status", "<div class='layer-list-item' layer-id='innerNode'><layer-message-viewer layer-id='messageViewer' class='layer-message-item-main'></layer-message-viewer></div>", "");
   layerUI.buildStyle("layer-message-item-status", "layer-message-item-status {\ndisplay: flex;\nflex-direction: column;\nalign-content: stretch;\n}\nlayer-message-item-status .layer-list-item {\ndisplay: flex;\nflex-direction: row;\nalign-items: stretch;\n}\nlayer-message-item-status  .layer-message-item-main {\nflex-grow: 1;\noverflow: hidden;\n}\nlayer-message-item-status layer-message-text-plain {\ndisplay: block;\n}", "");
 })();
-},{"../../../base":69,"../../../components/component":70,"../../../mixins/list-item":151,"../layer-message-item-mixin":98}],102:[function(require,module,exports){
+},{"../../../base":65,"../../../components/component":66,"../../../mixins/list-item":147,"../layer-message-item-mixin":94}],98:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../../../core');
@@ -34914,7 +34216,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 // Mandatory delay between loading one page and the next.  If user is scrolling too fast, they'll have to wait at least (2) seconds.
 var PAGING_DELAY = 2000; /**
-                          * The Layer Message List widget renders a scrollable, pagable list of layerUI.components.MessagesListPanel.Item widgets.
+                          * The Layer Message List widget renders a scrollable, pagable list of layer.UI.components.MessagesListPanel.Item widgets.
                           *
                           * This is designed to go inside of the layerUI.Conversation widget.
                           *
@@ -34933,15 +34235,15 @@ var PAGING_DELAY = 2000; /**
                           *
                           * 1. Define a custom `<layer-message-list/>` widget; this works but your now entirely responsible for all of its
                           *    behaviors, and can not easily integrate fixes and enhancements added to this repo. Defining components is discussed in
-                          *    layerUI.components.Component.
-                          * 2. Enhance the provided widget with Mixins.  Details of Mixins are described in layerUI.components.Component.
+                          *    layer.UI.components.Component.
+                          * 2. Enhance the provided widget with Mixins.  Details of Mixins are described in layer.UI.components.Component.
                           *    Below illustrates an example of a mixin for modifying this widget.
                           *
                           *
                           * The following example adds a search bar to the Message List
                           *
                           * ```
-                          * layerUI.init({
+                          * layer.UI.init({
                           *   appId: 'my-app-id',
                           *   layer: window.layer,
                           *   mixins: {
@@ -34994,8 +34296,8 @@ var PAGING_DELAY = 2000; /**
                           * });
                           * ```
                           *
-                          * @class layerUI.components.MessagesListPanel.List
-                          * @extends layerUI.components.Component
+                          * @class layer.UI.components.MessagesListPanel.List
+                          * @extends layer.UI.components.Component
                           *
                           * @mixin layerUI.mixins.EmptyList
                           * @mixin layerUI.mixins.List
@@ -35415,7 +34717,7 @@ var PAGING_DELAY = 2000; /**
      *
      * @method _markAsRead
      * @private
-     * @param {layerUI.components.MessagesListPanel.Item} child
+     * @param {layer.UI.components.MessagesListPanel.Item} child
      */
     _markAsRead: function _markAsRead(child) {
       if (_base2.default.isInBackground() || this.disable) return;
@@ -35440,7 +34742,7 @@ var PAGING_DELAY = 2000; /**
       if (handler) {
         var rootPart = message.getPartsMatchingAttribute({ role: 'root' })[0];
         var type = void 0;
-        if (rootPart && rootPart.mimeType === 'application/vnd.layer.response+json') {
+        if (this._isStatusMessage(rootPart, message)) {
           type = 'layer-message-item-status';
         } else if (message.sender.sessionOwner) {
           type = 'layer-message-item-sent';
@@ -35462,6 +34764,11 @@ var PAGING_DELAY = 2000; /**
       } else {
         return null;
       }
+    },
+    _isStatusMessage: function _isStatusMessage(rootPart, message) {
+      if (!rootPart) return false;
+      if (rootPart.mimeType === 'application/vnd.layer.response+json') return true;
+      return this.onIsStatusMessage ? this.onIsStatusMessage(rootPart, message) : false;
     },
 
 
@@ -35488,7 +34795,7 @@ var PAGING_DELAY = 2000; /**
      *
      * @method _processAffectedWidgetsCustom
      * @private
-     * @param {layerUI.components.MessagesListPanel.Item[]} widgets
+     * @param {layer.UI.components.MessagesListPanel.Item[]} widgets
      */
     _processAffectedWidgetsCustom: function _processAffectedWidgetsCustom(widgets, firstIndex, isTopItemNew) {
       if (widgets.length === 0) return;
@@ -35771,7 +35078,7 @@ var PAGING_DELAY = 2000; /**
   layerUI.buildAndRegisterTemplate("layer-message-list", "<!-- The List Header contains a collection of special nodes that may render at the top of the list for    different conditions --><div class='layer-list-meta' layer-id='listMeta'><!-- Rendered when the list is empty --><layer-replaceable-content layer-id='emptyNode' class='layer-empty-list' name='emptyNode'></layer-replaceable-content><div class='layer-header-toggle'><!-- Rendered when there are no more results to page to --><layer-replaceable-content layer-id='endOfResultsNode' class='layer-end-of-results-indicator' name='endOfResultsNode'><layer-start-of-conversation layer-id='startOfConversation'></layer-start-of-conversation></layer-replaceable-content><!-- Rendered when waiting for server data --><layer-replaceable-content layer-id='loadIndicator' class='layer-load-indicator' name='loadIndicator'><layer-loading-indicator></layer-loading-indicator></layer-replaceable-content></div></div>", "");
   layerUI.buildStyle("layer-message-list", "layer-message-list {\ndisplay: block;\nflex-grow: 1;\nheight: 100px; \npadding-bottom: 15px;\noverflow-y: scroll; \n-webkit-overflow-scrolling: touch;\n}\nlayer-message-list:not(.layer-loading-data) .layer-load-indicator,\nlayer-message-list:not(.layer-end-of-results) .layer-end-of-results-indicator {\ndisplay: none;\n}", "");
 })();
-},{"../../../../core":20,"../../../../util":165,"../../../base":69,"../../../mixins/empty-list":146,"../../../mixins/has-query":149,"../../../mixins/list":154,"../../../mixins/list-load-indicator":152,"../../../mixins/query-end-indicator":157,"../../component":70,"../layer-message-item-received/layer-message-item-received":99,"../layer-message-item-sent/layer-message-item-sent":100,"../layer-message-item-status/layer-message-item-status":101,"../layer-start-of-conversation/layer-start-of-conversation":103}],103:[function(require,module,exports){
+},{"../../../../core":16,"../../../../util":161,"../../../base":65,"../../../mixins/empty-list":142,"../../../mixins/has-query":145,"../../../mixins/list":150,"../../../mixins/list-load-indicator":148,"../../../mixins/query-end-indicator":153,"../../component":66,"../layer-message-item-received/layer-message-item-received":95,"../layer-message-item-sent/layer-message-item-sent":96,"../layer-message-item-status/layer-message-item-status":97,"../layer-start-of-conversation/layer-start-of-conversation":99}],99:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../component');
@@ -35795,8 +35102,8 @@ var _component = require('../../component');
      *
      * TODO: Document this
      *
-     * @class layerUI.components.Age
-     * @extends layerUI.components.Component
+     * @class layer.UI.components.Age
+     * @extends layer.UI.components.Component
      */
 
 
@@ -35805,7 +35112,7 @@ var _component = require('../../component');
   layerUI.buildAndRegisterTemplate("layer-start-of-conversation", "Conversation began <layer-date layer-id='startDate' default-format='{\"month\": \"long\", \"year\": \"numeric\", \"day\": \"numeric\", \"hour\": \"numeric\", \"minute\": \"numeric\" }' today-format='{\"hour\": \"numeric\", \"minute\": \"numeric\"}' week-format='{\"weekday\": \"long\", \"hour\": \"numeric\", \"minute\": \"numeric\"}'></layer-date>", "");
   layerUI.buildStyle("layer-start-of-conversation", "layer-start-of-conversation {\ndisplay: block;\nwhite-space: nowrap;\ntext-overflow: ellipsis;\noverflow: hidden;\n}\nlayer-start-of-conversation layer-date {\ndisplay: inline;\n}", "");
 })();
-},{"../../../base":69,"../../component":70}],104:[function(require,module,exports){
+},{"../../../base":65,"../../component":66}],100:[function(require,module,exports){
 'use strict';
 
 var _loadImage = require('blueimp-load-image/js/load-image');
@@ -35845,8 +35152,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * except in response to a user action.  Otherwise scroll positions get mucked and users get lost.
  * As a result, image heights should be fixed before any asynchronously loaded image has loaded.
  *
- * @class layerUI.handlers.message.Image
- * @extends layerUI.components.Component
+ * @class layer.UI.handlers.message.Image
+ * @extends layer.UI.components.Component
  */
 (0, _component.registerMessageComponent)('layer-message-image', {
   mixins: [_messageHandler2.default],
@@ -36037,7 +35344,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   layerUI.buildAndRegisterTemplate("layer-message-image", "", "");
   layerUI.buildStyle("layer-message-image", "layer-message-image {\ndisplay: flex;\nflex-direction: column;\nalign-items: center;\n}\nlayer-message-image canvas {\nwidth: 100%;\n}", "");
 })();
-},{"../../../base":69,"../../../components/component":70,"../../../mixins/message-handler":156,"../../../utils/sizing":163,"blueimp-load-image/js/load-image":174,"blueimp-load-image/js/load-image-exif":170,"blueimp-load-image/js/load-image-meta":171,"blueimp-load-image/js/load-image-orientation":172}],105:[function(require,module,exports){
+},{"../../../base":65,"../../../components/component":66,"../../../mixins/message-handler":152,"../../../utils/sizing":159,"blueimp-load-image/js/load-image":170,"blueimp-load-image/js/load-image-exif":166,"blueimp-load-image/js/load-image-meta":167,"blueimp-load-image/js/load-image-orientation":168}],101:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../components/component');
@@ -36052,8 +35359,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * The Unknown MessageHandler renders unhandled content with a placeholder politely
  * suggesting that a developer should probably handle it.
  *
- * @class layerUI.handlers.message.Unknown
- * @extends layerUI.components.Component
+ * @class layer.UI.handlers.message.Unknown
+ * @extends layer.UI.components.Component
  */
 (0, _component.registerComponent)('layer-message-unknown', {
   mixins: [_messageHandler2.default],
@@ -36074,7 +35381,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 });
 
 // Do not register this handler
-},{"../../components/component":70,"../../mixins/message-handler":156}],106:[function(require,module,exports){
+},{"../../components/component":66,"../../mixins/message-handler":152}],102:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../components/component');
@@ -36098,8 +35405,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * except in response to a user action.  Otherwise scroll positions get mucked and users get lost.
  * As a result, video heights should be fixed before any asynchronously loaded video or preview has loaded.
  *
- * @class layerUI.handlers.message.Video
- * @extends layerUI.components.Component
+ * @class layer.UI.handlers.message.Video
+ * @extends layer.UI.components.Component
  */
 (0, _component.registerMessageComponent)('layer-message-video', {
   mixins: [_messageHandler2.default],
@@ -36178,7 +35485,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
   }
 });
-},{"../../base":69,"../../components/component":70,"../../mixins/message-handler":156,"../../utils/sizing":163}],107:[function(require,module,exports){
+},{"../../base":65,"../../components/component":66,"../../mixins/message-handler":152,"../../utils/sizing":159}],103:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../components/component');
@@ -36197,8 +35504,8 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 /**
  *
- * @class layerUI.handlers.message.messageViewer
- * @extends layerUI.components.Component
+ * @class layer.UI.handlers.message.messageViewer
+ * @extends layer.UI.components.Component
  */
 (0, _component.registerMessageComponent)('layer-message-viewer', {
   mixins: [_messageHandler2.default, _clickable2.default],
@@ -36228,7 +35535,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * This property primarily exists so that one can set/override the messageViewContainerTagName on
      * individual Card UIs.
      *
-     * Currently can only be used to replace 'layer-standard-display-container' with a custom value.
+     * Currently can only be used to replace 'layer-standard-view-container' with a custom value.
      *
      * @type {String}
      */
@@ -36239,7 +35546,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       },
       get: function get() {
         var result = this.nodes.ui.messageViewContainerTagName;
-        if (result === 'layer-standard-display-container' && this.properties.messageViewContainerTagNameIsSet) {
+        if (result === 'layer-standard-view-container' && this.properties.messageViewContainerTagNameIsSet) {
           return this.properties.messageViewContainerTagName;
         } else {
           return result;
@@ -36373,7 +35680,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
   }
 });
-},{"../../base":69,"../../components/component":70,"../../mixins/clickable":145,"../../mixins/message-handler":156}],108:[function(require,module,exports){
+},{"../../base":65,"../../components/component":66,"../../mixins/clickable":141,"../../mixins/message-handler":152}],104:[function(require,module,exports){
 'use strict';
 
 var _autolinker = require('autolinker');
@@ -36396,7 +35703,7 @@ var autolinker = new _autolinker2.default({
 /**
  * The Layer Image TextHandler replaces all image URLs with image tags
  *
- * @class layerUI.handlers.text.Autolinker
+ * @class layer.UI.handlers.text.Autolinker
  */
 _base2.default.registerTextHandler({
   name: 'autolinker',
@@ -36406,7 +35713,7 @@ _base2.default.registerTextHandler({
     textData.text = autolinker.link(textData.text);
   }
 });
-},{"../../base":69,"autolinker":168}],109:[function(require,module,exports){
+},{"../../base":65,"autolinker":164}],105:[function(require,module,exports){
 'use strict';
 
 var _base = require('../../base');
@@ -36433,9 +35740,9 @@ _base2.default.registerTextHandler({
 }); /**
      * The Layer Code Block TextHandler replaces all \`\`\` with code blocks, and all \` with inline code blocks.
      *
-     * @class layerUI.handlers.text.CodeBlocks
+     * @class layer.UI.handlers.text.CodeBlocks
      */
-},{"../../base":69}],110:[function(require,module,exports){
+},{"../../base":65}],106:[function(require,module,exports){
 'use strict';
 
 var _twemoji = require('twemoji');
@@ -36483,13 +35790,13 @@ _base2.default.registerTextHandler({
 }); /**
      * The Layer Emoji TextHandler replaces all :smile: and :-) with emoji images
      *
-     * @class layerUI.handlers.text.Emoji
+     * @class layer.UI.handlers.text.Emoji
      */
-},{"../../base":69,"remarkable-emoji/setEmoji":178,"twemoji":179}],111:[function(require,module,exports){
+},{"../../base":65,"remarkable-emoji/setEmoji":174,"twemoji":175}],107:[function(require,module,exports){
 /**
  * The Layer Image TextHandler replaces all image URLs with image tags
  *
- * @class layerUI.handlers.text.Images
+ * @class layer.UI.handlers.text.Images
  * @removed
  */
 /*
@@ -36510,7 +35817,7 @@ layerUI.registerTextHandler({
 });
 */
 "use strict";
-},{}],112:[function(require,module,exports){
+},{}],108:[function(require,module,exports){
 'use strict';
 
 var _base = require('../../base');
@@ -36562,13 +35869,13 @@ _base2.default.registerTextHandler({
      * NOT be replaced with a <br/> tag as the code block will render that as a visible
      * <br/> rather than go to the next line.
      *
-     * @class layerUI.handlers.text.NewLine
+     * @class layer.UI.handlers.text.NewLine
      */
-},{"../../base":69}],113:[function(require,module,exports){
+},{"../../base":65}],109:[function(require,module,exports){
 /**
  * The Layer Youtube URL TextHandler replaces all youtube-like URLs with a video player.
  *
- * @class layerUI.handlers.text.Youtube
+ * @class layer.UI.handlers.text.Youtube
  * @removed
  */
 /*
@@ -36598,8 +35905,7 @@ layerUI.registerTextHandler({
 });
 */
 "use strict";
-},{}],114:[function(require,module,exports){
-(function (global){
+},{}],110:[function(require,module,exports){
 'use strict';
 
 /*
@@ -36652,51 +35958,51 @@ require('./utils/date-separator');
 
 // Load standard cards
 require('./messages/text/layer-text-model');
-require('./messages/text/layer-text-display');
+require('./messages/text/layer-text-view');
 
 require('./messages/response/layer-response-model');
-require('./messages/response/layer-response-display');
+require('./messages/response/layer-response-view');
 
 require('./messages/receipt/layer-receipt-model');
-require('./messages/receipt/layer-receipt-display');
+require('./messages/receipt/layer-receipt-view');
 
 require('./messages/choice/layer-choice-model');
-require('./messages/choice/layer-choice-display');
-require('./messages/choice/layer-choice-tiles-display');
-require('./messages/choice/layer-choice-label-display');
+require('./messages/choice/layer-choice-view');
+require('./messages/choice/layer-choice-tiles-view');
+require('./messages/choice/layer-choice-label-view');
 
 require('./messages/layer-standard-display-container');
 require('./messages/layer-titled-display-container');
 //require('./messages/layer-list-item-container');
-require('./messages/text/layer-text-display');
+require('./messages/text/layer-text-view');
 require('./messages/text/layer-text-model');
 
 require('./messages/image/layer-image-model');
-require('./messages/image/layer-image-display');
+require('./messages/image/layer-image-view');
 
 // require('./messages/list/list-model');
-// require('./messages/list/layer-list-display');
+// require('./messages/list/layer-list-view');
 
 require('./messages/carousel/layer-carousel-model');
-require('./messages/carousel/layer-carousel-display');
+require('./messages/carousel/layer-carousel-view');
 
 require('./messages/buttons/layer-buttons-model');
-require('./messages/buttons/layer-buttons-display');
+require('./messages/buttons/layer-buttons-view');
 
 require('./messages/file/layer-file-model');
-require('./messages/file/layer-file-display');
+require('./messages/file/layer-file-view');
 
 require('./messages/link/layer-link-model');
-require('./messages/link/layer-link-display');
+require('./messages/link/layer-link-view');
 
 require('./messages/location/layer-location-model');
-require('./messages/location/layer-location-display');
+require('./messages/location/layer-location-view');
 
 // require('./messages/address/address-model');
-// require('./messages/address/layer-address-display');
+// require('./messages/address/layer-address-view');
 
 require('./messages/product/layer-product-model');
-require('./messages/product/layer-product-display');
+require('./messages/product/layer-product-view');
 
 require('./messages/models/layer-person-model');
 require('./messages/models/layer-organization-model');
@@ -36713,13 +36019,12 @@ LayerUI.mixins = {
   ListSelection: require('./mixins/list-selection'),
   ListItemSelection: require('./mixins/list-item-selection'),
   FocusOnKeydown: require('./mixins/focus-on-keydown'),
-  MessageDisplayMixin: require('./messages/message-display-mixin')
+  MessageViewMixin: require('./messages/message-view-mixin')
 };
 
-// If we don't expose global.layerUI then custom templates can not load and call window.layerUI.registerTemplate()
-module.exports = global.layerUI = LayerUI;
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./adapters/angular":66,"./adapters/backbone":67,"./adapters/react":68,"./components/conversation-list/layer-conversation-list/layer-conversation-list":73,"./components/identity-list/layer-identity-list/layer-identity-list":75,"./components/layer-conversation-view/layer-conversation-view":83,"./components/layer-file-upload-button/layer-file-upload-button":85,"./components/layer-notifier/layer-notifier":90,"./components/layer-presence/layer-presence":91,"./components/layer-send-button/layer-send-button":93,"./components/membership-list-panel/layer-membership-list/layer-membership-list":97,"./handlers/message/layer-message-image/layer-message-image":104,"./handlers/message/layer-message-video":106,"./handlers/message/layer-message-viewer":107,"./handlers/text/autolinker":108,"./handlers/text/code-blocks":109,"./handlers/text/emoji":110,"./handlers/text/images":111,"./handlers/text/newline":112,"./handlers/text/youtube":113,"./layer-ui":115,"./messages/buttons/layer-buttons-display":116,"./messages/buttons/layer-buttons-model":117,"./messages/carousel/layer-carousel-display":118,"./messages/carousel/layer-carousel-model":119,"./messages/choice/layer-choice-display":120,"./messages/choice/layer-choice-label-display":121,"./messages/choice/layer-choice-model":122,"./messages/choice/layer-choice-tiles-display":123,"./messages/file/layer-file-display":124,"./messages/file/layer-file-model":125,"./messages/image/layer-image-display":126,"./messages/image/layer-image-model":127,"./messages/layer-standard-display-container":128,"./messages/layer-titled-display-container":129,"./messages/link/layer-link-display":130,"./messages/link/layer-link-model":131,"./messages/location/layer-location-display":132,"./messages/location/layer-location-model":133,"./messages/message-display-mixin":134,"./messages/models/layer-organization-model":135,"./messages/models/layer-person-model":136,"./messages/product/layer-product-display":137,"./messages/product/layer-product-model":138,"./messages/receipt/layer-receipt-display":139,"./messages/receipt/layer-receipt-model":140,"./messages/response/layer-response-display":141,"./messages/response/layer-response-model":142,"./messages/text/layer-text-display":143,"./messages/text/layer-text-model":144,"./mixins/focus-on-keydown":148,"./mixins/has-query":149,"./mixins/list":154,"./mixins/list-item":151,"./mixins/list-item-selection":150,"./mixins/list-selection":153,"./mixins/main-component":155,"./mixins/message-handler":156,"./utils/animated-scroll":161,"./utils/date-separator":162}],115:[function(require,module,exports){
+// If we don't expose global.layerUI then custom templates can not load and call window.layer.UI.registerTemplate()
+module.exports = LayerUI;
+},{"./adapters/angular":62,"./adapters/backbone":63,"./adapters/react":64,"./components/conversation-list/layer-conversation-list/layer-conversation-list":69,"./components/identity-list/layer-identity-list/layer-identity-list":71,"./components/layer-conversation-view/layer-conversation-view":79,"./components/layer-file-upload-button/layer-file-upload-button":81,"./components/layer-notifier/layer-notifier":86,"./components/layer-presence/layer-presence":87,"./components/layer-send-button/layer-send-button":89,"./components/membership-list-panel/layer-membership-list/layer-membership-list":93,"./handlers/message/layer-message-image/layer-message-image":100,"./handlers/message/layer-message-video":102,"./handlers/message/layer-message-viewer":103,"./handlers/text/autolinker":104,"./handlers/text/code-blocks":105,"./handlers/text/emoji":106,"./handlers/text/images":107,"./handlers/text/newline":108,"./handlers/text/youtube":109,"./layer-ui":111,"./messages/buttons/layer-buttons-model":112,"./messages/buttons/layer-buttons-view":113,"./messages/carousel/layer-carousel-model":114,"./messages/carousel/layer-carousel-view":115,"./messages/choice/layer-choice-label-view":116,"./messages/choice/layer-choice-model":117,"./messages/choice/layer-choice-tiles-view":118,"./messages/choice/layer-choice-view":119,"./messages/file/layer-file-model":120,"./messages/file/layer-file-view":121,"./messages/image/layer-image-model":122,"./messages/image/layer-image-view":123,"./messages/layer-standard-display-container":124,"./messages/layer-titled-display-container":125,"./messages/link/layer-link-model":126,"./messages/link/layer-link-view":127,"./messages/location/layer-location-model":128,"./messages/location/layer-location-view":129,"./messages/message-view-mixin":130,"./messages/models/layer-organization-model":131,"./messages/models/layer-person-model":132,"./messages/product/layer-product-model":133,"./messages/product/layer-product-view":134,"./messages/receipt/layer-receipt-model":135,"./messages/receipt/layer-receipt-view":136,"./messages/response/layer-response-model":137,"./messages/response/layer-response-view":138,"./messages/text/layer-text-model":139,"./messages/text/layer-text-view":140,"./mixins/focus-on-keydown":144,"./mixins/has-query":145,"./mixins/list":150,"./mixins/list-item":147,"./mixins/list-item-selection":146,"./mixins/list-selection":149,"./mixins/main-component":151,"./mixins/message-handler":152,"./utils/animated-scroll":157,"./utils/date-separator":158}],111:[function(require,module,exports){
 'use strict';
 
 require('webcomponents.js/webcomponents-lite');
@@ -36739,7 +36044,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * Import index.js instead of you want a standard setup with standard widgets installed.
  *
- * @class layerUI
+ * @class layer.UI
  * @static
  */
 
@@ -36789,122 +36094,7 @@ _base2.default.setupMixins = function setupMixins(mixins) {
 };
 
 module.exports = _base2.default;
-},{"./base":69,"./components/component":70,"./handlers/message/layer-message-unknown":105,"webcomponents.js/webcomponents-lite":182}],116:[function(require,module,exports){
-'use strict';
-
-var _component = require('../../components/component');
-
-require('../../components/layer-action-button/layer-action-button');
-
-require('../../components/layer-url-button/layer-url-button');
-
-require('../../components/layer-choice-button/layer-choice-button');
-
-var _layerChoiceModel = require('../choice/layer-choice-model');
-
-var _layerChoiceModel2 = _interopRequireDefault(_layerChoiceModel);
-
-var _messageDisplayMixin = require('../message-display-mixin');
-
-var _messageDisplayMixin2 = _interopRequireDefault(_messageDisplayMixin);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- *
- * @class
- * @extends layerUI.components.Component
- */
-(0, _component.registerComponent)('layer-buttons-display', {
-  template: '\n    <div class="layer-button-content" layer-id="content"></div>\n    <div class="layer-button-list" layer-id="buttons">\n  </div>',
-  style: 'layer-buttons-display {\n    display: flex;\n    flex-direction: column;\n  }\n  layer-buttons-display .layer-button-content {\n    flex-grow: 1;\n    display: flex;\n    flex-direction: row;\n  }\n  .layer-button-list {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    justify-content: center;\n  }\n  ',
-  mixins: [_messageDisplayMixin2.default],
-  properties: {
-    widthType: {
-      get: function get() {
-        return this.properties.contentView ? this.properties.contentView.widthType : 'flex-width';
-      }
-    }
-  },
-  methods: {
-    onAfterCreate: function onAfterCreate() {
-      var _this = this;
-
-      if (this.model.contentModel) {
-        this.properties.contentView = this.createElement('layer-message-viewer', {
-          message: this.model.message,
-          rootPart: this.model.contentModel.part,
-          model: this.model.contentModel,
-          parentNode: this.nodes.content,
-          name: 'subcard'
-        });
-      } else {
-        this.classList.add('layer-button-card-no-content');
-      }
-
-      this.model.buttons.forEach(function (button) {
-        var widget = void 0,
-            model = void 0;
-
-        if ('choices' in button && button.choices.length > 1) {
-          _this.parentComponent.classList.add('layer-button-card-with-choices');
-        }
-
-        switch (button.type) {
-          case 'action':
-            widget = _this.createElement('layer-action-button', {
-              text: button.text,
-              tooltip: button.tooltip,
-              event: button.event,
-              data: button.data
-            });
-            break;
-          case 'url':
-            widget = _this.createElement('layer-url-button', {
-              text: button.text,
-              url: button.url
-            });
-            break;
-          case 'choice':
-            model = _this.model.choices[button.data.responseName || 'selected'];
-            if (model) {
-              widget = _this.createElement('layer-choice-button', {
-                model: model
-              });
-            } else {
-              console.error('Failed to find a Choice Model to render');
-            }
-            break;
-        }
-        _this.nodes.buttons.appendChild(widget);
-      });
-    },
-    onRender: function onRender() {
-      this.onRerender();
-    },
-
-
-    /**
-     *
-     * @method
-     */
-    onRerender: function onRerender() {
-      for (var i = 0; i < this.nodes.buttons.childNodes.length; i++) {
-        var node = this.nodes.buttons.childNodes[i];
-        if (node.tagName === 'LAYER-CHOICE-BUTTON') {
-          node.model.responses = this.model.responses;
-        }
-      }
-    },
-    runAction: function runAction(options) {
-      if (this.nodes.subcard) {
-        this.nodes.subcard.runAction(options);
-        return true;
-      }
-    }
-  }
-});
-},{"../../components/component":70,"../../components/layer-action-button/layer-action-button":76,"../../components/layer-choice-button/layer-choice-button":79,"../../components/layer-url-button/layer-url-button":95,"../choice/layer-choice-model":122,"../message-display-mixin":134}],117:[function(require,module,exports){
+},{"./base":65,"./components/component":66,"./handlers/message/layer-message-unknown":101,"webcomponents.js/webcomponents-lite":178}],112:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -36912,6 +36102,8 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
 var _core = require('../../../core');
+
+var _util = require('../../../util');
 
 var _layerChoiceModel = require('../choice/layer-choice-model');
 
@@ -37103,7 +36295,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                });
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                model.generateMessage($("layer-conversation-view").conversation, message => message.send());
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @class layerUI.cards.ButtonsModel
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @class layer.UI.cards.ButtonsModel
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @extends layer.model
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
@@ -37161,7 +36353,7 @@ var ButtonsModel = function (_MessageTypeModel) {
           parentNodeId: _this3.nodeId,
           choices: button.choices,
           message: _this3.message,
-          parentId: _this3.part.id,
+          parentId: (0, _util.uuid)(_this3.part.id),
           responses: _this3.responses
         };
         if ('responseName' in button.data) obj.responseName = button.data.responseName;
@@ -37224,225 +36416,105 @@ ButtonsModel.prototype.choices = null;
 ButtonsModel.prototype.states = null;
 
 ButtonsModel.Label = 'Buttons';
-ButtonsModel.messageRenderer = 'layer-buttons-display';
+ButtonsModel.messageRenderer = 'layer-buttons-view';
 ButtonsModel.MIMEType = 'application/vnd.layer.buttons+json';
-_core.MessagePart.TextualMimeTypes.push(ButtonsModel.MIMEType);
 
 // Register the Message Model Class with the Client
 _core.Client.registerMessageTypeModelClass(ButtonsModel, 'ButtonsModel');
 
 module.exports = ButtonsModel;
-},{"../../../core":20,"../choice/layer-choice-model":122}],118:[function(require,module,exports){
+},{"../../../core":16,"../../../util":161,"../choice/layer-choice-model":117}],113:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../components/component');
 
-var _base = require('../../base');
+require('../../components/layer-action-button/layer-action-button');
 
-var _messageDisplayMixin = require('../message-display-mixin');
+require('../../components/layer-url-button/layer-url-button');
 
-var _messageDisplayMixin2 = _interopRequireDefault(_messageDisplayMixin);
+require('../../components/layer-choice-button/layer-choice-button');
 
-var _throttler = require('../../mixins/throttler');
+var _layerChoiceModel = require('../choice/layer-choice-model');
 
-var _throttler2 = _interopRequireDefault(_throttler);
+var _layerChoiceModel2 = _interopRequireDefault(_layerChoiceModel);
 
-var _clickable = require('../../mixins/clickable');
+var _messageViewMixin = require('../message-view-mixin');
 
-var _clickable2 = _interopRequireDefault(_clickable);
+var _messageViewMixin2 = _interopRequireDefault(_messageViewMixin);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _component.registerComponent)('layer-carousel-display', {
-  template: '\n    <span layer-id=\'prev\' class="layer-next-icon layer-previous-icon" ></span>\n    <div class="layer-carousel-display-items" layer-id="items"></div>\n    <span layer-id=\'next\' class="layer-next-icon" ></span>\n  ',
-  style: '\n  layer-carousel-display {\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n    max-width: 100%;\n    position: relative;\n  }\n  layer-carousel-display .layer-next-icon {\n    display: inline-block;\n    z-index: 10;\n    position: absolute;\n    cursor: pointer;\n  }\n\n  layer-carousel-display.layer-carousel-end .layer-next-icon:not(.layer-previous-icon) {\n    display: none;\n  }\n  layer-carousel-display.layer-carousel-start .layer-previous-icon {\n    display: none;\n  }\n  .layer-carousel-display-items {\n    display: flex;\n    flex-direction: row;\n    align-items: stretch;\n    overflow-x: hidden;\n  }\n  .layer-carousel-display-items:after {\n    content: "";\n    flex: 0 0 5px;\n  }\n  ',
-
-  mixins: [_messageDisplayMixin2.default, _throttler2.default, _clickable2.default],
-
-  // Note that there is also a message property managed by the MessageHandler mixin
+/**
+ *
+ * @class
+ * @extends layer.UI.components.Component
+ */
+(0, _component.registerComponent)('layer-buttons-view', {
+  template: '\n    <div class="layer-button-content" layer-id="content"></div>\n    <div class="layer-button-list" layer-id="buttons">\n  </div>',
+  style: 'layer-buttons-view {\n    display: flex;\n    flex-direction: column;\n  }\n  layer-buttons-view .layer-button-content {\n    flex-grow: 1;\n    display: flex;\n    flex-direction: row;\n  }\n  .layer-button-list {\n    display: flex;\n    flex-direction: column;\n    align-items: stretch;\n    justify-content: center;\n  }\n  ',
+  mixins: [_messageViewMixin2.default],
   properties: {
-    messageViewContainerTagName: {
-      noGetterFromSetter: true,
-      get: function get() {
-        return this.model.title ? 'layer-titled-display-container' : null;
-      }
-    },
     widthType: {
-      value: 'flex-width'
+      get: function get() {
+        return this.properties.contentView ? this.properties.contentView.widthType : 'flex-width';
+      }
     }
   },
   methods: {
-    getIconClass: function getIconClass() {
-      return '';
-    },
-    getTitle: function getTitle() {
-      return this.model.title;
-    },
-    onDestroy: function onDestroy() {
-      window.removeEventListener('resize', this.properties.onResize);
-    },
-    onCreate: function onCreate() {
-      this.addClickHandler('click-next', this.nodes.next, this._scroll.bind(this, true));
-      this.addClickHandler('click-prev', this.nodes.prev, this._scroll.bind(this, false));
-      this.properties.startX = this.properties.startY = null;
-      this.properties.touching = false;
-      this.properties.dx = 0;
-      this.addEventListener('touchstart', this.touchstart.bind(this));
-      this.addEventListener('touchend', this.touchend.bind(this));
-      this.addEventListener('touchmove', this.touchmove.bind(this));
-
-      this.properties.onResize = this._onResize.bind(this);
-      window.addEventListener('resize', this.properties.onResize);
-    },
-    onRerender: function onRerender() {
+    onAfterCreate: function onAfterCreate() {
       var _this = this;
 
-      if (!this.properties._internalState.onAttachCalled) return;
-      this._adjustCarouselWidth();
-
-      // console.log("CAROUSEL onRERENDER");
-      // TODO: Assign items ids so we don't need to blow away and then recreate them
-      this.nodes.items.innerHTML = '';
-      var maxCardWidth = this._getMaxMessageWidth();
-      this.model.items.forEach(function (item) {
-        // console.log('GENERATE: ' + item.id + '    ' + item.title);
-        var card = _this.createElement('layer-message-viewer', {
-          message: _this.model.message,
-          rootPart: item.part,
-          model: item,
-          parentNode: _this.nodes.items
+      if (this.model.contentModel) {
+        this.properties.contentView = this.createElement('layer-message-viewer', {
+          message: this.model.message,
+          rootPart: this.model.contentModel.part,
+          model: this.model.contentModel,
+          parentNode: this.nodes.content,
+          name: 'subcard'
         });
-        var preferedMinWidth = card.nodes.ui.preferredMinWidth;
-        switch (card.widthType) {
-          case 'full-width':
-            card.style.width = card.style.minWidth = maxCardWidth + 'px';
-            break;
-          case 'flex-width':
-            if (maxCardWidth < preferedMinWidth) {
-              card.style.maxWidth = card.style.minWidth = card.style.width = maxCardWidth + 'px';
-            } else {
-              card.style.maxWidth = card.style.minWidth = card.style.width = preferedMinWidth + 'px';
-            }
-            break;
-        }
-      });
-      setTimeout(this._updateScrollButtons.bind(this), 10);
-    },
-
-
-    onAttach: {
-      mode: _component.registerComponent.MODES.AFTER,
-      value: function value() {
-        setTimeout(this._updateScrollButtons.bind(this), 10);
-        this.onRerender();
-      }
-    },
-    _onResize: function _onResize() {
-      var _this2 = this;
-
-      this._throttler(function () {
-        return _this2._adjustCarouselWidth();
-      });
-    },
-    _adjustCarouselWidth: function _adjustCarouselWidth() {
-      var parent = this.parentComponent.parentNode;
-      if (!parent || !parent.clientWidth) return 0;
-      var carouselWidth = Math.floor(parent.clientWidth * 0.9);
-      if (carouselWidth) this.messageViewer.style.maxWidth = carouselWidth + 'px';
-    },
-    _getMaxMessageWidth: function _getMaxMessageWidth() {
-      var parent = this.parentComponent.parentNode;
-      if (!parent || !parent.clientWidth) return 0;
-      var width = parent.clientWidth;
-      if (width > 600) width = width * 0.6;else width = width * 0.8;
-      return Math.min(500, width);
-    },
-    _updateScrollButtons: function _updateScrollButtons() {
-      var root = this.nodes.items;
-      if (!root.childNodes.length) return;
-      this.toggleClass('layer-carousel-start', root.scrollLeft <= root.firstElementChild.offsetLeft);
-
-      var lastVisible = this._findLastFullyVisibleItem() || this._findFirstPartiallyVisibleItem();
-      var children = this.nodes.items.childNodes;
-      this.toggleClass('layer-carousel-end', lastVisible === children[children.length - 1]);
-    },
-
-
-    // TODO:
-    // 1. animated scroll
-    // 2. scroll at 50-100% of width,
-    // 3. Stop scrolling when a card is flush to the left or 100% is reached
-    _scroll: function _scroll(isForward, evt) {
-      evt.preventDefault();
-      evt.stopPropagation();
-      var root = this.nodes.items;
-      var nodes = root.childNodes;
-      var currentScroll = root.scrollLeft;
-
-      if (isForward) {
-        var lastVisible = this._findLastFullyVisibleItem() || this._findFirstPartiallyVisibleItem();
-        var lastVisibleIndex = Array.prototype.indexOf.call(root.childNodes, lastVisible);
-        if (lastVisible && lastVisibleIndex !== -1 && lastVisibleIndex < root.childNodes.length - 1) {
-          var scrollToNode = nodes[lastVisibleIndex + 1];
-          var scrollTo = scrollToNode.offsetLeft;
-          (0, _base.animatedScrollLeftTo)(root, scrollTo, 200, this._updateScrollButtons.bind(this));
-          this.classList.remove('layer-carousel-start');
-        }
       } else {
-        this.classList.remove('layer-carousel-end');
-        var firstVisible = this._findFirstFullyVisibleItem();
-        var firstVisibleIndex = Array.prototype.indexOf.call(nodes, firstVisible);
+        this.classList.add('layer-button-card-no-content');
+      }
 
-        // If we aren't already at the left most item, process the scroll request
-        if (firstVisibleIndex > 0) {
+      this.model.buttons.forEach(function (button) {
+        var widget = void 0,
+            model = void 0;
 
-          // Starting with one item left of the first fully visible item, look for the right amont to scroll
-          var rightMostCard = nodes[firstVisibleIndex - 1];
-          var minScrollLeft = rightMostCard.offsetLeft - root.clientWidth + rightMostCard.clientWidth + 10;
-          var found = false;
-          for (var i = 0; i <= firstVisibleIndex - 1; i++) {
-            var node = nodes[i];
-            var _scrollTo = node.offsetLeft;
-            if (_scrollTo > minScrollLeft) {
-              (0, _base.animatedScrollLeftTo)(root, _scrollTo, 200, this._updateScrollButtons.bind(this));
-              this.toggleClass('layer-carousel-start', _scrollTo <= nodes[0].offsetLeft);
-              found = true;
-              break;
-            }
-          }
-          if (!found) {
-            var _scrollTo2 = nodes[firstVisibleIndex - 1].offsetLeft;
-            (0, _base.animatedScrollLeftTo)(root, _scrollTo2, 200, this._updateScrollButtons.bind(this));
-            this.toggleClass('layer-carousel-start', _scrollTo2 <= nodes[0].offsetLeft);
-            found = true;
-          }
+        if ('choices' in button && button.choices.length > 1) {
+          _this.parentComponent.classList.add('layer-button-card-with-choices');
         }
-      }
+
+        switch (button.type) {
+          case 'action':
+            widget = _this.createElement('layer-action-button', {
+              text: button.text,
+              tooltip: button.tooltip,
+              event: button.event,
+              data: button.data
+            });
+            break;
+          case 'url':
+            widget = _this.createElement('layer-url-button', {
+              text: button.text,
+              url: button.url
+            });
+            break;
+          case 'choice':
+            model = _this.model.choices[button.data.responseName || 'selected'];
+            if (model) {
+              widget = _this.createElement('layer-choice-button', {
+                model: model
+              });
+            } else {
+              console.error('Failed to find a Choice Model to render');
+            }
+            break;
+        }
+        _this.nodes.buttons.appendChild(widget);
+      });
     },
-    _findLastFullyVisibleItem: function _findLastFullyVisibleItem(optionalScroll) {
-      var root = this.nodes.items;
-      if (!optionalScroll) optionalScroll = root.scrollLeft;
-      var nodes = root.childNodes;
-      for (var i = nodes.length - 1; i >= 0; i--) {
-        var node = nodes[i];
-        if (node.offsetLeft + node.clientWidth <= root.offsetLeft + root.clientWidth + optionalScroll && node.offsetLeft >= root.offsetLeft + optionalScroll) return node;
-      }
-    },
-    _findFirstFullyVisibleItem: function _findFirstFullyVisibleItem() {
-      var root = this.nodes.items;
-      var nodes = root.childNodes;
-      for (var i = 0; i < nodes.length; i++) {
-        var node = nodes[i];
-        if (node.offsetLeft >= root.offsetLeft + root.scrollLeft) return node;
-      }
-    },
-    _findFirstPartiallyVisibleItem: function _findFirstPartiallyVisibleItem() {
-      var root = this.nodes.items;
-      var nodes = root.childNodes;
-      for (var i = 0; i < nodes.length; i++) {
-        var node = nodes[i];
-        if (node.offsetLeft + node.clientWidth >= root.offsetLeft + root.scrollLeft) return node;
-      }
+    onRender: function onRender() {
+      this.onRerender();
     },
 
 
@@ -37450,72 +36522,23 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      *
      * @method
      */
-    onRender: function onRender() {},
-    touchstart: function touchstart(evt) {
-      this.properties.touching = true;
-      var touch = evt.touches ? evt.touches[0] : evt;
-      this.properties.dx = 0;
-      this.properties.startScrollX = this.nodes.items.scrollLeft;
-      this.properties.startX = touch.pageX;
-      this.properties.startY = touch.pageY;
-      //this.width = this.$element.width()
-    },
-    touchmove: function touchmove(evt) {
-      if (!this.properties.touching) return;
-      var touch = evt.touches ? evt.touches[0] : evt;
-      var dx = touch.pageX - this.properties.startX;
-      var dy = touch.pageY - this.properties.startY;
-      if (Math.abs(dx) < Math.abs(dy)) return; // vertical scroll
-
-      evt.preventDefault(); // prevent vertical scroll
-
-      var scrollLeft = -dx;
-      this.nodes.items.scrollLeft = this.properties.startScrollX + scrollLeft;
-      if (document.activeElement.tagName === 'TEXTAREA') document.activeElement.blur();
-    },
-    touchend: function touchend(evt) {
-      if (!this.properties.touching) return;
-      var root = this.nodes.items;
-
-      var touch = evt.changedTouches ? evt.changedTouches[0] : evt;
-
-      // If finger ended on a larger X than it started, then it moved right
-      // If finger moved right, we are decreasing our scrollLeft value
-      var fingerDirection = touch.pageX - this.properties.startX > 0 ? 'right' : 'left';
-
-      var firstPartialCard = this._findFirstPartiallyVisibleItem();
-      var cardWidth = firstPartialCard.clientWidth;
-      var visibleItemWidth = firstPartialCard.offsetLeft + firstPartialCard.clientWidth - root.scrollLeft;
-      var percentShown = visibleItemWidth / cardWidth;
-      var distanceToEnd = root.scrollWidth - root.scrollLeft - root.clientWidth;
-      var percentDistanceToEnd = distanceToEnd / cardWidth;
-
-      if (fingerDirection === 'left') {
-        if (percentDistanceToEnd < 0.6) {
-          (0, _base.animatedScrollLeftTo)(root, root.lastChild.offsetLeft, 200, this._updateScrollButtons.bind(this));
-        } else if (percentShown > 0.6) {
-          (0, _base.animatedScrollLeftTo)(root, firstPartialCard.offsetLeft, 200, this._updateScrollButtons.bind(this));
-        } else {
-          (0, _base.animatedScrollLeftTo)(root, firstPartialCard.nextElementSibling.offsetLeft, 200, this._updateScrollButtons.bind(this));
-        }
-      } else {
-        if (percentDistanceToEnd < 0.4) {
-          (0, _base.animatedScrollLeftTo)(root, root.lastChild.offsetLeft, 200, this._updateScrollButtons.bind(this));
-        } else if (percentShown < 0.4) {
-          (0, _base.animatedScrollLeftTo)(root, firstPartialCard.nextElementSibling.offsetLeft, 200, this._updateScrollButtons.bind(this));
-        } else {
-          (0, _base.animatedScrollLeftTo)(root, firstPartialCard.offsetLeft, 200, this._updateScrollButtons.bind(this));
+    onRerender: function onRerender() {
+      for (var i = 0; i < this.nodes.buttons.childNodes.length; i++) {
+        var node = this.nodes.buttons.childNodes[i];
+        if (node.tagName === 'LAYER-CHOICE-BUTTON') {
+          node.model.responses = this.model.responses;
         }
       }
-      this.properties.touching = false;
+    },
+    runAction: function runAction(options) {
+      if (this.nodes.subcard) {
+        this.nodes.subcard.runAction(options);
+        return true;
+      }
     }
   }
-}); /**
-     *
-     * @class
-     * @extends layerUI.components.Component
-     */
-},{"../../base":69,"../../components/component":70,"../../mixins/clickable":145,"../../mixins/throttler":160,"../message-display-mixin":134}],119:[function(require,module,exports){
+});
+},{"../../components/component":66,"../../components/layer-action-button/layer-action-button":72,"../../components/layer-choice-button/layer-choice-button":75,"../../components/layer-url-button/layer-url-button":91,"../choice/layer-choice-model":117,"../message-view-mixin":130}],114:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -37867,7 +36890,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    ]
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }).generateMessage($("layer-conversation-view").conversation, message => message.send())
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @class layerUI.cards.CarouselModel
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @class layer.UI.cards.CarouselModel
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @extends layer.model
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
@@ -37951,39 +36974,47 @@ CarouselModel.prototype.items = null;
 CarouselModel.prototype.title = '';
 
 CarouselModel.Label = 'Items';
-CarouselModel.messageRenderer = 'layer-carousel-display';
+CarouselModel.messageRenderer = 'layer-carousel-view';
 CarouselModel.MIMEType = 'application/vnd.layer.carousel+json';
-_core.MessagePart.TextualMimeTypes.push(CarouselModel.MIMEType);
 
 // Register the Message Model Class with the Client
 _core.Client.registerMessageTypeModelClass(CarouselModel, 'CarouselModel');
 
 module.exports = CarouselModel;
-},{"../../../core":20,"../../../util":165}],120:[function(require,module,exports){
+},{"../../../core":16,"../../../util":161}],115:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../components/component');
 
-var _messageDisplayMixin = require('../message-display-mixin');
+var _base = require('../../base');
 
-var _messageDisplayMixin2 = _interopRequireDefault(_messageDisplayMixin);
+var _messageViewMixin = require('../message-view-mixin');
 
-require('../../components/layer-action-button/layer-action-button');
+var _messageViewMixin2 = _interopRequireDefault(_messageViewMixin);
+
+var _throttler = require('../../mixins/throttler');
+
+var _throttler2 = _interopRequireDefault(_throttler);
+
+var _clickable = require('../../mixins/clickable');
+
+var _clickable2 = _interopRequireDefault(_clickable);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _component.registerComponent)('layer-choice-display', {
-  mixins: [_messageDisplayMixin2.default],
-  template: '\n    <div layer-id=\'question\' class=\'layer-choice-display-question\'></div>\n    <div layer-id=\'answers\' class=\'layer-choice-display-answers\'></div>\n  ',
-  style: '\n  layer-choice-display .layer-choice-display-answers {\n    display: flex;\n    flex-direction: column;\n  }\n\n  ',
-  //layerCardId: 'layer-choice-display',
+(0, _component.registerComponent)('layer-carousel-view', {
+  template: '\n    <span layer-id=\'prev\' class="layer-next-icon layer-previous-icon" ></span>\n    <div class="layer-carousel-view-items" layer-id="items"></div>\n    <span layer-id=\'next\' class="layer-next-icon" ></span>\n  ',
+  style: '\n  layer-carousel-view {\n    display: flex;\n    flex-direction: row;\n    align-items: center;\n    max-width: 100%;\n    position: relative;\n  }\n  layer-carousel-view .layer-next-icon {\n    display: inline-block;\n    z-index: 10;\n    position: absolute;\n    cursor: pointer;\n  }\n\n  layer-carousel-view.layer-carousel-end .layer-next-icon:not(.layer-previous-icon) {\n    display: none;\n  }\n  layer-carousel-view.layer-carousel-start .layer-previous-icon {\n    display: none;\n  }\n  .layer-carousel-view-items {\n    display: flex;\n    flex-direction: row;\n    align-items: stretch;\n    overflow-x: hidden;\n  }\n  .layer-carousel-view-items:after {\n    content: "";\n    flex: 0 0 5px;\n  }\n  ',
+
+  mixins: [_messageViewMixin2.default, _throttler2.default, _clickable2.default],
+
+  // Note that there is also a message property managed by the MessageHandler mixin
   properties: {
-    label: {
-      value: 'Choices'
-    },
-    messageContainerTagName: {
+    messageViewContainerTagName: {
       noGetterFromSetter: true,
-      value: 'layer-titled-message-container'
+      get: function get() {
+        return this.model.title ? 'layer-titled-display-container' : null;
+      }
     },
     widthType: {
       value: 'flex-width'
@@ -37991,85 +37022,265 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
   },
   methods: {
     getIconClass: function getIconClass() {
-      return 'layer-poll-card-icon';
+      return '';
     },
     getTitle: function getTitle() {
       return this.model.title;
     },
-    onAfterCreate: function onAfterCreate() {
-      var _this = this;
+    onDestroy: function onDestroy() {
+      window.removeEventListener('resize', this.properties.onResize);
+    },
+    onCreate: function onCreate() {
+      this.addClickHandler('click-next', this.nodes.next, this._scroll.bind(this, true));
+      this.addClickHandler('click-prev', this.nodes.prev, this._scroll.bind(this, false));
+      this.properties.startX = this.properties.startY = null;
+      this.properties.touching = false;
+      this.properties.dx = 0;
+      this.addEventListener('touchstart', this.touchstart.bind(this));
+      this.addEventListener('touchend', this.touchend.bind(this));
+      this.addEventListener('touchmove', this.touchmove.bind(this));
 
-      this.nodes.question.innerHTML = this.model.question;
-      this.model.choices.forEach(function (choice) {
-        _this.createElement('layer-action-button', {
-          text: choice.text,
-          event: 'layer-choice-select',
-          data: { id: choice.id },
-          icon: choice.icon,
-          parentNode: _this.nodes.answers
-        });
-      });
+      this.properties.onResize = this._onResize.bind(this);
+      window.addEventListener('resize', this.properties.onResize);
     },
     onRerender: function onRerender() {
-      var _this2 = this;
+      var _this = this;
 
-      this.toggleClass('layer-choice-display-complete', this.model.selectedAnswer);
+      if (!this.properties._internalState.onAttachCalled) return;
+      this._adjustCarouselWidth();
 
-      this.model.choices.forEach(function (choice, index) {
-        var button = _this2.nodes.answers.childNodes[index];
-        button.text = _this2.model.getText(index);
-        button.selected = _this2.model.isSelectedIndex(index);
-        if (_this2.model.selectedAnswer && !_this2.model.allowReselect || !_this2.model.allowDeselect && button.selected) {
-          button.disabled = true;
-        } else {
-          button.disabled = false;
+      // console.log("CAROUSEL onRERENDER");
+      // TODO: Assign items ids so we don't need to blow away and then recreate them
+      this.nodes.items.innerHTML = '';
+      var maxCardWidth = this._getMaxMessageWidth();
+      this.model.items.forEach(function (item) {
+        // console.log('GENERATE: ' + item.id + '    ' + item.title);
+        var card = _this.createElement('layer-message-viewer', {
+          message: _this.model.message,
+          rootPart: item.part,
+          model: item,
+          parentNode: _this.nodes.items
+        });
+        var preferedMinWidth = card.nodes.ui.preferredMinWidth;
+        switch (card.widthType) {
+          case 'full-width':
+            card.style.width = card.style.minWidth = maxCardWidth + 'px';
+            break;
+          case 'flex-width':
+            if (maxCardWidth < preferedMinWidth) {
+              card.style.maxWidth = card.style.minWidth = card.style.width = maxCardWidth + 'px';
+            } else {
+              card.style.maxWidth = card.style.minWidth = card.style.width = preferedMinWidth + 'px';
+            }
+            break;
         }
       });
+      setTimeout(this._updateScrollButtons.bind(this), 10);
     },
-    onChoiceSelect: function onChoiceSelect(data) {
-      this.model.selectAnswer(data);
-    },
-    runAction: function runAction(_ref) {
-      var event = _ref.event,
-          data = _ref.data;
 
-      if (event === 'layer-choice-select') {
-        this.onChoiceSelect(data);
 
-        var rootPart = this.model.message.getPartsMatchingAttribute({ role: 'root' })[0];
-        var rootModel = this.client.getMessageTypeModel(rootPart.id);
-        this.trigger(this.model.responseName, {
-          model: this.model,
-          data: this.model,
-          rootModel: rootModel
-        });
+    onAttach: {
+      mode: _component.registerComponent.MODES.AFTER,
+      value: function value() {
+        setTimeout(this._updateScrollButtons.bind(this), 10);
+        this.onRerender();
       }
+    },
+    _onResize: function _onResize() {
+      var _this2 = this;
+
+      this._throttler(function () {
+        return _this2._adjustCarouselWidth();
+      });
+    },
+    _adjustCarouselWidth: function _adjustCarouselWidth() {
+      var parent = this.parentComponent.parentNode;
+      if (!parent || !parent.clientWidth) return 0;
+      var carouselWidth = Math.floor(parent.clientWidth * 0.9);
+      if (carouselWidth) this.messageViewer.style.maxWidth = carouselWidth + 'px';
+    },
+    _getMaxMessageWidth: function _getMaxMessageWidth() {
+      var parent = this.parentComponent.parentNode;
+      if (!parent || !parent.clientWidth) return 350;
+      var width = parent.clientWidth;
+      if (width > 600) width = width * 0.6;else width = width * 0.8;
+      return Math.min(500, width);
+    },
+    _updateScrollButtons: function _updateScrollButtons() {
+      var root = this.nodes.items;
+      if (!root.childNodes.length) return;
+      this.toggleClass('layer-carousel-start', root.scrollLeft <= root.firstElementChild.offsetLeft);
+
+      var lastVisible = this._findLastFullyVisibleItem() || this._findFirstPartiallyVisibleItem();
+      var children = this.nodes.items.childNodes;
+      this.toggleClass('layer-carousel-end', lastVisible === children[children.length - 1]);
+    },
+
+
+    // TODO:
+    // 1. animated scroll
+    // 2. scroll at 50-100% of width,
+    // 3. Stop scrolling when a card is flush to the left or 100% is reached
+    _scroll: function _scroll(isForward, evt) {
+      evt.preventDefault();
+      evt.stopPropagation();
+      var root = this.nodes.items;
+      var nodes = root.childNodes;
+      var currentScroll = root.scrollLeft;
+
+      if (isForward) {
+        var lastVisible = this._findLastFullyVisibleItem() || this._findFirstPartiallyVisibleItem();
+        var lastVisibleIndex = Array.prototype.indexOf.call(root.childNodes, lastVisible);
+        if (lastVisible && lastVisibleIndex !== -1 && lastVisibleIndex < root.childNodes.length - 1) {
+          var scrollToNode = nodes[lastVisibleIndex + 1];
+          var scrollTo = scrollToNode.offsetLeft;
+          (0, _base.animatedScrollLeftTo)(root, scrollTo, 200, this._updateScrollButtons.bind(this));
+          this.classList.remove('layer-carousel-start');
+        }
+      } else {
+        this.classList.remove('layer-carousel-end');
+        var firstVisible = this._findFirstFullyVisibleItem();
+        var firstVisibleIndex = Array.prototype.indexOf.call(nodes, firstVisible);
+
+        // If we aren't already at the left most item, process the scroll request
+        if (firstVisibleIndex > 0) {
+
+          // Starting with one item left of the first fully visible item, look for the right amont to scroll
+          var rightMostCard = nodes[firstVisibleIndex - 1];
+          var minScrollLeft = rightMostCard.offsetLeft - root.clientWidth + rightMostCard.clientWidth + 10;
+          var found = false;
+          for (var i = 0; i <= firstVisibleIndex - 1; i++) {
+            var node = nodes[i];
+            var _scrollTo = node.offsetLeft;
+            if (_scrollTo > minScrollLeft) {
+              (0, _base.animatedScrollLeftTo)(root, _scrollTo, 200, this._updateScrollButtons.bind(this));
+              this.toggleClass('layer-carousel-start', _scrollTo <= nodes[0].offsetLeft);
+              found = true;
+              break;
+            }
+          }
+          if (!found) {
+            var _scrollTo2 = nodes[firstVisibleIndex - 1].offsetLeft;
+            (0, _base.animatedScrollLeftTo)(root, _scrollTo2, 200, this._updateScrollButtons.bind(this));
+            this.toggleClass('layer-carousel-start', _scrollTo2 <= nodes[0].offsetLeft);
+            found = true;
+          }
+        }
+      }
+    },
+    _findLastFullyVisibleItem: function _findLastFullyVisibleItem(optionalScroll) {
+      var root = this.nodes.items;
+      if (!optionalScroll) optionalScroll = root.scrollLeft;
+      var nodes = root.childNodes;
+      for (var i = nodes.length - 1; i >= 0; i--) {
+        var node = nodes[i];
+        if (node.offsetLeft + node.clientWidth <= root.offsetLeft + root.clientWidth + optionalScroll && node.offsetLeft >= root.offsetLeft + optionalScroll) return node;
+      }
+    },
+    _findFirstFullyVisibleItem: function _findFirstFullyVisibleItem() {
+      var root = this.nodes.items;
+      var nodes = root.childNodes;
+      for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        if (node.offsetLeft >= root.offsetLeft + root.scrollLeft) return node;
+      }
+    },
+    _findFirstPartiallyVisibleItem: function _findFirstPartiallyVisibleItem() {
+      var root = this.nodes.items;
+      var nodes = root.childNodes;
+      for (var i = 0; i < nodes.length; i++) {
+        var node = nodes[i];
+        if (node.offsetLeft + node.clientWidth >= root.offsetLeft + root.scrollLeft) return node;
+      }
+    },
+
+
+    /**
+     *
+     * @method
+     */
+    onRender: function onRender() {},
+    touchstart: function touchstart(evt) {
+      this.properties.touching = true;
+      var touch = evt.touches ? evt.touches[0] : evt;
+      this.properties.dx = 0;
+      this.properties.startScrollX = this.nodes.items.scrollLeft;
+      this.properties.startX = touch.pageX;
+      this.properties.startY = touch.pageY;
+      //this.width = this.$element.width()
+    },
+    touchmove: function touchmove(evt) {
+      if (!this.properties.touching) return;
+      var touch = evt.touches ? evt.touches[0] : evt;
+      var dx = touch.pageX - this.properties.startX;
+      var dy = touch.pageY - this.properties.startY;
+      if (Math.abs(dx) < Math.abs(dy)) return; // vertical scroll
+
+      evt.preventDefault(); // prevent vertical scroll
+
+      var scrollLeft = -dx;
+      this.nodes.items.scrollLeft = this.properties.startScrollX + scrollLeft;
+      if (document.activeElement.tagName === 'TEXTAREA') document.activeElement.blur();
+    },
+    touchend: function touchend(evt) {
+      if (!this.properties.touching) return;
+      var root = this.nodes.items;
+
+      var touch = evt.changedTouches ? evt.changedTouches[0] : evt;
+
+      // If finger ended on a larger X than it started, then it moved right
+      // If finger moved right, we are decreasing our scrollLeft value
+      var fingerDirection = touch.pageX - this.properties.startX > 0 ? 'right' : 'left';
+
+      var firstPartialCard = this._findFirstPartiallyVisibleItem();
+      var cardWidth = firstPartialCard.clientWidth;
+      var visibleItemWidth = firstPartialCard.offsetLeft + firstPartialCard.clientWidth - root.scrollLeft;
+      var percentShown = visibleItemWidth / cardWidth;
+      var distanceToEnd = root.scrollWidth - root.scrollLeft - root.clientWidth;
+      var percentDistanceToEnd = distanceToEnd / cardWidth;
+
+      if (fingerDirection === 'left') {
+        if (percentDistanceToEnd < 0.6) {
+          (0, _base.animatedScrollLeftTo)(root, root.lastChild.offsetLeft, 200, this._updateScrollButtons.bind(this));
+        } else if (percentShown > 0.6) {
+          (0, _base.animatedScrollLeftTo)(root, firstPartialCard.offsetLeft, 200, this._updateScrollButtons.bind(this));
+        } else {
+          (0, _base.animatedScrollLeftTo)(root, firstPartialCard.nextElementSibling.offsetLeft, 200, this._updateScrollButtons.bind(this));
+        }
+      } else {
+        if (percentDistanceToEnd < 0.4) {
+          (0, _base.animatedScrollLeftTo)(root, root.lastChild.offsetLeft, 200, this._updateScrollButtons.bind(this));
+        } else if (percentShown < 0.4) {
+          (0, _base.animatedScrollLeftTo)(root, firstPartialCard.nextElementSibling.offsetLeft, 200, this._updateScrollButtons.bind(this));
+        } else {
+          (0, _base.animatedScrollLeftTo)(root, firstPartialCard.offsetLeft, 200, this._updateScrollButtons.bind(this));
+        }
+      }
+      this.properties.touching = false;
     }
   }
 }); /**
      *
-     *
-     *
-     * @class layerUI.handlers.message.ChoiceModel
-     * @extends layerUI.components.Component
+     * @class
+     * @extends layer.UI.components.Component
      */
-},{"../../components/component":70,"../../components/layer-action-button/layer-action-button":76,"../message-display-mixin":134}],121:[function(require,module,exports){
+},{"../../base":65,"../../components/component":66,"../../mixins/clickable":141,"../../mixins/throttler":156,"../message-view-mixin":130}],116:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../components/component');
 
-var _messageDisplayMixin = require('../message-display-mixin');
+var _messageViewMixin = require('../message-view-mixin');
 
-var _messageDisplayMixin2 = _interopRequireDefault(_messageDisplayMixin);
+var _messageViewMixin2 = _interopRequireDefault(_messageViewMixin);
 
 require('../../components/layer-action-button/layer-action-button');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _component.registerComponent)('layer-choice-label-display', {
-  mixins: [_messageDisplayMixin2.default],
-  template: '\n    <div layer-id=\'question\' class=\'layer-choice-display-question\'></div>\n    <div layer-id=\'answer\' class=\'layer-choice-display-answer\'></div>\n  ',
-  style: '\n  layer-choice-label-display {\n    display: flex;\n    flex-direction: row;\n  }\n  layer-choice-label-display .layer-choice-display-answer {\n    flex-grow: 1;\n  }\n  ',
+(0, _component.registerComponent)('layer-choice-label-view', {
+  mixins: [_messageViewMixin2.default],
+  template: '\n    <div layer-id=\'question\' class=\'layer-choice-view-question\'></div>\n    <div layer-id=\'answer\' class=\'layer-choice-view-answer\'></div>\n  ',
+  style: '\n  layer-choice-label-view {\n    display: flex;\n    flex-direction: row;\n  }\n  layer-choice-label-view .layer-choice-view-answer {\n    flex-grow: 1;\n  }\n  ',
   properties: {
     label: {
       value: 'Choices'
@@ -38091,10 +37302,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      *
      *
      *
-     * @class layerUI.handlers.message.ChoiceModel
-     * @extends layerUI.components.Component
+     * @class layer.UI.handlers.message.ChoiceModel
+     * @extends layer.UI.components.Component
      */
-},{"../../components/component":70,"../../components/layer-action-button/layer-action-button":76,"../message-display-mixin":134}],122:[function(require,module,exports){
+},{"../../components/component":66,"../../components/layer-action-button/layer-action-button":72,"../message-view-mixin":130}],117:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -38209,7 +37420,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   model.generateMessage($("layer-conversation-view").conversation, message => message.send())
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 *
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @class layerUI.cards.ChoiceModel
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @class layer.UI.cards.ChoiceModel
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @extends layer.model
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
@@ -38226,7 +37437,7 @@ var ChoiceModel = function (_MessageTypeModel) {
   _createClass(ChoiceModel, [{
     key: '_generateParts',
     value: function _generateParts(callback) {
-      var body = this._initBodyWithMetadata(['question', 'choices', 'selectedAnswer', 'type', 'allowReselect', 'allowDeselect', 'allowMultiselect', 'title', 'customResponseData']);
+      var body = this._initBodyWithMetadata(['question', 'choices', 'selectedAnswer', 'type', 'responseName', 'allowReselect', 'allowDeselect', 'allowMultiselect', 'title', 'customResponseData']);
       this.part = new _core.MessagePart({
         mimeType: this.constructor.MIMEType,
         body: JSON.stringify(body)
@@ -38295,7 +37506,8 @@ var ChoiceModel = function (_MessageTypeModel) {
       }
 
       var responseModel = new _layerResponseModel2.default({
-        responseTo: this.parentId || this.part.id,
+        responseTo: this.message.id,
+        responseToNodeId: this.parentId || this.nodeId,
         participantData: _defineProperty({}, this.responseName, selectedAnswers.join(',')),
         displayModel: new _layerTextModel2.default({
           text: this.getClient().user.displayName + selectionText + text
@@ -38363,7 +37575,8 @@ var ChoiceModel = function (_MessageTypeModel) {
 
         var responseModel = new _layerResponseModel2.default({
           participantData: participantData,
-          responseTo: this.parentId || this.part.id,
+          responseTo: this.message.id,
+          responseToNodeId: this.parentId || this.nodeId,
           displayModel: new _layerTextModel2.default({
             text: this.getClient().user.displayName + ' ' + action + ' "' + selectedText + '"' + (nameOfChoice ? ' for "' + nameOfChoice + '"' : '')
           })
@@ -38424,11 +37637,11 @@ var ChoiceModel = function (_MessageTypeModel) {
     value: function __getCurrentMessageRenderer() {
       switch (this.type) {
         case 'standard':
-          return 'layer-choice-display';
+          return 'layer-choice-view';
         // case 'TiledChoices':
-        // return 'layer-choice-tiles-display';
+        // return 'layer-choice-tiles-view';
         case 'Label':
-          return 'layer-choice-label-display';
+          return 'layer-choice-label-view';
       }
     }
   }, {
@@ -38523,9 +37736,8 @@ ChoiceModel.prototype.customResponseData = null;
 
 ChoiceModel.Label = 'Choose One';
 ChoiceModel.defaultAction = 'layer-choice-select';
-ChoiceModel.messageRenderer = 'layer-choice-display';
+ChoiceModel.messageRenderer = 'layer-choice-view';
 ChoiceModel.MIMEType = 'application/vnd.layer.choice+json';
-_core.MessagePart.TextualMimeTypes.push(ChoiceModel.MIMEType);
 
 _core.Root.initClass.apply(ChoiceModel, [ChoiceModel, 'ChoiceModel']);
 
@@ -38533,23 +37745,23 @@ _core.Root.initClass.apply(ChoiceModel, [ChoiceModel, 'ChoiceModel']);
 _core.Client.registerMessageTypeModelClass(ChoiceModel, 'ChoiceModel');
 
 module.exports = ChoiceModel;
-},{"../../../core":20,"../response/layer-response-model":142,"../text/layer-text-model":144}],123:[function(require,module,exports){
+},{"../../../core":16,"../response/layer-response-model":137,"../text/layer-text-model":139}],118:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../components/component');
 
-var _messageDisplayMixin = require('../message-display-mixin');
+var _messageViewMixin = require('../message-view-mixin');
 
-var _messageDisplayMixin2 = _interopRequireDefault(_messageDisplayMixin);
+var _messageViewMixin2 = _interopRequireDefault(_messageViewMixin);
 
 require('../../components/layer-action-button/layer-action-button');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _component.registerComponent)('layer-choice-tiles-display', {
-  mixins: [_messageDisplayMixin2.default],
-  template: '\n    <div layer-id=\'question\' class=\'layer-choice-display-question\'></div>\n    <div layer-id=\'answers\' class=\'layer-choice-display-answers\'></div>\n  ',
-  style: '\n  layer-choice-tiles-display {\n    display: block;\n  }\n  layer-choice-tiles-display .layer-choice-display-answers {\n\n  }\n  ',
+(0, _component.registerComponent)('layer-choice-tiles-view', {
+  mixins: [_messageViewMixin2.default],
+  template: '\n    <div layer-id=\'question\' class=\'layer-choice-view-question\'></div>\n    <div layer-id=\'answers\' class=\'layer-choice-view-answers\'></div>\n  ',
+  style: '\n  layer-choice-tiles-view {\n    display: block;\n  }\n  layer-choice-tiles-view .layer-choice-view-answers {\n\n  }\n  ',
   properties: {
     label: {
       value: 'Choices'
@@ -38570,7 +37782,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
       });
     },
     onRerender: function onRerender() {
-      this.toggleClass('layer-choice-display-complete', this.model.selectedAnswer);
+      this.toggleClass('layer-choice-view-complete', this.model.selectedAnswer);
       if (this.model.selectedAnswer) {
         for (var i = 0; i < this.nodes.options.childNodes.length; i++) {
           var child = this.nodes.options.childNodes[i];
@@ -38595,69 +37807,104 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      *
      *
      *
-     * @class layerUI.handlers.message.ChoiceModel
-     * @extends layerUI.components.Component
+     * @class layer.UI.handlers.message.ChoiceModel
+     * @extends layer.UI.components.Component
      */
-},{"../../components/component":70,"../../components/layer-action-button/layer-action-button":76,"../message-display-mixin":134}],124:[function(require,module,exports){
+},{"../../components/component":66,"../../components/layer-action-button/layer-action-button":72,"../message-view-mixin":130}],119:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../components/component');
 
-var _messageDisplayMixin = require('../message-display-mixin');
+var _messageViewMixin = require('../message-view-mixin');
 
-var _messageDisplayMixin2 = _interopRequireDefault(_messageDisplayMixin);
+var _messageViewMixin2 = _interopRequireDefault(_messageViewMixin);
 
-var _base = require('../../base');
+require('../../components/layer-action-button/layer-action-button');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _component.registerComponent)('layer-file-display', {
-  mixins: [_messageDisplayMixin2.default],
-
-  // Adapated from github.com/picturepan2/fileicon.css
-  style: '\n  layer-file-display {\n    display: block;\n    width: 100%;\n  }\n',
-
-  // Note that there is also a message property managed by the MessageHandler mixin
+(0, _component.registerComponent)('layer-choice-view', {
+  mixins: [_messageViewMixin2.default],
+  template: '\n    <div layer-id=\'question\' class=\'layer-choice-view-question\'></div>\n    <div layer-id=\'answers\' class=\'layer-choice-view-answers\'></div>\n  ',
+  style: '\n  layer-choice-view .layer-choice-view-answers {\n    display: flex;\n    flex-direction: column;\n  }\n\n  ',
+  //layerCardId: 'layer-choice-view',
   properties: {
+    label: {
+      value: 'Choices'
+    },
+    messageContainerTagName: {
+      noGetterFromSetter: true,
+      value: 'layer-titled-message-container'
+    },
     widthType: {
       value: 'flex-width'
-    },
-    preferredMinWidth: {
-      type: Number,
-      value: 250
-    },
-    messageViewContainerTagName: {
-      noGetterFromSetter: true,
-      value: 'layer-standard-display-container'
     }
   },
   methods: {
-    /**
-     *
-     * @method
-     */
+    getIconClass: function getIconClass() {
+      return 'layer-poll-view-icon';
+    },
+    getTitle: function getTitle() {
+      return this.model.title;
+    },
+    onAfterCreate: function onAfterCreate() {
+      var _this = this;
+
+      this.nodes.question.innerHTML = this.model.question;
+      this.model.choices.forEach(function (choice) {
+        _this.createElement('layer-action-button', {
+          text: choice.text,
+          event: 'layer-choice-select',
+          data: { id: choice.id },
+          icon: choice.icon,
+          parentNode: _this.nodes.answers
+        });
+      });
+    },
     onRerender: function onRerender() {
-      this.classList.add('layer-file-' + this.model.mimeType.replace(/[/+]/g, '-'));
+      var _this2 = this;
+
+      this.toggleClass('layer-choice-view-complete', this.model.selectedAnswer);
+
+      this.model.choices.forEach(function (choice, index) {
+        var button = _this2.nodes.answers.childNodes[index];
+        button.text = _this2.model.getText(index);
+        button.selected = _this2.model.isSelectedIndex(index);
+        if (_this2.model.selectedAnswer && !_this2.model.allowReselect || !_this2.model.allowDeselect && button.selected) {
+          button.disabled = true;
+        } else {
+          button.disabled = false;
+        }
+      });
+    },
+    onChoiceSelect: function onChoiceSelect(data) {
+      this.model.selectAnswer(data);
+    },
+    runAction: function runAction(_ref) {
+      var event = _ref.event,
+          data = _ref.data;
+
+      if (event === 'layer-choice-select') {
+        this.onChoiceSelect(data);
+
+        var rootPart = this.model.message.getPartsMatchingAttribute({ role: 'root' })[0];
+        var rootModel = this.client.getMessageTypeModel(rootPart.id);
+        this.trigger(this.model.responseName, {
+          model: this.model,
+          data: this.model,
+          rootModel: rootModel
+        });
+      }
     }
   }
-});
-
-/* Note that this runs with this === <layer-message-viewer /> */
-/**
- * TODO: Verify that custom handling of "open-file" events are possible and documented
- * @class layerUI.handlers.message.messageViewer
- * @extends layerUI.components.Component
- */
-(0, _base.registerMessageActionHandler)('open-file', function openFileHandler(customData) {
-  if (customData.url) {
-    window.open(customData.url);
-  } else {
-    this.model.getSourceUrl(function (url) {
-      return window.open(url);
-    });
-  }
-});
-},{"../../base":69,"../../components/component":70,"../message-display-mixin":134}],125:[function(require,module,exports){
+}); /**
+     *
+     *
+     *
+     * @class layer.UI.handlers.message.ChoiceModel
+     * @extends layer.UI.components.Component
+     */
+},{"../../components/component":66,"../../components/layer-action-button/layer-action-button":72,"../message-view-mixin":130}],120:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -38704,7 +37951,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    mimeType: "image/png",
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    title:  'And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.'
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }).generateMessage($("layer-conversation-view").conversation, message => message.send())
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @class layerUI.cards.FileModel
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @class layer.UI.cards.FileModel
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @extends layer.model
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
@@ -38809,6 +38056,7 @@ var FileModel = function (_MessageTypeModel) {
   }, {
     key: 'getFooter',
     value: function getFooter() {
+      if (!this.size) return '';
       return Math.floor(this.size / 1000).toLocaleString() + 'K';
     }
   }]);
@@ -38826,62 +38074,40 @@ FileModel.prototype.mimeType = '';
 
 FileModel.Label = 'File';
 FileModel.defaultAction = 'open-file';
-FileModel.messageRenderer = 'layer-file-display';
+FileModel.messageRenderer = 'layer-file-view';
 FileModel.MIMEType = 'application/vnd.layer.file+json';
-_core.MessagePart.TextualMimeTypes.push(FileModel.MIMEType);
 
 // Register the Message Model Class with the Client
 _core.Client.registerMessageTypeModelClass(FileModel, 'FileModel');
 
 module.exports = FileModel;
-},{"../../../core":20}],126:[function(require,module,exports){
+},{"../../../core":16}],121:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../components/component');
 
+var _messageViewMixin = require('../message-view-mixin');
+
+var _messageViewMixin2 = _interopRequireDefault(_messageViewMixin);
+
 var _base = require('../../base');
-
-var _messageDisplayMixin = require('../message-display-mixin');
-
-var _messageDisplayMixin2 = _interopRequireDefault(_messageDisplayMixin);
-
-var _loadImage = require('blueimp-load-image/js/load-image');
-
-var _loadImage2 = _interopRequireDefault(_loadImage);
-
-require('blueimp-load-image/js/load-image-orientation');
-
-require('blueimp-load-image/js/load-image-meta');
-
-require('blueimp-load-image/js/load-image-exif');
-
-var _sizing = require('../../utils/sizing');
-
-var _sizing2 = _interopRequireDefault(_sizing);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- *
- * @class layerUI.handlers.message.messageViewer
- * @extends layerUI.components.Component
- */
-(0, _component.registerComponent)('layer-image-display', {
-  mixins: [_messageDisplayMixin2.default],
-  style: 'layer-image-display {\n      display: block;\n      overflow: hidden;\n    }\n    layer-message-viewer.layer-image-display > * {\n      cursor: pointer;\n    }\n ',
+(0, _component.registerComponent)('layer-file-view', {
+  mixins: [_messageViewMixin2.default],
+
+  // Adapated from github.com/picturepan2/fileicon.css
+  style: '\n  layer-file-view {\n    display: block;\n    width: 100%;\n  }\n',
+
+  // Note that there is also a message property managed by the MessageHandler mixin
   properties: {
-    parentComponent: {
-      set: function set() {
-        this.onRerender();
-      }
-    },
     widthType: {
-      get: function get() {
-        return this.parentComponent.isShowingMetadata ? 'flex-width' : 'chat-bubble';
-      }
+      value: 'flex-width'
     },
-    maxHeight: {
-      value: 300
+    preferredMinWidth: {
+      type: Number,
+      value: 250
     },
     messageViewContainerTagName: {
       noGetterFromSetter: true,
@@ -38889,141 +38115,32 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
   },
   methods: {
-    onCreate: function onCreate() {
-      this.isHeightAllocated = false;
-    },
-
-
-    onAttach: {
-      mode: _component.registerComponent.MODES.AFTER,
-      value: function value() {
-        this.onRerender();
-      }
-    },
-
     /**
-     * Render the Message.
-     *
-     * Primarily, this method determines whether to call _renderCanvas on the preview or the image.
      *
      * @method
-     * @private
      */
     onRerender: function onRerender() {
-      var _this = this;
-
-      // wait until the parentComponent is a Message Display Container
-      if (!this.properties._internalState.onAttachCalled) return;
-      var maxCardWidth = this._getMaxMessageWidth();
-
-      // maxSizes should be removed
-      var width = this.model.previewWidth || this.model.width || maxCardWidth;
-      var height = this.model.previewHeight || this.model.height || this.maxHeight;
-
-      var isSmallImage = width < maxCardWidth;
-      var isSmallAndWideImage = isSmallImage && maxCardWidth > height;
-      this.toggleClass('layer-image-display-small-image', isSmallImage && !isSmallAndWideImage);
-
-      if (this.model.source || this.model.preview) {
-        this.model.getBlob(function (blob) {
-          return _this._renderCanvas(blob, maxCardWidth);
-        });
-      } else {
-        while (this.firstChild) {
-          this.removeChild(this.firstChild);
-        }var img = this.createElement('img', {
-          classList: isSmallImage ? [] : ['layer-top-content-for-border-radius'],
-          parentNode: this
-        });
-        img.addEventListener('load', function (evt) {
-          return _this.isHeightAllocated = true;
-        });
-        img.src = this.model.previewUrl || this.model.sourceUrl;
-        img.style.maxWidth = maxCardWidth + 'px';
-        img.style.maxHeight = this.maxHeight + 'px';
-      }
-    },
-    _getMaxMessageWidth: function _getMaxMessageWidth() {
-      if (this.messageViewer.classList.contains('layer-root-card')) {
-        var parent = this.messageViewer.parentNode;
-        if (!parent || !parent.clientWidth) return 0;
-        var width = parent.clientWidth;
-        if (width > 600) width = width * 0.6;else width = width * 0.8;
-        return width;
-      } else {
-        return this.messageViewer.parentNode.clientWidth;
-      }
-    },
-
-
-    /**
-     * Rendering Rules:
-     *
-     * * Images whose height is less than width and width is less than 192px are scaled to 192px
-     * * Images whose height is greater than width and width is less than 192px are scaled to height 192px?
-     * * Images whose width and height are equal, and less than 192px should be scaled up to 192px
-     * * Images between 192-350 are sized as-is
-     * * However, if there is metadata, scale images up to 350px
-     *
-     * @param {*} blob
-     */
-    _renderCanvas: function _renderCanvas(blob, maxCardWidth) {
-      var _this2 = this;
-
-      var width = this.model.previewWidth || this.model.width || maxCardWidth;
-      var height = this.model.previewHeight || this.model.height || this.maxHeight;
-      var minWidth = this.parentComponent.getPreferredMinWidth();
-      var minHeight = this.parentComponent.getPreferredMinHeight();
-      var maxHeight = this.parentComponent.getPreferredMaxHeight();
-
-      // Read the EXIF data
-      _loadImage2.default.parseMetaData(blob, function (data) {
-        var options = {
-          canvas: true,
-          orientation: _this2.model.orientation
-        };
-
-        if (data.imageHead && data.exif) {
-          options.orientation = data.exif.get('Orientation') || 1;
-        }
-        options.maxWidth = maxCardWidth;
-        options.maxHeight = maxHeight;
-
-        // Write the image to a canvas with the specified orientation
-        (0, _loadImage2.default)(blob, function (canvas) {
-          if (canvas instanceof HTMLElement) {
-            if (width < minWidth && height < minHeight) {
-              if (width > height) {
-                canvas = _loadImage2.default.scale(canvas, { minWidth: minWidth });
-              } else {
-                canvas = _loadImage2.default.scale(canvas, { minHeight: minHeight });
-              }
-            }
-
-            while (_this2.firstChild) {
-              _this2.removeChild(_this2.firstChild);
-            }_this2.appendChild(canvas);
-            if (canvas.width >= minWidth) _this2.parentComponent.style.width = canvas.width + 'px';
-            _this2.isHeightAllocated = true;
-          } else {
-            console.error(canvas);
-          }
-        }, options);
-      });
-    },
-    handleContainerEvent: function handleContainerEvent(name, evt) {
-      switch (name) {
-        case 'click':
-        case 'tap':
-          this.model.getBestQualityUrl(function (url) {
-            return window.open(url);
-          });
-          break;
-      }
+      this.classList.add('layer-file-' + this.model.mimeType.replace(/[/+]/g, '-'));
     }
   }
 });
-},{"../../base":69,"../../components/component":70,"../../utils/sizing":163,"../message-display-mixin":134,"blueimp-load-image/js/load-image":174,"blueimp-load-image/js/load-image-exif":170,"blueimp-load-image/js/load-image-meta":171,"blueimp-load-image/js/load-image-orientation":172}],127:[function(require,module,exports){
+
+/* Note that this runs with this === <layer-message-viewer /> */
+/**
+ * TODO: Verify that custom handling of "open-file" events are possible and documented
+ * @class layer.UI.handlers.message.messageViewer
+ * @extends layer.UI.components.Component
+ */
+(0, _base.registerMessageActionHandler)('open-file', function openFileHandler(customData) {
+  if (customData.url) {
+    window.open(customData.url);
+  } else {
+    this.model.getSourceUrl(function (url) {
+      return window.open(url);
+    });
+  }
+});
+},{"../../base":65,"../../components/component":66,"../message-view-mixin":130}],122:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -39070,10 +38187,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }).generateMessage($("layer-conversation-view").conversation, message => message.send())
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  new ImageModel({
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   sourceUrl: "https://farm5.staticflickr.com/4272/34912460025_be2700d3e7_k.jpg",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   artist: "unknown photographer",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   title: "Source URL Test",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   subtitle: "Ooooh, Pretty..."
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   sourceUrl: "https://78.media.tumblr.com/1b019b4237ab18f789381941eca98784/tumblr_nlmlir7Lhk1u0k6deo1_400.gif",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   artist: "Monty Python",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   title: "Tis only a flesh wound",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   subtitle: "Your arm's off!"
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }).generateMessage($("layer-conversation-view").conversation, message => message.send())
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                new ImageModel({
@@ -39144,7 +38261,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    title: "Wider and taller than card but much wider than tall"
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  }).generateMessage($("layer-conversation-view").conversation, message => message.send())
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @class layerUI.cards.ImageModel
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @class layer.UI.cards.ImageModel
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @extends layer.model
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
@@ -39370,16 +38487,204 @@ ImageModel.prototype.url = '';
 
 ImageModel.Label = 'Picture';
 ImageModel.defaultAction = 'open-url';
-ImageModel.messageRenderer = 'layer-image-display';
+ImageModel.messageRenderer = 'layer-image-view';
 ImageModel.MIMEType = 'application/vnd.layer.image+json';
 _core.Root.initClass.apply(ImageModel, [ImageModel, 'ImageModel']);
-_core.MessagePart.TextualMimeTypes.push(ImageModel.MIMEType);
 
 // Register the Message Model Class with the Client
 _core.Client.registerMessageTypeModelClass(ImageModel, 'ImageModel');
 
 module.exports = ImageModel;
-},{"../../../core":20,"../../utils/sizing":163,"blueimp-load-image/js/load-image":174,"blueimp-load-image/js/load-image-exif":170,"blueimp-load-image/js/load-image-meta":171,"blueimp-load-image/js/load-image-orientation":172}],128:[function(require,module,exports){
+},{"../../../core":16,"../../utils/sizing":159,"blueimp-load-image/js/load-image":170,"blueimp-load-image/js/load-image-exif":166,"blueimp-load-image/js/load-image-meta":167,"blueimp-load-image/js/load-image-orientation":168}],123:[function(require,module,exports){
+'use strict';
+
+var _component = require('../../components/component');
+
+var _base = require('../../base');
+
+var _messageViewMixin = require('../message-view-mixin');
+
+var _messageViewMixin2 = _interopRequireDefault(_messageViewMixin);
+
+var _loadImage = require('blueimp-load-image/js/load-image');
+
+var _loadImage2 = _interopRequireDefault(_loadImage);
+
+require('blueimp-load-image/js/load-image-orientation');
+
+require('blueimp-load-image/js/load-image-meta');
+
+require('blueimp-load-image/js/load-image-exif');
+
+var _sizing = require('../../utils/sizing');
+
+var _sizing2 = _interopRequireDefault(_sizing);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ *
+ * @class layer.UI.handlers.message.messageViewer
+ * @extends layer.UI.components.Component
+ */
+(0, _component.registerComponent)('layer-image-view', {
+  mixins: [_messageViewMixin2.default],
+  style: 'layer-image-view {\n      display: block;\n      overflow: hidden;\n    }\n    layer-message-viewer.layer-image-view > * {\n      cursor: pointer;\n    }\n ',
+  properties: {
+    parentComponent: {
+      set: function set() {
+        this.onRerender();
+      }
+    },
+    widthType: {
+      get: function get() {
+        return this.parentComponent.isShowingMetadata ? 'flex-width' : 'chat-bubble';
+      }
+    },
+    maxHeight: {
+      value: 300
+    },
+    messageViewContainerTagName: {
+      noGetterFromSetter: true,
+      value: 'layer-standard-display-container'
+    }
+  },
+  methods: {
+    onCreate: function onCreate() {
+      this.isHeightAllocated = false;
+    },
+
+
+    onAttach: {
+      mode: _component.registerComponent.MODES.AFTER,
+      value: function value() {
+        this.onRerender();
+      }
+    },
+
+    /**
+     * Render the Message.
+     *
+     * Primarily, this method determines whether to call _renderCanvas on the preview or the image.
+     *
+     * @method
+     * @private
+     */
+    onRerender: function onRerender() {
+      var _this = this;
+
+      // wait until the parentComponent is a Message Display Container
+      if (!this.properties._internalState.onAttachCalled) return;
+      var maxCardWidth = this._getMaxMessageWidth();
+
+      // maxSizes should be removed
+      var width = this.model.previewWidth || this.model.width || maxCardWidth;
+      var height = this.model.previewHeight || this.model.height || this.maxHeight;
+
+      var isSmallImage = width < maxCardWidth;
+      var isSmallAndWideImage = isSmallImage && maxCardWidth > height;
+      this.toggleClass('layer-image-view-small-image', isSmallImage && !isSmallAndWideImage);
+
+      if (this.model.source || this.model.preview) {
+        this.model.getBlob(function (blob) {
+          return _this._renderCanvas(blob, maxCardWidth);
+        });
+      } else {
+        while (this.firstChild) {
+          this.removeChild(this.firstChild);
+        }var img = this.createElement('img', {
+          classList: isSmallImage ? [] : ['layer-top-content-for-border-radius'],
+          parentNode: this
+        });
+        img.addEventListener('load', function (evt) {
+          return _this.isHeightAllocated = true;
+        });
+        img.src = this.model.previewUrl || this.model.sourceUrl;
+        img.style.maxWidth = maxCardWidth + 'px';
+        img.style.maxHeight = this.maxHeight + 'px';
+      }
+    },
+    _getMaxMessageWidth: function _getMaxMessageWidth() {
+      if (this.messageViewer.classList.contains('layer-root-card')) {
+        var parent = this.messageViewer.parentNode;
+        if (!parent || !parent.clientWidth) return 0;
+        var width = parent.clientWidth;
+        if (width > 600) width = width * 0.6;else width = width * 0.8;
+        return width;
+      } else {
+        return this.messageViewer.parentNode.clientWidth;
+      }
+    },
+
+
+    /**
+     * Rendering Rules:
+     *
+     * * Images whose height is less than width and width is less than 192px are scaled to 192px
+     * * Images whose height is greater than width and width is less than 192px are scaled to height 192px?
+     * * Images whose width and height are equal, and less than 192px should be scaled up to 192px
+     * * Images between 192-350 are sized as-is
+     * * However, if there is metadata, scale images up to 350px
+     *
+     * @param {*} blob
+     */
+    _renderCanvas: function _renderCanvas(blob, maxCardWidth) {
+      var _this2 = this;
+
+      var width = this.model.previewWidth || this.model.width || maxCardWidth;
+      var height = this.model.previewHeight || this.model.height || this.maxHeight;
+      var minWidth = this.parentComponent.getPreferredMinWidth();
+      var minHeight = this.parentComponent.getPreferredMinHeight();
+      var maxHeight = this.parentComponent.getPreferredMaxHeight();
+
+      // Read the EXIF data
+      _loadImage2.default.parseMetaData(blob, function (data) {
+        var options = {
+          canvas: true,
+          orientation: _this2.model.orientation
+        };
+
+        if (data.imageHead && data.exif) {
+          options.orientation = data.exif.get('Orientation') || 1;
+        }
+        options.maxWidth = maxCardWidth;
+        options.maxHeight = maxHeight;
+
+        // Write the image to a canvas with the specified orientation
+        (0, _loadImage2.default)(blob, function (canvas) {
+          if (canvas instanceof HTMLElement) {
+            if (width < minWidth && height < minHeight) {
+              if (width > height) {
+                canvas = _loadImage2.default.scale(canvas, { minWidth: minWidth });
+              } else {
+                canvas = _loadImage2.default.scale(canvas, { minHeight: minHeight });
+              }
+            }
+
+            while (_this2.firstChild) {
+              _this2.removeChild(_this2.firstChild);
+            }_this2.appendChild(canvas);
+            if (canvas.width >= minWidth) _this2.parentComponent.style.width = canvas.width + 'px';
+            _this2.isHeightAllocated = true;
+          } else {
+            console.error(canvas);
+          }
+        }, options);
+      });
+    },
+    handleContainerEvent: function handleContainerEvent(name, evt) {
+      switch (name) {
+        case 'click':
+        case 'tap':
+          this.model.getBestQualityUrl(function (url) {
+            return window.open(url);
+          });
+          break;
+      }
+    }
+  }
+});
+},{"../../base":65,"../../components/component":66,"../../utils/sizing":159,"../message-view-mixin":130,"blueimp-load-image/js/load-image":170,"blueimp-load-image/js/load-image-exif":166,"blueimp-load-image/js/load-image-meta":167,"blueimp-load-image/js/load-image-orientation":168}],124:[function(require,module,exports){
 'use strict';
 
 var _component = require('../components/component');
@@ -39465,10 +38770,10 @@ var _component = require('../components/component');
   }
 }); /**
      *
-     * @class layerUI.handlers.message.messageViewer
-     * @extends layerUI.components.Component
+     * @class layer.UI.handlers.message.messageViewer
+     * @extends layer.UI.components.Component
      */
-},{"../components/component":70}],129:[function(require,module,exports){
+},{"../components/component":66}],125:[function(require,module,exports){
 'use strict';
 
 var _component = require('../components/component');
@@ -39521,79 +38826,10 @@ var _component = require('../components/component');
   }
 }); /**
      *
-     * @class layerUI.handlers.message.messageViewer
-     * @extends layerUI.components.Component
+     * @class layer.UI.handlers.message.messageViewer
+     * @extends layer.UI.components.Component
      */
-},{"../components/component":70}],130:[function(require,module,exports){
-'use strict';
-
-var _component = require('../../components/component');
-
-var _messageDisplayMixin = require('../message-display-mixin');
-
-var _messageDisplayMixin2 = _interopRequireDefault(_messageDisplayMixin);
-
-var _base = require('../../base');
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-(0, _component.registerComponent)('layer-link-display', {
-  mixins: [_messageDisplayMixin2.default],
-
-  // This style contains rules that impacts the container that contains the url card
-  // This will not translate well to shadow-dom.
-  style: '\n  layer-message-viewer.layer-link-display layer-standard-display-container {\n    cursor: pointer;\n    display: block;\n  }\n  layer-link-display img[src=\'\'] {\n    display: none;\n  }\n  layer-link-display img {\n    width: 100%;\n  }\n  .layer-card-width-flex-width layer-link-display a {\n    display: none;\n  }\n  ',
-
-  template: '<img layer-id="image" class="layer-link-display-image" /><a target="_blank" layer-id="link"></a>',
-  properties: {
-    widthType: {
-      get: function get() {
-        return this.model.imageUrl || this.parentComponent.isShowingMetadata ? 'flex-width' : 'chat-bubble';
-      }
-    },
-    messageViewContainerTagName: {
-      noGetterFromSetter: true,
-      value: 'layer-standard-display-container'
-    }
-  },
-  methods: {
-    onCreate: function onCreate() {},
-    onRender: function onRender() {
-      this.onRerender();
-    },
-
-
-    /**
-     *
-     * @method
-     */
-    onRerender: function onRerender() {
-      this.messageViewer.toggleClass('layer-message-as-chat-bubble', !this.model.title && !this.model.author && !this.model.imageUrl && !this.model.description);
-      this.nodes.image.src = this.model.imageUrl || '';
-      this.nodes.link.src = this.model.url;
-      this.nodes.link.innerHTML = this.model.url;
-    },
-    setupContainerClasses: function setupContainerClasses() {
-      if (this.widthType) {
-        var isLinkOnly = this.widthType === 'chat-bubble';
-        var op = isLinkOnly || this.model.imageUrl ? 'remove' : 'add';
-        this.parentComponent.classList[op]('layer-arrow-next-container');
-        this.parentComponent.classList[this.model.imageUrl || isLinkOnly ? 'remove' : 'add']('layer-no-core-ui');
-      }
-    }
-  }
-}); /**
-     *
-     * @class layerUI.handlers.message.messageViewer
-     * @extends layerUI.components.Component
-     */
-
-
-(0, _base.registerMessageActionHandler)('open-url', function openUrlHandler(customData) {
-  var url = customData.url || this.model.url;
-  if (url) window.open(url);
-});
-},{"../../base":69,"../../components/component":70,"../message-display-mixin":134}],131:[function(require,module,exports){
+},{"../components/component":66}],126:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -39610,23 +38846,23 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  LinkModel = layer.Core.Client.getMessageTypeModelClass('LinkModel')
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  model = new LinkModel({
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   url: "http://www.cnn.com/2017/07/07/us/sc-prison-escape-drone/index.html",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   url: "https://layer.com/introducing-the-layer-conversation-design-system/",
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  });
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  model.generateMessage($("layer-conversation-view").conversation, message => message.send());
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   model = new LinkModel({
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   url: "http://www.cnn.com/2017/07/07/us/sc-prison-escape-drone/index.html",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   url: "https://layer.com/introducing-the-layer-conversation-design-system/",
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    description: ""
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  });
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  model.generateMessage($("layer-conversation-view").conversation, message => message.send());
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 model = new LinkModel({
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   url: "http://www.cnn.com/2017/07/07/us/sc-prison-escape-drone/index.html",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   title: "South Carolina inmate used drone, makeshift dummy to escape prison",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   imageUrl: "http://i2.cdn.cnn.com/cnnnext/dam/assets/170707132615-sc-prison-escape-super-tease.jpg",
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   description: "A South Carolina prisoner broke out of prison using a cell phone, a makeshift dummy, a drone and wire cutters, the South Carolina Department of Corrections said"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   url: "https://layer.com/introducing-the-layer-conversation-design-system/",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   title: "Introducing the Layer Conversation Design System",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   imageUrl: "https://layer.com/wp-content/uploads/2017/07/bezier-blog-header-2x.png",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   description: "The Layer Conversation Design System helps you imagine and design the perfect customer conversation across devices."
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  });
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  model.generateMessage($("layer-conversation-view").conversation, message => message.send());
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
@@ -39668,11 +38904,11 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  LinkModel = layer.Core.Client.getMessageTypeModelClass('LinkModel')
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  model = new LinkModel({
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   url: "http://www.cnn.com/2017/07/07/us/sc-prison-escape-drone/index.html",
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   url: "https://layer.com/introducing-the-layer-conversation-design-system/",
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    description:  'And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.'
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  });
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  model.generateMessage($("layer-conversation-view").conversation, message => message.send());
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @class layerUI.cards.LinkModel
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @class layer.UI.cards.LinkModel
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @extends layer.model
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
@@ -39772,46 +39008,40 @@ LinkModel.prototype.html = '';
 
 LinkModel.Label = 'Link to';
 LinkModel.defaultAction = 'open-url';
-LinkModel.messageRenderer = 'layer-link-display';
+LinkModel.messageRenderer = 'layer-link-view';
 
 LinkModel.MIMEType = 'application/vnd.layer.link+json';
-
-_core.MessagePart.TextualMimeTypes.push(LinkModel.MIMEType);
 
 // Register the Card Model Class with the Client
 _core.Client.registerMessageTypeModelClass(LinkModel, 'LinkModel');
 
 module.exports = LinkModel;
-},{"../../../core":20}],132:[function(require,module,exports){
+},{"../../../core":16}],127:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../components/component');
 
-var _messageDisplayMixin = require('../message-display-mixin');
+var _messageViewMixin = require('../message-view-mixin');
 
-var _messageDisplayMixin2 = _interopRequireDefault(_messageDisplayMixin);
+var _messageViewMixin2 = _interopRequireDefault(_messageViewMixin);
 
 var _base = require('../../base');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _component.registerComponent)('layer-location-display', {
-  mixins: [_messageDisplayMixin2.default],
-  template: '<img layer-id="img" />',
-  style: '\n  layer-message-viewer.layer-location-display {\n    cursor: pointer;\n  }\n  .layer-location-display-address-only {\n    display: none;\n  }\n  ',
+(0, _component.registerComponent)('layer-link-view', {
+  mixins: [_messageViewMixin2.default],
+
+  // This style contains rules that impacts the container that contains the url card
+  // This will not translate well to shadow-dom.
+  style: '\n  layer-message-viewer.layer-link-view layer-standard-display-container {\n    cursor: pointer;\n    display: block;\n  }\n  layer-link-view img[src=\'\'] {\n    display: none;\n  }\n  layer-link-view img {\n    width: 100%;\n  }\n  .layer-card-width-flex-width layer-link-view a {\n    display: none;\n  }\n  ',
+
+  template: '<img layer-id="image" class="layer-link-view-image" /><a target="_blank" layer-id="link"></a>',
   properties: {
-    mapHeight: {
-      value: 300
-    },
-    hideMap: {
-      value: false,
-      set: function set(value) {
-        this.toggleClass('layer-location-display-address-only', value);
-        this.setupContainerClasses();
-      }
-    },
     widthType: {
-      value: 'full-width'
+      get: function get() {
+        return this.model.imageUrl || this.parentComponent.isShowingMetadata ? 'flex-width' : 'chat-bubble';
+      }
     },
     messageViewContainerTagName: {
       noGetterFromSetter: true,
@@ -39819,16 +39049,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
   },
   methods: {
-    onAttach: function onAttach() {
-      if (!this.hideMap) this._updateImageSrc();
-    },
-    _updateImageSrc: function _updateImageSrc() {
-      if (this.parentNode && this.parentNode.clientWidth) {
-        var marker = this.model.latitude ? this.model.latitude + ',' + this.model.longitude : escape(this.model.street1 + (this.model.street2 ? ' ' + this.model.street2 : '') + (' ' + this.model.city + ' ' + this.model.administrativeArea + ', ' + this.model.postalCode + ' ' + this.model.country));
-
-        this.nodes.img.src = location.protocol + '//maps.googleapis.com/maps/api/staticmap?size=' + this.parentNode.clientWidth + 'x' + this.mapHeight + '&language=' + navigator.language + '&key=' + window.googleMapsAPIKey + '&zoom=' + this.model.zoom + '&markers=' + marker;
-      }
-    },
+    onCreate: function onCreate() {},
     onRender: function onRender() {
       this.onRerender();
     },
@@ -39839,38 +39060,32 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      * @method
      */
     onRerender: function onRerender() {
-      this._updateImageSrc();
+      this.messageViewer.toggleClass('layer-message-as-chat-bubble', !this.model.title && !this.model.author && !this.model.imageUrl && !this.model.description);
+      this.nodes.image.src = this.model.imageUrl || '';
+      this.nodes.link.src = this.model.url;
+      this.nodes.link.innerHTML = this.model.url;
     },
     setupContainerClasses: function setupContainerClasses() {
-      this.parentComponent.toggleClass('layer-arrow-next-container', this.hideMap);
-      this.parentComponent.toggleClass('layer-no-core-ui', this.hideMap);
+      if (this.widthType) {
+        var isLinkOnly = this.widthType === 'chat-bubble';
+        var op = isLinkOnly || this.model.imageUrl ? 'remove' : 'add';
+        this.parentComponent.classList[op]('layer-arrow-next-container');
+        this.parentComponent.classList[this.model.imageUrl || isLinkOnly ? 'remove' : 'add']('layer-no-core-ui');
+      }
     }
   }
-}); /* m = $("layer-conversation-view").conversation.createMessage({parts: [
-      {
-        mimeType: "application/vnd.layer.location+json; role=root",
-        body: '{"latitude": 37.7734858, "longitude": -122.3916087, "title": "Réveille Coffee Co.", "description": "Good coffee, but pricey, and when you hear people say the name, you know that they just reviled the place."}'
-      }]}).send();
-      */
-
-/**
- * You must set your Google Maps API key in `window.googleMapsAPIKey`
- *
- * @class ???
- * @extends layerUI.components.Component
- */
+}); /**
+     *
+     * @class layer.UI.handlers.message.messageViewer
+     * @extends layer.UI.components.Component
+     */
 
 
-(0, _base.registerMessageActionHandler)('open-map', function openMapHandler(customData) {
-  var url = void 0;
-  if (this.model.street1) {
-    url = 'http://www.google.com/maps/?q=' + escape(this.model.street1 + (this.model.street2 ? ' ' + this.model.street2 : '') + (' ' + this.model.city + ' ' + this.model.administrativeArea + ', ' + this.model.postalCode + ' ' + this.model.country));
-  } else if (this.model.latitude) {
-    url = 'https://www.google.com/maps/search/?api=1&query=' + this.model.latitude + ',' + this.model.longitude + '&zoom=' + this.model.zoom;
-  }
+(0, _base.registerMessageActionHandler)('open-url', function openUrlHandler(customData) {
+  var url = customData.url || this.model.url;
   if (url) window.open(url);
 });
-},{"../../base":69,"../../components/component":70,"../message-display-mixin":134}],133:[function(require,module,exports){
+},{"../../base":65,"../../components/component":66,"../message-view-mixin":130}],128:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -39940,7 +39155,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      street1: '655 4th st',
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      description:  'And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.  And the Lord spake, saying, "First shalt thou take out the Holy Pin. Then shalt thou count to three, no more, no less. Three shall be the number thou shalt count, and the number of the counting shall be three. Four shalt thou not count, neither count thou two, excepting that thou then proceed to three. Five is right out! Once the number three, being the third number, be reached, then lobbest thou thy Holy Hand Grenade of Antioch towards thy foe, who, being naughty in my sight, shall snuff it.'
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }).generateMessage($("layer-conversation-view").conversation, message => message.send());;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @class layerUI.cards.LocationModel
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @class layer.UI.cards.LocationModel
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @extends layer.model
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
@@ -39998,16 +39213,102 @@ LocationModel.prototype.showAddress = null; // 3 state: true: show the address; 
 
 LocationModel.Label = 'Location';
 LocationModel.defaultAction = 'open-map';
-LocationModel.messageRenderer = 'layer-location-display';
+LocationModel.messageRenderer = 'layer-location-view';
 LocationModel.MIMEType = 'application/vnd.layer.location+json';
-
-_core.MessagePart.TextualMimeTypes.push(LocationModel.MIMEType);
 
 // Register the Card Model Class with the Client
 _core.Client.registerMessageTypeModelClass(LocationModel, 'LocationModel');
 
 module.exports = LocationModel;
-},{"../../../core":20}],134:[function(require,module,exports){
+},{"../../../core":16}],129:[function(require,module,exports){
+'use strict';
+
+var _component = require('../../components/component');
+
+var _messageViewMixin = require('../message-view-mixin');
+
+var _messageViewMixin2 = _interopRequireDefault(_messageViewMixin);
+
+var _base = require('../../base');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+(0, _component.registerComponent)('layer-location-view', {
+  mixins: [_messageViewMixin2.default],
+  template: '<img layer-id="img" />',
+  style: '\n  layer-message-viewer.layer-location-view {\n    cursor: pointer;\n  }\n  .layer-location-view-address-only {\n    display: none;\n  }\n  ',
+  properties: {
+    mapHeight: {
+      value: 300
+    },
+    hideMap: {
+      value: false,
+      set: function set(value) {
+        this.toggleClass('layer-location-view-address-only', value);
+        this.setupContainerClasses();
+      }
+    },
+    widthType: {
+      value: 'full-width'
+    },
+    messageViewContainerTagName: {
+      noGetterFromSetter: true,
+      value: 'layer-standard-display-container'
+    }
+  },
+  methods: {
+    onAttach: function onAttach() {
+      if (!this.hideMap) this._updateImageSrc();
+    },
+    _updateImageSrc: function _updateImageSrc() {
+      if (this.parentNode && this.parentNode.clientWidth) {
+        var marker = this.model.latitude ? this.model.latitude + ',' + this.model.longitude : escape(this.model.street1 + (this.model.street2 ? ' ' + this.model.street2 : '') + (' ' + this.model.city + ' ' + this.model.administrativeArea + ', ' + this.model.postalCode + ' ' + this.model.country));
+
+        this.nodes.img.src = location.protocol + '//maps.googleapis.com/maps/api/staticmap?size=' + this.parentNode.clientWidth + 'x' + this.mapHeight + '&language=' + navigator.language + '&key=' + window.googleMapsAPIKey + '&zoom=' + this.model.zoom + '&markers=' + marker;
+      }
+    },
+    onRender: function onRender() {
+      this.onRerender();
+    },
+
+
+    /**
+     *
+     * @method
+     */
+    onRerender: function onRerender() {
+      this._updateImageSrc();
+    },
+    setupContainerClasses: function setupContainerClasses() {
+      this.parentComponent.toggleClass('layer-arrow-next-container', this.hideMap);
+      this.parentComponent.toggleClass('layer-no-core-ui', this.hideMap);
+    }
+  }
+}); /* m = $("layer-conversation-view").conversation.createMessage({parts: [
+      {
+        mimeType: "application/vnd.layer.location+json; role=root",
+        body: '{"latitude": 37.7734858, "longitude": -122.3916087, "title": "Réveille Coffee Co.", "description": "Good coffee, but pricey, and when you hear people say the name, you know that they just reviled the place."}'
+      }]}).send();
+      */
+
+/**
+ * You must set your Google Maps API key in `window.googleMapsAPIKey`
+ *
+ * @class ???
+ * @extends layer.UI.components.Component
+ */
+
+
+(0, _base.registerMessageActionHandler)('open-map', function openMapHandler(customData) {
+  var url = void 0;
+  if (this.model.street1) {
+    url = 'http://www.google.com/maps/?q=' + escape(this.model.street1 + (this.model.street2 ? ' ' + this.model.street2 : '') + (' ' + this.model.city + ' ' + this.model.administrativeArea + ', ' + this.model.postalCode + ' ' + this.model.country));
+  } else if (this.model.latitude) {
+    url = 'https://www.google.com/maps/search/?api=1&query=' + this.model.latitude + ',' + this.model.longitude + '&zoom=' + this.model.zoom;
+  }
+  if (url) window.open(url);
+});
+},{"../../base":65,"../../components/component":66,"../message-view-mixin":130}],130:[function(require,module,exports){
 'use strict';
 
 var _component = require('../components/component');
@@ -40084,7 +39385,7 @@ module.exports = {
     }
   }
 };
-},{"../components/component":70}],135:[function(require,module,exports){
+},{"../components/component":66}],131:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -40129,13 +39430,11 @@ OrganizationModel.prototype.type = '';
 
 OrganizationModel.MIMEType = 'application/vnd.layer.organization+json';
 
-_core.MessagePart.TextualMimeTypes.push(OrganizationModel.MIMEType);
-
 // Register the Card Model Class with the Client
 _core.Client.registerMessageTypeModelClass(OrganizationModel, 'OrganizationModel');
 
 module.exports = OrganizationModel;
-},{"../../../core":20}],136:[function(require,module,exports){
+},{"../../../core":16}],132:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -40183,87 +39482,11 @@ PersonModel.prototype.identityId = '';
 
 PersonModel.MIMEType = 'application/vnd.layer.person+json';
 
-_core.MessagePart.TextualMimeTypes.push(PersonModel.MIMEType);
-
 // Register the Card Model Class with the Client
 _core.Client.registerMessageTypeModelClass(PersonModel, 'PersonModel');
 
 module.exports = PersonModel;
-},{"../../../core":20}],137:[function(require,module,exports){
-'use strict';
-
-var _component = require('../../components/component');
-
-var _messageDisplayMixin = require('../message-display-mixin');
-
-var _messageDisplayMixin2 = _interopRequireDefault(_messageDisplayMixin);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- *
- * @class layerUI.handlers.message.messageViewer
- * @extends layerUI.components.Component
- */
-(0, _component.registerComponent)('layer-product-display', {
-  style: 'layer-product-display {\n    display: block;\n  }\n  layer-message-viewer.layer-product-display {\n    cursor: pointer;\n  }\n  layer-product-display.layer-no-image .layer-card-top {\n    display: none;\n  }\n  ',
-  template: '\n    <div layer-id=\'UIContainer\' class=\'layer-card-top\'>\n      <img layer-id="image" />\n    </div>\n    <div class="layer-card-body-outer">\n        <div class="layer-card-product-header">\n          <div layer-id="brand" class="layer-card-product-brand"></div>\n          <div layer-id="model" class="layer-card-product-model"></div>\n        </div>\n        <div layer-id="name" class="layer-card-product-name"></div>\n\n        <div layer-id="price" class="layer-card-product-price"></div>\n        <div layer-id="choices" class="layer-card-product-choices"></div>\n        <div layer-id="description" class="layer-card-product-description"></div>\n    </div>\n  ',
-  mixins: [_messageDisplayMixin2.default],
-  // Note that there is also a message property managed by the MessageHandler mixin
-  properties: {
-    widthType: {
-      value: 'full-width'
-    }
-  },
-  methods: {
-    onRerender: function onRerender() {
-      var _this = this;
-
-      this.nodes.name.innerHTML = this.model.name;
-      this.nodes.brand.innerHTML = this.model.brand;
-      this.nodes.price.innerHTML = this.model.getFormattedPrice();
-      this.nodes.description.innerHTML = this.model.description;
-
-      this.nodes.image.src = this.model.imageUrls[0];
-      this.toggleClass('layer-no-image', this.model.imageUrls.length === 0);
-
-      var optionsParent = this.nodes.choices;
-
-      if (!optionsParent.firstChild) {
-        this.model.options.forEach(function (optionsModel) {
-          optionsModel.action = { event: _this.model.actionEvent, data: _this.model.data || { url: _this.model.url } };
-          _this.createElement('layer-message-viewer', {
-            message: _this.model.message,
-            rootPart: optionsModel.part,
-            model: optionsModel,
-            //messageViewContainerTagName: false,
-            cardBorderStyle: 'none',
-            parentNode: _this.nodes.choices
-          });
-        });
-      }
-      /*
-      if (this.model.detailModel) {
-        this.createElement('layer-message-viewer', {
-          message: this.model.message,
-          rootPart: this.model.detailModel.part,
-          model: this.model.detailModel,
-          //messageViewContainerTagName: false,
-          cardBorderStyle: 'none',
-          parentNode: this,
-        });
-      }*/
-    },
-
-
-    /**
-     *
-     * @method
-     */
-    onRender: function onRender() {}
-  }
-});
-},{"../../components/component":70,"../message-display-mixin":134}],138:[function(require,module,exports){
+},{"../../../core":16}],133:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -40368,7 +39591,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * A Product model, typically used within a Recipt Model, but usable anywhere that you want to display simple product information.
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 *
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @class layerUI.cards.ProductModel
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @class layer.UI.cards.ProductModel
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 * @extends layer.model
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 */
 
@@ -40458,6 +39681,7 @@ var ProductModel = function (_MessageTypeModel) {
   }, {
     key: 'getFormattedPrice',
     value: function getFormattedPrice() {
+      if (!this.price) return '';
       return new Number(this.price).toLocaleString(navigator.language, {
         currency: this.currency,
         style: 'currency'
@@ -40496,83 +39720,78 @@ ProductModel.prototype.url = ''; // Where to go for more information on this pro
 ProductModel.defaultAction = 'open-url';
 
 ProductModel.Label = 'Product';
-ProductModel.messageRenderer = 'layer-product-display';
+ProductModel.messageRenderer = 'layer-product-view';
 ProductModel.MIMEType = 'application/vnd.layer.product+json';
-
-_core.MessagePart.TextualMimeTypes.push(ProductModel.MIMEType);
 
 // Register the Message Model Class with the Client
 _core.Client.registerMessageTypeModelClass(ProductModel, 'ProductModel');
 
 _core.Root.initClass.apply(ProductModel, [ProductModel, 'ProductModel']);
 module.exports = ProductModel;
-},{"../../../core":20}],139:[function(require,module,exports){
+},{"../../../core":16}],134:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../components/component');
 
-var _messageDisplayMixin = require('../message-display-mixin');
+var _messageViewMixin = require('../message-view-mixin');
 
-var _messageDisplayMixin2 = _interopRequireDefault(_messageDisplayMixin);
+var _messageViewMixin2 = _interopRequireDefault(_messageViewMixin);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  *
- * @class layerUI.handlers.message.messageViewer
- * @extends layerUI.components.Component
+ * @class layer.UI.handlers.message.messageViewer
+ * @extends layer.UI.components.Component
  */
-(0, _component.registerComponent)('layer-product-card-mini', {
-  template: '\n    <img layer-id=\'img\' />\n    <div class=\'layer-product-card-mini-right\'>\n      <div layer-id="name" class="layer-receipt-display-name"></div>\n      <div layer-id="options" class="layer-receipt-display-options"></div>\n      <div layer-id="quantity" class="layer-receipt-display-quantity"></div>\n      <div layer-id="price" class="layer-receipt-display-price"></div>\n    </div>\n  ',
-  style: 'layer-product-card-mini {\n    display: flex;\n    flex-direction: row;\n    align-items: flex-start;\n  }\n  ',
-  properties: {
-    item: {}
-  },
-  methods: {
-    onRender: function onRender() {
-      this.onRerender();
-    },
-    onRerender: function onRerender() {
-      this.nodes.img.src = this.item.imageUrls[0];
-      this.nodes.name.innerHTML = this.item.name;
-      this.nodes.price.innerHTML = this.item.getFormattedPrice();
-      this.nodes.quantity.innerHTML = this.item.quantity !== 1 ? this.item.quantity : '';
-      if (this.item.options) {
-        var selectedOptions = this.item.options.map(function (choiceModel) {
-          if (choiceModel.selectedAnswer) {
-            return choiceModel.choices.filter(function (choice) {
-              return choice.id === choiceModel.selectedAnswer;
-            })[0].text;
-          }
-        }).filter(function (selectedText) {
-          return selectedText;
-        }).join(', ');
-        this.nodes.options.innerHTML = selectedOptions;
-      }
-    }
-  }
-});
-
-(0, _component.registerComponent)('layer-receipt-display', {
-  template: '\n  <div class="layer-receipt-for-products" layer-id="products"></div>\n  <div class=\'layer-receipt-details\'>\n    <div class=\'layer-paid-with layer-receipt-detail-item\'>\n      <label>Paid with</label>\n      <div class="layer-receipt-paid-with layer-card-description" layer-id=\'paidWith\'></div>\n    </div>\n    <div class=\'layer-address layer-receipt-detail-item\'>\n      <label>Ship to</label>\n      <layer-message-viewer layer-id=\'shipTo\' hide-map=\'true\'></layer-message-viewer>\n    </div>\n    <div class=\'layer-receipt-summary layer-receipt-detail-item\'>\n      <label>Total</label>\n      <span class=\'layer-receipt-price\' layer-id=\'total\'></span>\n    </div>\n  </div>\n  ',
-  style: 'layer-receipt-display {\n    display: block;\n  }\n  layer-message-viewer.layer-receipt-display {\n    padding-bottom: 0px;\n  }\n  layer-receipt-display.layer-receipt-no-payment .layer-paid-with {\n    display: none;\n  }\n  ',
-  mixins: [_messageDisplayMixin2.default],
+(0, _component.registerComponent)('layer-product-view', {
+  style: 'layer-product-view {\n    display: block;\n  }\n  layer-message-viewer.layer-product-view {\n    cursor: pointer;\n  }\n  layer-product-view.layer-no-image .layer-card-top {\n    display: none;\n  }\n  ',
+  template: '\n    <div layer-id=\'UIContainer\' class=\'layer-card-top\'>\n      <img layer-id="image" />\n    </div>\n    <div class="layer-card-body-outer">\n        <div class="layer-card-product-header">\n          <div layer-id="brand" class="layer-card-product-brand"></div>\n          <div layer-id="model" class="layer-card-product-model"></div>\n        </div>\n        <div layer-id="name" class="layer-card-product-name"></div>\n\n        <div layer-id="price" class="layer-card-product-price"></div>\n        <div layer-id="choices" class="layer-card-product-choices"></div>\n        <div layer-id="description" class="layer-card-product-description"></div>\n    </div>\n  ',
+  mixins: [_messageViewMixin2.default],
   // Note that there is also a message property managed by the MessageHandler mixin
   properties: {
-    messageViewContainerTagName: {
-      noGetterFromSetter: true,
-      value: 'layer-titled-display-container'
-    },
     widthType: {
       value: 'full-width'
     }
   },
   methods: {
-    getIconClass: function getIconClass() {
-      return 'layer-receipt-display-icon';
-    },
-    getTitle: function getTitle() {
-      return this.model.title || 'Order Confirmation';
+    onRerender: function onRerender() {
+      var _this = this;
+
+      this.nodes.name.innerHTML = this.model.name;
+      this.nodes.brand.innerHTML = this.model.brand;
+      this.nodes.price.innerHTML = this.model.getFormattedPrice();
+      this.nodes.description.innerHTML = this.model.description;
+
+      this.nodes.image.src = this.model.imageUrls[0];
+      this.toggleClass('layer-no-image', this.model.imageUrls.length === 0);
+
+      var optionsParent = this.nodes.choices;
+
+      if (!optionsParent.firstChild) {
+        this.model.options.forEach(function (optionsModel) {
+          optionsModel.action = { event: _this.model.actionEvent, data: _this.model.data || { url: _this.model.url } };
+          _this.createElement('layer-message-viewer', {
+            message: _this.model.message,
+            rootPart: optionsModel.part,
+            model: optionsModel,
+            //messageViewContainerTagName: false,
+            cardBorderStyle: 'none',
+            parentNode: _this.nodes.choices
+          });
+        });
+      }
+      /*
+      if (this.model.detailModel) {
+        this.createElement('layer-message-viewer', {
+          message: this.model.message,
+          rootPart: this.model.detailModel.part,
+          model: this.model.detailModel,
+          //messageViewContainerTagName: false,
+          cardBorderStyle: 'none',
+          parentNode: this,
+        });
+      }*/
     },
 
 
@@ -40580,42 +39799,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
      *
      * @method
      */
-    onRender: function onRender() {},
-    onRerender: function onRerender() {
-      var _this = this;
-
-      this.nodes.products.innerHTML = '';
-      this.model.items.forEach(function (item) {
-        _this.createElement('layer-product-card-mini', {
-          item: item,
-          parentNode: _this.nodes.products
-        });
-      });
-
-      if (this.model.shippingAddressModel) {
-        var shipTo = this.nodes.shipTo;
-        this.model.shippingAddressModel.showAddress = true;
-        shipTo.rootPart = this.model.shippingAddressModel.part;
-        shipTo.model = this.model.shippingAddressModel;
-
-        shipTo.message = this.model.message;
-        shipTo.cardBorderStyle = 'none';
-        shipTo._onAfterCreate();
-
-        shipTo.nodes.ui.hideMap = true;
-      }
-
-      this.nodes.total.innerHTML = new Number(this.model.summary.totalCost).toLocaleString(navigator.language, {
-        currency: this.model.currency,
-        style: 'currency'
-      });
-      this.nodes.paidWith.innerHTML = this.model.paymentMethod || 'Unknown';
-
-      this.toggleClass('layer-receipt-no-payment', !this.model.paymentMethod);
-    }
+    onRender: function onRender() {}
   }
 });
-},{"../../components/component":70,"../message-display-mixin":134}],140:[function(require,module,exports){
+},{"../../components/component":66,"../message-view-mixin":130}],135:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -40817,7 +40004,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ]
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                }).generateMessage($("layer-conversation-view").conversation, message => message.send());
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @class layerUI.cards.ReceiptModel
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               * @class layer.UI.cards.ReceiptModel
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * @extends layer.model
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
 
@@ -40836,7 +40023,12 @@ var ReceiptModel = function (_MessageTypeModel) {
     value: function _generateParts(callback) {
       var _this2 = this;
 
-      var body = this._initBodyWithMetadata(['createdAt', 'currency', 'discounts', 'paymentMethod', 'summary', 'order']);
+      var body = this._initBodyWithMetadata(['createdAt', 'currency', 'discounts', 'paymentMethod', 'order']);
+      body.summary = {};
+      Object.keys(this.summary).forEach(function (keyName) {
+        var newKeyName = _util2.default.hyphenate(keyName);
+        body.summary[newKeyName] = _this2.summary[keyName];
+      });
 
       this.part = new _core.MessagePart({
         mimeType: this.constructor.MIMEType,
@@ -40932,62 +40124,122 @@ ReceiptModel.modelSet = [{ model: 'items', role: 'product-items' }, { model: 'sh
 
 ReceiptModel.Label = 'Receipt';
 ReceiptModel.MIMEType = 'application/vnd.layer.receipt+json';
-ReceiptModel.messageRenderer = 'layer-receipt-display';
-_core.MessagePart.TextualMimeTypes.push(ReceiptModel.MIMEType);
+ReceiptModel.messageRenderer = 'layer-receipt-view';
 
 // Register the Message Model Class with the Client
 _core.Client.registerMessageTypeModelClass(ReceiptModel, 'ReceiptModel');
 
 module.exports = ReceiptModel;
-},{"../../../core":20,"../../../util":165}],141:[function(require,module,exports){
+},{"../../../core":16,"../../../util":161}],136:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../components/component');
 
-var _messageDisplayMixin = require('../message-display-mixin');
+var _messageViewMixin = require('../message-view-mixin');
 
-var _messageDisplayMixin2 = _interopRequireDefault(_messageDisplayMixin);
+var _messageViewMixin2 = _interopRequireDefault(_messageViewMixin);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  *
- * @class layerUI.handlers.message.messageViewer
- * @extends layerUI.components.Component
+ * @class layer.UI.handlers.message.messageViewer
+ * @extends layer.UI.components.Component
  */
-(0, _component.registerComponent)('layer-response-display', {
-  mixins: [_messageDisplayMixin2.default],
-
-  // Adapated from github.com/picturepan2/fileicon.css
-  style: 'layer-message-viewer.layer-response-display {\n  }',
-
-  // Note that there is also a message property managed by the MessageHandler mixin
+(0, _component.registerComponent)('layer-product-card-mini', {
+  template: '\n    <img layer-id=\'img\' />\n    <div class=\'layer-product-card-mini-right\'>\n      <div layer-id="name" class="layer-receipt-view-name"></div>\n      <div layer-id="options" class="layer-receipt-view-options"></div>\n      <div layer-id="quantity" class="layer-receipt-view-quantity"></div>\n      <div layer-id="price" class="layer-receipt-view-price"></div>\n    </div>\n  ',
+  style: 'layer-product-card-mini {\n    display: flex;\n    flex-direction: row;\n    align-items: flex-start;\n  }\n  ',
   properties: {
-    model: {},
-    cardBorderStyle: {
-      value: 'none'
-    },
-    widthType: {
-      get: function get() {
-        return this.properties.contentView ? this.properties.contentView.widthType : 'flex-width';
-      }
-    }
+    item: {}
   },
   methods: {
-    onAfterCreate: function onAfterCreate() {
-      if (this.model.displayModel) {
-        this.properties.contentView = this.createElement('layer-message-viewer', {
-          message: this.model.message,
-          rootPart: this.model.displayModel.part,
-          model: this.model.displayModel,
-          parentNode: this,
-          cardBorderStyle: 'none'
-        });
+    onRender: function onRender() {
+      this.onRerender();
+    },
+    onRerender: function onRerender() {
+      this.nodes.img.src = this.item.imageUrls[0];
+      this.nodes.name.innerHTML = this.item.name;
+      this.nodes.price.innerHTML = this.item.getFormattedPrice();
+      this.nodes.quantity.innerHTML = this.item.quantity !== 1 ? this.item.quantity : '';
+      if (this.item.options) {
+        var selectedOptions = this.item.options.map(function (choiceModel) {
+          if (choiceModel.selectedAnswer) {
+            return choiceModel.choices.filter(function (choice) {
+              return choice.id === choiceModel.selectedAnswer;
+            })[0].text;
+          }
+        }).filter(function (selectedText) {
+          return selectedText;
+        }).join(', ');
+        this.nodes.options.innerHTML = selectedOptions;
       }
     }
   }
 });
-},{"../../components/component":70,"../message-display-mixin":134}],142:[function(require,module,exports){
+
+(0, _component.registerComponent)('layer-receipt-view', {
+  template: '\n  <div class="layer-receipt-for-products" layer-id="products"></div>\n  <div class=\'layer-receipt-details\'>\n    <div class=\'layer-paid-with layer-receipt-detail-item\'>\n      <label>Paid with</label>\n      <div class="layer-receipt-paid-with layer-card-description" layer-id=\'paidWith\'></div>\n    </div>\n    <div class=\'layer-address layer-receipt-detail-item\'>\n      <label>Ship to</label>\n      <layer-message-viewer layer-id=\'shipTo\' hide-map=\'true\'></layer-message-viewer>\n    </div>\n    <div class=\'layer-receipt-summary layer-receipt-detail-item\'>\n      <label>Total</label>\n      <span class=\'layer-receipt-price\' layer-id=\'total\'></span>\n    </div>\n  </div>\n  ',
+  style: 'layer-receipt-view {\n    display: block;\n  }\n  layer-message-viewer.layer-receipt-view {\n    padding-bottom: 0px;\n  }\n  layer-receipt-view.layer-receipt-no-payment .layer-paid-with {\n    display: none;\n  }\n  ',
+  mixins: [_messageViewMixin2.default],
+  // Note that there is also a message property managed by the MessageHandler mixin
+  properties: {
+    messageViewContainerTagName: {
+      noGetterFromSetter: true,
+      value: 'layer-titled-display-container'
+    },
+    widthType: {
+      value: 'full-width'
+    }
+  },
+  methods: {
+    getIconClass: function getIconClass() {
+      return 'layer-receipt-view-icon';
+    },
+    getTitle: function getTitle() {
+      return this.model.title || 'Order Confirmation';
+    },
+
+
+    /**
+     *
+     * @method
+     */
+    onRender: function onRender() {},
+    onRerender: function onRerender() {
+      var _this = this;
+
+      this.nodes.products.innerHTML = '';
+      this.model.items.forEach(function (item) {
+        _this.createElement('layer-product-card-mini', {
+          item: item,
+          parentNode: _this.nodes.products
+        });
+      });
+
+      if (this.model.shippingAddressModel) {
+        var shipTo = this.nodes.shipTo;
+        this.model.shippingAddressModel.showAddress = true;
+        shipTo.rootPart = this.model.shippingAddressModel.part;
+        shipTo.model = this.model.shippingAddressModel;
+
+        shipTo.message = this.model.message;
+        shipTo.cardBorderStyle = 'none';
+        shipTo._onAfterCreate();
+
+        shipTo.nodes.ui.hideMap = true;
+      }
+
+      this.nodes.total.innerHTML = new Number(this.model.summary.totalCost).toLocaleString(navigator.language, {
+        currency: this.model.currency,
+        style: 'currency'
+      });
+      this.nodes.paidWith.innerHTML = this.model.paymentMethod || 'Unknown';
+
+      this.toggleClass('layer-receipt-no-payment', !this.model.paymentMethod);
+    }
+  }
+});
+},{"../../components/component":66,"../message-view-mixin":130}],137:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -41016,7 +40268,7 @@ var ResponseModel = function (_MessageTypeModel) {
     value: function _generateParts(callback) {
       var messageId = this.responseTo.replace(/\/parts\/.*/, '');
 
-      var body = this._initBodyWithMetadata(['responseTo', 'participantData', 'sharedData']);
+      var body = this._initBodyWithMetadata(['responseTo', 'responseToNodeId', 'participantData', 'sharedData']);
 
       this.part = new _core.MessagePart({
         mimeType: this.constructor.MIMEType,
@@ -41042,7 +40294,6 @@ var ResponseModel = function (_MessageTypeModel) {
     key: '_parseMessage',
     value: function _parseMessage(payload) {
       _get(ResponseModel.prototype.__proto__ || Object.getPrototypeOf(ResponseModel.prototype), '_parseMessage', this).call(this, payload);
-      var messageId = this.responseTo.replace(/\/parts\/.*/, '');
 
       var messagePart = this.childParts.filter(function (part) {
         return part.mimeAttributes.role === 'message';
@@ -41063,130 +40314,66 @@ var ResponseModel = function (_MessageTypeModel) {
 
 ResponseModel.prototype.participantData = null;
 ResponseModel.prototype.sharedData = null;
-ResponseModel.prototype.responseTo = null; // Message Part ID
+ResponseModel.prototype.responseTo = null;
+ResponseModel.prototype.responseToNodeId = null;
 ResponseModel.prototype.displayModel = null;
 
-ResponseModel.messageRenderer = 'layer-response-display';
+ResponseModel.messageRenderer = 'layer-response-view';
 ResponseModel.MIMEType = 'application/vnd.layer.response+json';
-_core.MessagePart.TextualMimeTypes.push(ResponseModel.MIMEType);
-_core.MessagePart.TextualMimeTypes.push('application/vnd.layer.responsesummary+json');
 
 // Register the Message Model Class with the Client
 _core.Client.registerMessageTypeModelClass(ResponseModel, 'ResponseModel');
 
 module.exports = ResponseModel;
-},{"../../../core":20}],143:[function(require,module,exports){
+},{"../../../core":16}],138:[function(require,module,exports){
 'use strict';
 
 var _component = require('../../components/component');
 
-var _messageDisplayMixin = require('../message-display-mixin');
+var _messageViewMixin = require('../message-view-mixin');
 
-var _messageDisplayMixin2 = _interopRequireDefault(_messageDisplayMixin);
-
-var _base = require('../../base');
-
-var _base2 = _interopRequireDefault(_base);
+var _messageViewMixin2 = _interopRequireDefault(_messageViewMixin);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _component.registerComponent)('layer-text-display', {
-  style: 'layer-text-display {\n    display: block;\n  }\n  .layer-root-card.layer-text-display > * > .layer-card-top {\n    display: block;\n  }\n  ',
-  mixins: [_messageDisplayMixin2.default],
+/**
+ *
+ * @class layer.UI.handlers.message.messageViewer
+ * @extends layer.UI.components.Component
+ */
+(0, _component.registerComponent)('layer-response-view', {
+  mixins: [_messageViewMixin2.default],
+
+  // Adapated from github.com/picturepan2/fileicon.css
+  style: 'layer-message-viewer.layer-response-view {\n  }',
+
   // Note that there is also a message property managed by the MessageHandler mixin
   properties: {
-    html: {
-      set: function set(html) {
-        this.innerHTML = html;
-      }
+    model: {},
+    cardBorderStyle: {
+      value: 'none'
     },
     widthType: {
       get: function get() {
-        return this.parentComponent.isShowingMetadata ? 'flex-width' : 'chat-bubble';
+        return this.properties.contentView ? this.properties.contentView.widthType : 'flex-width';
       }
-    },
-    messageViewContainerTagName: {
-      noGetterFromSetter: true,
-      value: 'layer-standard-display-container'
     }
   },
   methods: {
-    onAfterCreate: function onAfterCreate() {},
-
-
-    /**
-     *
-     * @method
-     */
-    onRender: function onRender() {},
-    onRerender: function onRerender() {
-      if (this.messageViewer) {
-        this.messageViewer.toggleClass('layer-message-as-chat-bubble', !this.model.title && !this.model.author);
+    onAfterCreate: function onAfterCreate() {
+      if (this.model.displayModel) {
+        this.properties.contentView = this.createElement('layer-message-viewer', {
+          message: this.model.message,
+          rootPart: this.model.displayModel.part,
+          model: this.model.displayModel,
+          parentNode: this,
+          cardBorderStyle: 'none'
+        });
       }
-      this._processText();
-    },
-
-
-    /**
-     * Replaces any html tags with escaped html tags so that the recipient
-     * sees tags rather than rendered html.
-     *
-     * @method
-     * @private
-     */
-    _fixHtml: function _fixHtml(body) {
-      body = body.replace(/</g, '&lt;');
-      body = body.replace(/>/g, '&gt;');
-      return body;
-    },
-
-
-    /**
-     * Order the Text handlers if they haven't previously been sorted.
-     *
-     * This is run as a method, but is treated more like a run-once static method.
-     *
-     * @method
-     * @private
-     */
-    _setupOrderedHandlers: function _setupOrderedHandlers() {
-      _base2.default.textHandlersOrdered = Object.keys(_base2.default.textHandlers).filter(function (handlerName) {
-        return _base2.default.textHandlers[handlerName].enabled;
-      }).map(function (handlerName) {
-        return _base2.default.textHandlers[handlerName];
-      }).sort(function (a, b) {
-        if (a.order > b.order) return 1;
-        if (b.order > a.order) return -1;
-        return 0;
-      });
-    },
-    _processText: function _processText() {
-      var _this = this;
-
-      if (!_base2.default.textHandlersOrdered) this._setupOrderedHandlers();
-
-      var text = (this.model.text || '').trim();
-      var textData = {
-        text: this._fixHtml(text)
-      };
-
-      // Iterate over each handler, calling each handler.
-      // Perform a cheap trick until we can update our API so that
-      // css classes can be associated with each item.
-      // This is a cheap trick because a TextHandler could arbitrarily edit the `afterText` array,
-      // removing previously added elements.  And this code would then break.
-      _base2.default.textHandlersOrdered.forEach(function (handlerDef) {
-        handlerDef.handler(textData, _this.message, _this.parentComponent && _this.parentComponent.tagName === 'LAYER-STANDARD-MESSAGE-CONTAINER');
-      });
-      this.html = textData.text;
     }
   }
-}); /**
-     *
-     * @class layerUI.handlers.message.messageViewer
-     * @extends layerUI.components.Component
-     */
-},{"../../base":69,"../../components/component":70,"../message-display-mixin":134}],144:[function(require,module,exports){
+});
+},{"../../components/component":66,"../message-view-mixin":130}],139:[function(require,module,exports){
 'use strict';
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -41284,10 +40471,8 @@ TextModel.prototype.mimeType = 'text/plain';
 
 TextModel.Label = 'Text';
 TextModel.MIMEType = 'application/vnd.layer.text+json';
-TextModel.messageRenderer = 'layer-text-display';
+TextModel.messageRenderer = 'layer-text-view';
 _core.Root.initClass.apply(TextModel, [TextModel, 'TextModel']);
-
-_core.MessagePart.TextualMimeTypes.push(TextModel.MIMEType);
 
 // Register the Message Model Class with the Client
 _core.Client.registerMessageTypeModelClass(TextModel, 'TextModel');
@@ -41311,13 +40496,124 @@ _core.Client.registerMessageTypeModelClass(TextModel, 'TextModel');
 });
 
 module.exports = TextModel;
-},{"../../../core":20,"../../base":69}],145:[function(require,module,exports){
+},{"../../../core":16,"../../base":65}],140:[function(require,module,exports){
+'use strict';
+
+var _component = require('../../components/component');
+
+var _messageViewMixin = require('../message-view-mixin');
+
+var _messageViewMixin2 = _interopRequireDefault(_messageViewMixin);
+
+var _base = require('../../base');
+
+var _base2 = _interopRequireDefault(_base);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+(0, _component.registerComponent)('layer-text-view', {
+  style: 'layer-text-view {\n    display: block;\n  }\n  .layer-root-card.layer-text-view > * > .layer-card-top {\n    display: block;\n  }\n  ',
+  mixins: [_messageViewMixin2.default],
+  // Note that there is also a message property managed by the MessageHandler mixin
+  properties: {
+    html: {
+      set: function set(html) {
+        this.innerHTML = html;
+      }
+    },
+    widthType: {
+      get: function get() {
+        return this.parentComponent.isShowingMetadata ? 'flex-width' : 'chat-bubble';
+      }
+    },
+    messageViewContainerTagName: {
+      noGetterFromSetter: true,
+      value: 'layer-standard-display-container'
+    }
+  },
+  methods: {
+    onAfterCreate: function onAfterCreate() {},
+
+
+    /**
+     *
+     * @method
+     */
+    onRender: function onRender() {},
+    onRerender: function onRerender() {
+      if (this.messageViewer) {
+        this.messageViewer.toggleClass('layer-message-as-chat-bubble', !this.model.title && !this.model.author);
+      }
+      this._processText();
+    },
+
+
+    /**
+     * Replaces any html tags with escaped html tags so that the recipient
+     * sees tags rather than rendered html.
+     *
+     * @method
+     * @private
+     */
+    _fixHtml: function _fixHtml(body) {
+      body = body.replace(/</g, '&lt;');
+      body = body.replace(/>/g, '&gt;');
+      return body;
+    },
+
+
+    /**
+     * Order the Text handlers if they haven't previously been sorted.
+     *
+     * This is run as a method, but is treated more like a run-once static method.
+     *
+     * @method
+     * @private
+     */
+    _setupOrderedHandlers: function _setupOrderedHandlers() {
+      _base2.default.textHandlersOrdered = Object.keys(_base2.default.textHandlers).filter(function (handlerName) {
+        return _base2.default.textHandlers[handlerName].enabled;
+      }).map(function (handlerName) {
+        return _base2.default.textHandlers[handlerName];
+      }).sort(function (a, b) {
+        if (a.order > b.order) return 1;
+        if (b.order > a.order) return -1;
+        return 0;
+      });
+    },
+    _processText: function _processText() {
+      var _this = this;
+
+      if (!_base2.default.textHandlersOrdered) this._setupOrderedHandlers();
+
+      var text = (this.model.text || '').trim();
+      var textData = {
+        text: this._fixHtml(text)
+      };
+
+      // Iterate over each handler, calling each handler.
+      // Perform a cheap trick until we can update our API so that
+      // css classes can be associated with each item.
+      // This is a cheap trick because a TextHandler could arbitrarily edit the `afterText` array,
+      // removing previously added elements.  And this code would then break.
+      _base2.default.textHandlersOrdered.forEach(function (handlerDef) {
+        handlerDef.handler(textData, _this.message, _this.parentComponent && _this.parentComponent.tagName === 'LAYER-STANDARD-MESSAGE-CONTAINER');
+      });
+      this.html = textData.text;
+    }
+  }
+}); /**
+     *
+     * @class layer.UI.handlers.message.messageViewer
+     * @extends layer.UI.components.Component
+     */
+},{"../../base":65,"../../components/component":66,"../message-view-mixin":130}],141:[function(require,module,exports){
 'use strict';
 
 /**
  * Handler that manages click vs tap event handling
  *
- * @class layerUI.mixins.Clickable
+ * @class layer.UI.mixins.Clickable
  */
 module.exports = {
   methods: {
@@ -41344,13 +40640,13 @@ module.exports = {
     }
   }
 };
-},{}],146:[function(require,module,exports){
+},{}],142:[function(require,module,exports){
 'use strict';
 
 /**
  * A helper mixin for Lists that render alternate text in the event that the list is Empty.
  *
- * @class layerUI.mixins.EmptyList
+ * @class layer.UI.mixins.EmptyList
  */
 module.exports = {
   properties: {
@@ -41401,7 +40697,7 @@ module.exports = {
     }
   }
 };
-},{}],147:[function(require,module,exports){
+},{}],143:[function(require,module,exports){
 'use strict';
 
 var _loadImage = require('blueimp-load-image/js/load-image');
@@ -41449,7 +40745,7 @@ window.loadImage = _loadImage2.default;
  * Must be mixed in with a Component that defines a `conversation` property.
  *
  *
- * @class layerUI.mixins.FileDropTarget
+ * @class layer.UI.mixins.FileDropTarget
  */
 module.exports = {
   properties: {
@@ -41629,7 +40925,7 @@ module.exports = {
     }
   }
 };
-},{"../../core":20,"../base":69,"../messages/carousel/layer-carousel-model":119,"../messages/file/layer-file-model":125,"../messages/image/layer-image-model":127,"../utils/sizing":163,"blueimp-load-image/js/load-image":174,"blueimp-load-image/js/load-image-exif":170,"blueimp-load-image/js/load-image-meta":171,"blueimp-load-image/js/load-image-orientation":172}],148:[function(require,module,exports){
+},{"../../core":16,"../base":65,"../messages/carousel/layer-carousel-model":114,"../messages/file/layer-file-model":120,"../messages/image/layer-image-model":122,"../utils/sizing":159,"blueimp-load-image/js/load-image":170,"blueimp-load-image/js/load-image-exif":166,"blueimp-load-image/js/load-image-meta":167,"blueimp-load-image/js/load-image-orientation":168}],144:[function(require,module,exports){
 'use strict';
 
 /**
@@ -41637,7 +40933,7 @@ module.exports = {
  *
  * Any class using this mixin must provide an `onKeyDown` method.
  *
- * @class layerUI.mixins.FocusOnKeydown
+ * @class layer.UI.mixins.FocusOnKeydown
  */
 module.exports = {
   methods: {
@@ -41683,7 +40979,7 @@ module.exports = {
     }
   }
 };
-},{}],149:[function(require,module,exports){
+},{}],145:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../core');
@@ -41695,7 +40991,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * A Mixin for main components that can receive or generate a Query
  *
- * @class layerUI.mixins.HasQuery
+ * @class layer.UI.mixins.HasQuery
  */
 module.exports = {
   properties: {
@@ -41749,7 +41045,7 @@ module.exports = {
     query: {
       set: function set(newValue, oldValue) {
         if (oldValue) oldValue.off(null, null, this);
-        if (newValue instanceof layer.Core.Query) {
+        if (newValue instanceof _core2.default.Query) {
           this._updateQuery();
         } else {
           this.properties.query = null;
@@ -41811,7 +41107,7 @@ module.exports = {
       if (this._queryModel && !this.properties.query && this.client && !this.client.isDestroyed) {
         this.query = this.client.createQuery({
           model: this._queryModel,
-          dataType: layer.Core.Query.InstanceDataType,
+          dataType: _core2.default.Query.InstanceDataType,
           paginationWindow: this.pageSize || 50,
           sortBy: this.sortBy
         });
@@ -41833,7 +41129,7 @@ module.exports = {
     }
   }
 };
-},{"../../core":20}],150:[function(require,module,exports){
+},{"../../core":16}],146:[function(require,module,exports){
 'use strict';
 
 /**
@@ -41842,7 +41138,7 @@ module.exports = {
  * Also listens for `click` events to update the `selectedId` property,
  * and triggers a selection events.
  *
- * @class layerUI.mixins.ListSelection
+ * @class layer.UI.mixins.ListSelection
  */
 
 module.exports = {
@@ -41867,7 +41163,7 @@ module.exports = {
     }
   }
 };
-},{}],151:[function(require,module,exports){
+},{}],147:[function(require,module,exports){
 'use strict';
 
 var _component = require('../components/component');
@@ -41879,7 +41175,7 @@ var _base = require('../base');
  *
  * This Mixin requires a template that provides a `layer-list-item` class
  *
- * @class layerUI.mixins.ListItem
+ * @class layer.UI.mixins.ListItem
  */
 module.exports = {
   properties: {
@@ -42073,7 +41369,7 @@ module.exports = {
     }
   }
 };
-},{"../base":69,"../components/component":70}],152:[function(require,module,exports){
+},{"../base":65,"../components/component":66}],148:[function(require,module,exports){
 'use strict';
 
 require('../components/layer-loading-indicator/layer-loading-indicator');
@@ -42106,9 +41402,9 @@ module.exports = {
     *
     * This mixin requires "layer-id=loadIndicator" to exist in the template for any component using this mixin.
     *
-    * @class layerUI.mixins.ListLoadIndicator
+    * @class layer.UI.mixins.ListLoadIndicator
     */
-},{"../components/layer-loading-indicator/layer-loading-indicator":86}],153:[function(require,module,exports){
+},{"../components/layer-loading-indicator/layer-loading-indicator":82}],149:[function(require,module,exports){
 'use strict';
 
 var _clickable = require('./clickable');
@@ -42123,7 +41419,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Also listens for `click` events to update the `selectedId` property,
  * and triggers selection events.
  *
- * @class layerUI.mixins.ListSelection
+ * @class layer.UI.mixins.ListSelection
  */
 module.exports = {
   mixins: [_clickable2.default],
@@ -42179,7 +41475,7 @@ module.exports = {
      * User has selected something in the Conversation List that didn't handle that click event.
      *
      * Find the Conversation Item selected and generate a `layer-conversation-selected` event.
-     * Click events do NOT bubble up; they must either be handled by the layerUI.components.ConversationsListPanel.Item.Conversation or
+     * Click events do NOT bubble up; they must either be handled by the layer.UI.components.ConversationsListPanel.Item.Conversation or
      * they are treated as a selection event.
      *
      * Listening to `layer-conversation-selected` you will still receive the original click event
@@ -42227,7 +41523,7 @@ module.exports = {
     }
   }
 };
-},{"./clickable":145}],154:[function(require,module,exports){
+},{"./clickable":141}],150:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../core');
@@ -42256,7 +41552,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /**
  * A List Mixin that provides common list patterns
  *
- * @class layerUI.mixins.List
+ * @class layer.UI.mixins.List
  * @mixin layerUI.mixins.HasQuery
  */
 function isEqual(arr1, arr2) {
@@ -42790,7 +42086,7 @@ module.exports = {
     }
   }
 };
-},{"../../core":20,"../../util":165,"../base":69,"../components/component":70,"./has-query":149,"./throttler":160}],155:[function(require,module,exports){
+},{"../../core":16,"../../util":161,"../base":65,"../components/component":66,"./has-query":145,"./throttler":156}],151:[function(require,module,exports){
 'use strict';
 
 var _core = require('../../core');
@@ -42823,7 +42119,7 @@ module.exports = {
      * App IDs are typically provided via:
      *
      * ```
-     * layerUI.init(({ appId: myAppId })
+     * layer.UI.init(({ appId: myAppId })
      * ```
      *
      * The only time one would use this property
@@ -42858,7 +42154,7 @@ module.exports = {
      * App IDs are typically provided via:
      *
      * ```
-     * layerUI.init(({ appId: myAppId })
+     * layer.UI.init(({ appId: myAppId })
      * ```
      *
      * The only time one would use this property
@@ -42894,9 +42190,9 @@ module.exports = {
 }; /**
     * A Mixin for main components (not needed for subcomponents) that provides common properties, shortcuts and code.
     *
-    * @class layerUI.mixins.MainComponent
+    * @class layer.UI.mixins.MainComponent
     */
-},{"../../core":20,"../base":69,"../components/component":70}],156:[function(require,module,exports){
+},{"../../core":16,"../base":65,"../components/component":66}],152:[function(require,module,exports){
 'use strict';
 
 var _component = require('../components/component');
@@ -43047,9 +42343,9 @@ module.exports = {
     * });
     * ```
     *
-    * @class layerUI.mixins.MessageHandler
+    * @class layer.UI.mixins.MessageHandler
     */
-},{"../components/component":70}],157:[function(require,module,exports){
+},{"../components/component":66}],153:[function(require,module,exports){
 'use strict';
 
 var _util = require('../../util');
@@ -43122,9 +42418,9 @@ module.exports = {
     *
     * This mixin requires "layer-id=endOfResultsNode" to exist in the template for any component using this mixin.
     *
-    * @class layerUI.mixins.QueryEndIndicator
+    * @class layer.UI.mixins.QueryEndIndicator
     */
-},{"../../util":165}],158:[function(require,module,exports){
+},{"../../util":161}],154:[function(require,module,exports){
 'use strict';
 
 var _component = require('../components/component');
@@ -43154,15 +42450,15 @@ module.exports = {
 }; /**
     * A helper mixin to add a size property components; adding a layer-size-small, layer-size-medium or layer-size-large css class.
     *
-    * @class layerUI.mixins.SizeProperty
+    * @class layer.UI.mixins.SizeProperty
     */
-},{"../components/component":70}],159:[function(require,module,exports){
+},{"../components/component":66}],155:[function(require,module,exports){
 "use strict";
 
 /**
  * A helper mixin for Lists that render alternate text in the event that the list is Empty.
  *
- * @class layerUI.mixins.StateManager
+ * @class layer.UI.mixins.StateManager
  */
 module.exports = {
   properties: {
@@ -43214,13 +42510,13 @@ module.exports = {
      */
   }
 };
-},{}],160:[function(require,module,exports){
+},{}],156:[function(require,module,exports){
 "use strict";
 
 /**
  * A helper mixin for Lists that render alternate text in the event that the list is Empty.
  *
- * @class layerUI.mixins.Throttler
+ * @class layer.UI.mixins.Throttler
  */
 module.exports = {
   properties: {
@@ -43257,8 +42553,8 @@ module.exports = {
     }
   }
 };
-},{}],161:[function(require,module,exports){
-"use strict";
+},{}],157:[function(require,module,exports){
+'use strict';
 
 var requestAnimFrame = function () {
     return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame;
@@ -43271,20 +42567,24 @@ var easeInOutQuad = function easeInOutQuad(t, b, c, d) {
     return -c / 2 * (t * (t - 2) - 1) + b;
 };
 
+var scrollTo = function scrollTo(element, property, to, callback) {
+    element[property] = to;
+    setTimeout(function () {
+        callback();
+    }, 200);
+};
+
 var animatedScrollTo = function animatedScrollTo(element, to, duration, callback) {
     var start = element.scrollTop,
         change = to - start,
         animationStart = +new Date();
     var animating = true;
-    var callbackCalled = false;
     var lastpos = null;
 
     if (element.scrollTop === to) return callback();
 
     var animateScroll = function animateScroll() {
         if (!animating) {
-            if (callback && !callbackCalled) callback();
-            callbackCalled = true;
             return;
         }
         requestAnimFrame(animateScroll);
@@ -43292,28 +42592,38 @@ var animatedScrollTo = function animatedScrollTo(element, to, duration, callback
         var val = Math.floor(easeInOutQuad(now - animationStart, start, change, duration));
         if (lastpos) {
             if (lastpos === element.scrollTop) {
-                lastpos = val;
                 element.scrollTop = val;
+                lastpos = element.scrollTop;
             } else {
                 animating = false;
             }
         } else {
-            lastpos = val;
             element.scrollTop = val;
+            lastpos = element.scrollTop;
         }
         if (now > animationStart + duration) {
             element.scrollTop = to;
             animating = false;
-            callbackCalled = true;
             if (callback) {
                 callback();
             }
         }
     };
     requestAnimFrame(animateScroll);
-    return function cancel() {
+    var cancel = function cancel() {
         animating = false;
     };
+
+    // Some environments are failing to process the animated scroll some of the time.
+    // Add a fallback to force the issue should the scroll fail to have occurred
+    var cancelFallbackTimeoutId = setTimeout(function () {
+        if (animating) cancel();
+        if (Math.abs(to - element.scrollTop) > 10) {
+            scrollTo(element, 'scrollTop', to, callback);
+        }
+    }, duration + 20);
+
+    return cancel;
 };
 
 var animatedScrollLeftTo = function animatedScrollLeftTo(element, to, duration, callback) {
@@ -43337,14 +42647,18 @@ var animatedScrollLeftTo = function animatedScrollLeftTo(element, to, duration, 
         var val = Math.floor(easeInOutQuad(now - animationStart, start, change, duration));
         if (lastpos) {
             if (lastpos === element.scrollLeft) {
-                lastpos = val;
+                console.log('lastpost === element.scrollLeft: ' + lastpos + '; val=' + val);
                 element.scrollLeft = val;
+                lastpos = element.scrollLeft;
+                console.log('Updated to ' + element.scrollLeft);
             } else {
+                console.log("ScrollLeft has moved; canceling");
                 animating = false;
             }
         } else {
-            lastpos = val;
             element.scrollLeft = val;
+            lastpos = element.scrollLeft;
+            console.log('Scrolling to ' + val + '; actual value ' + element.scrollLeft);
         }
         if (now > animationStart + duration) {
             element.scrollLeft = to;
@@ -43356,16 +42670,27 @@ var animatedScrollLeftTo = function animatedScrollLeftTo(element, to, duration, 
         }
     };
     requestAnimFrame(animateScroll);
-    return function cancel() {
+    var cancel = function cancel() {
         animating = false;
     };
+
+    // Some environments are failing to process the animated scroll some of the time.
+    // Add a fallback to force the issue should the scroll fail to have occurred
+    var cancelFallbackTimeoutId = setTimeout(function () {
+        if (animating) cancel();
+        if (Math.abs(to - element.scrollTop) > 10) {
+            scrollTo(element, 'scrollLeft', to, callback);
+        }
+    }, duration + 20);
+
+    return cancel;
 };
 
 module.exports = {
     animatedScrollTo: animatedScrollTo,
     animatedScrollLeftTo: animatedScrollLeftTo
 };
-},{}],162:[function(require,module,exports){
+},{}],158:[function(require,module,exports){
 'use strict';
 
 var _base = require('../base');
@@ -43393,7 +42718,7 @@ var dateClassName = 'layer-list-item-separator-date'; /**
                                                        *
                                                        * Date separators come as `<div class='layer-list-item-separator-date'><span>DATE</span></div>`
                                                        *
-                                                       * @class layerUI.utils.DateSeparator
+                                                       * @class layer.UI.utils.DateSeparator
                                                        */
 
 
@@ -43416,7 +42741,7 @@ module.exports = _base.utils.dateSeparator = function (widget, messages, index) 
     _base2.default.addListItemSeparator(widget, '', dateClassName, true);
   }
 };
-},{"../base":69}],163:[function(require,module,exports){
+},{"../base":65}],159:[function(require,module,exports){
 "use strict";
 
 // NOTE: dimensions must contains width and height properties.
@@ -43447,15 +42772,748 @@ module.exports = function (dimensions, maxSizes) {
     height: Math.round(size.height)
   };
 };
-},{}],164:[function(require,module,exports){
-arguments[4][11][0].apply(exports,arguments)
-},{"dup":11}],165:[function(require,module,exports){
-arguments[4][12][0].apply(exports,arguments)
-},{"./defer":164,"./layer-parser":166,"./logger":167,"dup":12,"uuid":181}],166:[function(require,module,exports){
-arguments[4][13][0].apply(exports,arguments)
-},{"dup":13,"layer-patch":175}],167:[function(require,module,exports){
-arguments[4][14][0].apply(exports,arguments)
-},{"../constants":15,"dup":14}],168:[function(require,module,exports){
+},{}],160:[function(require,module,exports){
+(function (global){
+'use strict';
+
+/**
+ * Execute this function immediately after current processing is complete (setImmediate replacement).
+ *
+ * A depth of up to 10 is allowed.  That means that functions you schedule using defer
+ * can in turn schedule further actions.  The original actions are depth = 0; the actions scheduled
+ * by your actions are depth = 1.  These new actions may in turn schedule further actions, which happen at depth = 3.
+ * But to avoid infinite loops, if depth reaches 10, it clears the queue and ignores them.
+ *
+ * @method defer
+ * @param {Function} f
+ */
+var setImmediate = global.getNativeSupport && global.getNativeSupport('setImmediate');
+if (setImmediate) {
+  module.exports = setImmediate;
+} else {
+
+  // Process all callbacks in the setImmediateQueue
+  var setImmediateProcessor = function setImmediateProcessor() {
+    // Processing the queue is no longer scheduled; clear any scheduling info.
+    setImmediateIsPending = false;
+    clearTimeout(setImmediateId);
+    setImmediateId = 0;
+
+    // Our initial depth is depth 0
+    setImmediateDepth = 0;
+    setImmediateQueue.push(setImmediateDepth);
+
+    // Process all functions and depths in the queue starting always with the item at index 0,
+    // and removing them from the queue before processing them.
+    while (setImmediateQueue.length) {
+      var item = setImmediateQueue.shift();
+      if (typeof item === 'function') {
+        try {
+          item();
+        } catch (err) {
+          console.error(err);
+        }
+      } else if (item >= setImmediateMaxDepth) {
+        setImmediateQueue = [];
+        console.error('Layer Error: setImmediate Max Queue Depth Exceded');
+      }
+    }
+  };
+  // Schedule the function to be called by adding it to the queue, and setting up scheduling if its needed.
+
+
+  var setImmediateId = 0,
+      setImmediateDepth = 0,
+
+
+  // Have we scheduled the queue to be processed? If not, this is false
+  setImmediateIsPending = false,
+
+
+  // Queue of functions to call and depth integers
+  setImmediateQueue = [];
+
+  // If a setImmediate callback itself calls setImmediate which in turn calls setImmediate, at what point do we suspect we have an infinite loop?
+  // A depth of 10 is currently considered OK, but this may need to be increased.
+  var setImmediateMaxDepth = 10;module.exports = function defer(func) {
+    if (typeof func !== 'function') throw new Error('Function expected in defer');
+
+    setImmediateQueue.push(func);
+
+    // If postMessage has not already been called, call it
+    if (!setImmediateIsPending) {
+      setImmediateIsPending = true;
+      if (typeof document !== 'undefined') {
+        window.postMessage({ type: 'layer-set-immediate' }, '*');
+      } else {
+        // React Native reportedly lacks a document, and throws errors on the second parameter
+        window.postMessage({ type: 'layer-set-immediate' });
+      }
+
+      // Having seen scenarios where postMessage failed to trigger, set a backup using setTimeout that will be canceled
+      // if postMessage is succesfully called.
+      setImmediateId = setTimeout(setImmediateProcessor, 0);
+    }
+  };
+
+  // For Unit Testing
+  module.exports.flush = function () {
+    return setImmediateProcessor();
+  };
+  module.exports.reset = function () {
+    setImmediateQueue = [];
+  };
+
+  addEventListener('message', function (event) {
+    if (event.data.type !== 'layer-set-immediate') return;
+    setImmediateProcessor();
+  });
+}
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{}],161:[function(require,module,exports){
+(function (global){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+/**
+ * Utility methods
+ *
+ * @class layer.ClientUtils
+ */
+
+var uuid = require('uuid');
+exports.atob = typeof atob === 'undefined' ? global.getNativeSupport('atob') : atob.bind(window);
+exports.btoa = typeof btoa === 'undefined' ? global.getNativeSupport('btoa') : btoa.bind(window);
+var LocalFileReader = typeof FileReader === 'undefined' ? global.getNativeSupport('FileReader') : FileReader;
+
+/**
+ * Generate a random UUID
+ *
+ * @method
+ * @return {string}
+ */
+exports.generateUUID = uuid.v4;
+
+/**
+ * Returns the 'type' portion of a Layer ID.
+ *
+ *         switch(Utils.typeFromID(id)) {
+ *             case 'conversations':
+ *                 ...
+ *             case 'message':
+ *                 ...
+ *             case: 'queries':
+ *                 ...
+ *         }
+ *
+ * Does not currently handle Layer App IDs.
+ *
+ * @method
+ * @param  {string} id
+ * @return {string}
+ */
+exports.typeFromID = function (id) {
+  var matches = id.match(/([^/]*)(\/[^/]*)$/);
+  return matches ? matches[1] : '';
+};
+
+/**
+ * Returns the UUID portion of a Layer ID
+ *
+ * @method
+ * @param  {string} id
+ * @return {string}
+ */
+exports.uuid = function (id) {
+  return (id || '').replace(/^.*\//, '');
+};
+
+exports.isEmpty = function (obj) {
+  return Object.prototype.toString.apply(obj) === '[object Object]' && Object.keys(obj).length === 0;
+};
+
+exports.camelCase = function (str) {
+  return str.replace(/[-_](.)/g, function (match, value) {
+    return value.toUpperCase();
+  });
+};
+
+/**
+ * Turn a camel case name into a hyphenated name
+ *
+ * @method hyphenate
+ * @static
+ * @param {String} aCamelCasedString
+ * @returns {String} a-hyphenated-string
+ */
+var regexHyphenate = /([a-z])([A-Z])/g;
+exports.hyphenate = function (str) {
+  var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '-';
+  return str.replace(regexHyphenate, function (match, part1, part2) {
+    return part1 + separator + part2.toLowerCase();
+  });
+};
+
+/**
+ * Simplified sort method.
+ *
+ * Provides a function to return the value to compare rather than do the comparison.
+ *
+ *      sortBy([{v: 3}, {v: 1}, v: 33}], function(value) {
+ *          return value.v;
+ *      }, false);
+ *
+ * @method
+ * @param  {Mixed[]}   inArray      Array to sort
+ * @param  {Function} fn            Function that will return a value to compare
+ * @param  {Function} fn.value      Current value from inArray we are comparing, and from which a value should be extracted
+ * @param  {boolean}  [reverse=false] Sort ascending (false) or descending (true)
+ */
+exports.sortBy = function (inArray, fn, reverse) {
+  reverse = reverse ? -1 : 1;
+  return inArray.sort(function (valueA, valueB) {
+    var aa = fn(valueA);
+    var bb = fn(valueB);
+    if (aa === undefined && bb === undefined) return 0;
+    if (aa === undefined && bb !== undefined) return 1;
+    if (aa !== undefined && bb === undefined) return -1;
+    if (aa > bb) return 1 * reverse;
+    if (aa < bb) return -1 * reverse;
+    return 0;
+  });
+};
+
+/**
+ * Quick and easy clone method.
+ *
+ * Does not work on circular references; should not be used
+ * on objects with event listeners.
+ *
+ *      var newObj = Utils.clone(oldObj);
+ *
+ * @method
+ * @param  {Object}     Object to clone
+ * @return {Object}     New Object
+ */
+exports.clone = function (obj) {
+  return JSON.parse(JSON.stringify(obj));
+};
+
+/**
+ * Its necessary that the encoding algorithm for creating a URI matches the Layer Server's algorithm.
+ * Failure to do that creates mismatching IDs that will then refer to different objects.
+ *
+ * Derived from https://github.com/kevva/strict-uri-encode
+ *
+ * @method strictEncodeURI
+ * @param {String} str
+ */
+exports.strictEncodeURI = function (str) {
+  return encodeURIComponent(str).replace(/[!~'()]/g, function (x) {
+    return '%' + x.charCodeAt(0).toString(16).toUpperCase();
+  });
+};
+
+/**
+ * URL Decode a URL Encoded base64 string
+ *
+ * Copied from https://github.com/auth0-blog/angular-token-auth, but
+ * appears in many places on the web.
+ *
+ * @method decode
+ * @param {String} str   base64 string
+ * @return str   Decoded string
+ */
+/* istanbul ignore next */
+exports.decode = function (str) {
+  var reg1 = new RegExp('_', 'g');
+  var reg2 = new RegExp('-', 'g');
+  var output = str.replace(reg2, '+').replace(reg1, '/');
+  switch (output.length % 4) {
+    case 0:
+      break;
+    case 2:
+      output += '==';
+      break;
+    case 3:
+      output += '=';
+      break;
+    default:
+      throw new Error('Illegal base64url string!');
+  }
+  return exports.atob(output);
+};
+
+/**
+ * Returns a delay in seconds needed to follow an exponential
+ * backoff pattern of delays for retrying a connection.
+ *
+ * Algorithm has two motivations:
+ *
+ * 1. Retry with increasingly long intervals up to some maximum interval
+ * 2. Randomize the retry interval enough so that a thousand clients
+ * all following the same algorithm at the same time will not hit the
+ * server at the exact same times.
+ *
+ * The following are results before jitter for some values of counter:
+
+      0: 0.1
+      1: 0.2
+      2: 0.4
+      3: 0.8
+      4: 1.6
+      5: 3.2
+      6: 6.4
+      7: 12.8
+      8: 25.6
+      9: 51.2
+      10: 102.4
+      11. 204.8
+      12. 409.6
+      13. 819.2
+      14. 1638.4 (27 minutes)
+
+ * @method getExponentialBackoffSeconds
+ * @param  {number} maxSeconds - This is not the maximum seconds delay, but rather
+ * the maximum seconds delay BEFORE adding a randomized value.
+ * @param  {number} counter - Current counter to use for calculating the delay; should be incremented up to some reasonable maximum value for each use.
+ * @return {number}     Delay in seconds/fractions of a second
+ */
+exports.getExponentialBackoffSeconds = function getExponentialBackoffSeconds(maxSeconds, counter) {
+  var secondsWaitTime = Math.pow(2, counter) / 10,
+      secondsOffset = Math.random(); // value between 0-1 seconds.
+  if (counter < 2) secondsOffset = secondsOffset / 4; // values less than 0.2 should be offset by 0-0.25 seconds
+  else if (counter < 6) secondsOffset = secondsOffset / 2; // values between 0.2 and 1.0 should be offset by 0-0.5 seconds
+
+  if (secondsWaitTime >= maxSeconds) secondsWaitTime = maxSeconds;
+
+  return secondsWaitTime + secondsOffset;
+};
+
+/**
+ * Is this data a blob?
+ *
+ * @method isBlob
+ * @param {Mixed} value
+ * @returns {Boolean} - True if its a blob, false if not.
+ */
+exports.isBlob = function (value) {
+  return typeof Blob !== 'undefined' && value instanceof Blob;
+};
+
+/**
+ * Given a blob return a base64 string.
+ *
+ * @method blobToBase64
+ * @param {Blob} blob - data to convert to base64
+ * @param {Function} callback
+ * @param {String} callback.result - Your base64 string result
+ */
+exports.blobToBase64 = function (blob, callback) {
+  var reader = new LocalFileReader();
+  reader.readAsDataURL(blob);
+  reader.onloadend = function () {
+    return callback(reader.result.replace(/^.*?,/, ''));
+  };
+};
+
+/**
+ * Given a base64 string return a blob.
+ *
+ * @method base64ToBlob
+ * @param {String} b64Data - base64 string data without any type prefixes
+ * @param {String} contentType - mime type of the data
+ * @returns {Blob}
+ */
+exports.base64ToBlob = function (b64Data, contentType) {
+  try {
+    var sliceSize = 512;
+    var byteCharacters = exports.atob(b64Data);
+    var byteArrays = [];
+    var offset = void 0;
+
+    for (offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+      var i = void 0;
+      var slice = byteCharacters.slice(offset, offset + sliceSize);
+      var byteNumbers = new Array(slice.length);
+      for (i = 0; i < slice.length; i++) {
+        byteNumbers[i] = slice.charCodeAt(i);
+      }
+
+      var byteArray = new Uint8Array(byteNumbers);
+
+      byteArrays.push(byteArray);
+    }
+
+    var blob = new Blob(byteArrays, { type: contentType });
+    return blob;
+  } catch (e) {
+    // noop
+  }
+  return null;
+};
+
+/**
+ * Does window.btao() in a unicode-safe way
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/btoa#Unicode_strings
+ *
+ * @method utoa
+ * @param {String} str
+ * @return {String}
+ */
+exports.utoa = function (str) {
+  return exports.btoa(unescape(encodeURIComponent(str)));
+};
+
+/**
+ * Does window.atob() in a way that can decode data from utoa()
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/btoa#Unicode_strings
+ *
+ * @method atou
+ * @param {String} str
+ * @return {String}
+ */
+exports.atou = function (str) {
+  return decodeURIComponent(escape(exports.atob(str)));
+};
+
+/**
+ * Given a File/Blob return a string.
+ *
+ * Assumes blob represents textual data.
+ *
+ * @method fetchTextFromFile
+ * @param {Blob} file
+ * @param {Function} callback
+ * @param {String} callback.result
+ */
+exports.fetchTextFromFile = function (file, callback) {
+  if (typeof file === 'string') return callback(file);
+  var reader = new LocalFileReader();
+  reader.addEventListener('loadend', function () {
+    callback(reader.result);
+  });
+  reader.readAsText(file);
+};
+
+/**
+ * Execute this function immediately after current processing is complete (setImmediate replacement).
+ *
+ * A depth of up to 10 is allowed.  That means that functions you schedule using defer
+ * can in turn schedule further actions.  The original actions are depth = 0; the actions scheduled
+ * by your actions are depth = 1.  These new actions may in turn schedule further actions, which happen at depth = 3.
+ * But to avoid infinite loops, if depth reaches 10, it clears the queue and ignores them.
+ *
+ * @method defer
+ * @param {Function} f
+ */
+exports.defer = require('./defer');
+
+/**
+ * Run the Layer Parser on the request.
+ *
+ * Parameters here
+ * are the parameters specied in [Layer-Patch](https://github.com/layerhq/node-layer-patch), plus
+ * a client object.
+ *
+ *      Util.layerParse({
+ *          object: conversation,
+ *          type: 'Conversation',
+ *          operations: layerPatchOperations,
+ *          client: client
+ *      });
+ *
+ * @method
+ * @deprecated Use 'utils/layer-parser' instead
+ * @param {Object} request - layer-patch parameters
+ * @param {Object} request.object - Object being updated  by the operations
+ * @param {string} request.type - Type of object being updated
+ * @param {Object[]} request.operations - Array of change operations to perform upon the object
+ * @param {layer.Client} request.client
+ */
+exports.layerParse = require('./layer-parser');
+
+/**
+ * Object comparison.
+ *
+ * Does a recursive traversal of two objects verifying that they are the same.
+ * Is able to make metadata-restricted assumptions such as that
+ * all values are either plain Objects or strings.
+ *
+ *      if (Utils.doesObjectMatch(conv1.metadata, conv2.metadata)) {
+ *          alert('These two metadata objects are the same');
+ *      }
+ *
+ * @method
+ * @param  {Object} requestedData
+ * @param  {Object} actualData
+ * @return {boolean}
+ */
+exports.doesObjectMatch = function (requestedData, actualData) {
+  if (!requestedData && actualData || requestedData && !actualData) return false;
+  var requestedKeys = Object.keys(requestedData).sort();
+  var actualKeys = Object.keys(actualData).sort();
+
+  // If there are a different number of keys, fail.
+  if (requestedKeys.length !== actualKeys.length) return false;
+
+  // Compare key name and value at each index
+  for (var index = 0; index < requestedKeys.length; index++) {
+    var k1 = requestedKeys[index];
+    var k2 = actualKeys[index];
+    var v1 = requestedData[k1];
+    var v2 = actualData[k2];
+    if (k1 !== k2) return false;
+    if (v1 && (typeof v1 === 'undefined' ? 'undefined' : _typeof(v1)) === 'object') {
+      // Array comparison is not used by the Web SDK at this time.
+      if (Array.isArray(v1)) {
+        throw new Error('Array comparison not handled yet');
+      } else if (!exports.doesObjectMatch(v1, v2)) {
+        return false;
+      }
+    } else if (v1 !== v2) {
+      return false;
+    }
+  }
+  return true;
+};
+
+/**
+ * Simple array inclusion test
+ * @method includes
+ * @param {Mixed[]} items
+ * @param {Mixed} value
+ * @returns {boolean}
+ */
+exports.includes = function (items, value) {
+  return items.indexOf(value) !== -1;
+};
+
+/**
+ * Some ASCII art when client initializes
+ */
+exports.asciiInit = function (version) {
+  if (!version) return 'Missing version';
+
+  var split = version.split('-');
+  var line1 = split[0] || '',
+      line2 = split[1] || '';
+
+  line1 += new Array(13 - line1.length).join(' ');
+  line2 += new Array(14 - line2.length).join(' ');
+
+  return '\n    /hNMMMMMMMMMMMMMMMMMMMms.\n  hMMy+/////////////////omMN-\n  MMN                    oMMo\n  MMN        Layer       oMMo\n  MMN       Web SDK      oMMo\n  MMM-                   oMMo\n  MMMy      v' + line1 + 'oMMo\n  MMMMo     ' + line2 + 'oMMo\n  MMMMMy.                oMMo\n  MMMMMMNy:\'             oMMo\n  NMMMMMMMMmy+:-.\'      \'yMM/\n  :dMMMMMMMMMMMMNNNNNNNNNMNs\n   -/+++++++++++++++++++:\'';
+};
+
+exports.logger = require('./logger');
+}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+},{"./defer":160,"./layer-parser":162,"./logger":163,"uuid":177}],162:[function(require,module,exports){
+'use strict';
+
+/**
+ * Run the Layer Parser on the request.
+ *
+ * Parameters here
+ * are the parameters specied in [Layer-Patch](https://github.com/layerhq/node-layer-patch), plus
+ * a client object.
+ *
+ *      layerParse({
+ *          object: conversation,
+ *          type: 'Conversation',
+ *          operations: layerPatchOperations,
+ *          client: client
+ *      });
+ *
+ * @method
+ * @param {Object} request - layer-patch parameters
+ * @param {Object} request.object - Object being updated  by the operations
+ * @param {string} request.type - Type of object being updated
+ * @param {Object[]} request.operations - Array of change operations to perform upon the object
+ * @param {layer.Client} request.client
+ */
+var LayerParser = require('layer-patch');
+
+var parser = void 0;
+
+/**
+ * Creates a LayerParser
+ *
+ * @method
+ * @private
+ * @param {Object} request - see layer.ClientUtils.layerParse
+ */
+function createParser(request) {
+  request.client.once('destroy', function () {
+    return parser = null;
+  });
+
+  parser = new LayerParser({
+    camelCase: true,
+    getObjectCallback: function getObjectCallback(id) {
+      return request.client.getObject(id);
+    },
+    createObjectCallback: function createObjectCallback(id, obj) {
+      return request.client._createObject(obj);
+    },
+    propertyNameMap: {
+      Conversation: {
+        unreadMessageCount: 'unreadCount'
+      },
+      Identity: {
+        presence: '_presence'
+      }
+    },
+    changeCallbacks: {
+      MessagePart: {
+        all: function all(updateObject, newValue, oldValue, paths) {
+          updateObject._handlePatchEvent(newValue, oldValue, paths);
+        }
+      },
+      Message: {
+        all: function all(updateObject, newValue, oldValue, paths) {
+          updateObject._handlePatchEvent(newValue, oldValue, paths);
+        }
+      },
+      Conversation: {
+        all: function all(updateObject, newValue, oldValue, paths) {
+          updateObject._handlePatchEvent(newValue, oldValue, paths);
+        }
+      },
+      Channel: {
+        all: function all(updateObject, newValue, oldValue, paths) {
+          updateObject._handlePatchEvent(newValue, oldValue, paths);
+        }
+      },
+      Identity: {
+        all: function all(updateObject, newValue, oldValue, paths) {
+          updateObject._handlePatchEvent(newValue, oldValue, paths);
+        }
+      }
+    }
+  });
+}
+
+// Docs in client-utils.js
+module.exports = function (request) {
+  if (!parser) createParser(request);
+  parser.parse(request);
+};
+},{"layer-patch":171}],163:[function(require,module,exports){
+'use strict';
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @class layer.Logger
+ * @private
+ *
+ */
+var _require$LOG = require('../constants').LOG,
+    DEBUG = _require$LOG.DEBUG,
+    INFO = _require$LOG.INFO,
+    WARN = _require$LOG.WARN,
+    ERROR = _require$LOG.ERROR,
+    NONE = _require$LOG.NONE;
+
+// Pretty arbitrary test that IE/edge fails and others don't.  Yes I could do a more direct
+// test for IE/edge but its hoped that MS will fix this around the time they cleanup their internal console object.
+// Note that uglifyjs with drop_console=true will throw an error on console.assert.toString().match; so we instead do (console.assert.toString() || "") which drop_console
+// on replacing console.assert.toString() with (void 0) will still work
+
+
+var supportsConsoleFormatting = Boolean(console.assert && (console.assert.toString() || "").match(/assert/));
+var LayerCss = 'color: #888; font-weight: bold;';
+var Black = 'color: black';
+/* istanbulify ignore next */
+
+var Logger = function () {
+  function Logger() {
+    _classCallCheck(this, Logger);
+  }
+
+  _createClass(Logger, [{
+    key: 'log',
+    value: function log(msg, obj, type, color) {
+      /* istanbul ignore else */
+      if ((typeof msg === 'undefined' ? 'undefined' : _typeof(msg)) === 'object') {
+        obj = msg;
+        msg = '';
+      }
+      var timestamp = new Date().toLocaleTimeString();
+      var op = void 0;
+      switch (type) {
+        case DEBUG:
+          op = 'debug';
+          break;
+        case INFO:
+          op = 'info';
+          break;
+        case WARN:
+          op = 'warn';
+          break;
+        case ERROR:
+          op = 'error';
+          break;
+        default:
+          op = 'log';
+      }
+      if (obj) {
+        if (supportsConsoleFormatting) {
+          console[op]('%cLayer%c ' + op.toUpperCase() + '%c [' + timestamp + ']: ' + msg, LayerCss, 'color: ' + color, Black, obj);
+        } else {
+          console[op]('Layer ' + op.toUpperCase() + ' [' + timestamp + ']: ' + msg, obj);
+        }
+      } else if (supportsConsoleFormatting) {
+        console[op]('%cLayer%c ' + op.toUpperCase() + '%c [' + timestamp + ']: ' + msg, LayerCss, 'color: ' + color, Black);
+      } else {
+        console[op]('Layer ' + op.toUpperCase() + ' [' + timestamp + ']: ' + msg);
+      }
+    }
+  }, {
+    key: 'debug',
+    value: function debug(msg, obj) {
+      /* istanbul ignore next */
+      if (this.level >= DEBUG) this.log(msg, obj, DEBUG, '#888');
+    }
+  }, {
+    key: 'info',
+    value: function info(msg, obj) {
+      /* istanbul ignore next */
+      if (this.level >= INFO) this.log(msg, obj, INFO, 'black');
+    }
+  }, {
+    key: 'warn',
+    value: function warn(msg, obj) {
+      /* istanbul ignore next */
+      if (this.level >= WARN) this.log(msg, obj, WARN, 'orange');
+    }
+  }, {
+    key: 'error',
+    value: function error(msg, obj) {
+      /* istanbul ignore next */
+      if (this.level >= ERROR) this.log(msg, obj, ERROR, 'red');
+    }
+  }]);
+
+  return Logger;
+}();
+
+/* istanbul ignore next */
+
+
+Logger.prototype.level = typeof jasmine === 'undefined' ? ERROR : NONE;
+
+var logger = new Logger();
+
+module.exports = logger;
+},{"../constants":11}],164:[function(require,module,exports){
 /*!
  * Autolinker.js
  * 1.4.4
@@ -47658,7 +47716,7 @@ Autolinker.truncate.TruncateSmart = function(url, truncateLen, ellipsisChars){
 return Autolinker;
 }));
 
-},{}],169:[function(require,module,exports){
+},{}],165:[function(require,module,exports){
 /**
  * Standalone extraction of Backbone.Events, no external dependency required.
  * Degrades nicely when Backone/underscore are already available in the current
@@ -47936,7 +47994,7 @@ return Autolinker;
   }
 })(this);
 
-},{}],170:[function(require,module,exports){
+},{}],166:[function(require,module,exports){
 /*
  * JavaScript Load Image Exif Parser
  * https://github.com/blueimp/JavaScript-Load-Image
@@ -48262,7 +48320,7 @@ return Autolinker;
   // * disableExifGps: Disables parsing of the Exif GPS Info IFD.
 })
 
-},{"./load-image":174,"./load-image-meta":171}],171:[function(require,module,exports){
+},{"./load-image":170,"./load-image-meta":167}],167:[function(require,module,exports){
 /*
  * JavaScript Load Image Meta
  * https://github.com/blueimp/JavaScript-Load-Image
@@ -48442,7 +48500,7 @@ return Autolinker;
   }
 })
 
-},{"./load-image":174}],172:[function(require,module,exports){
+},{"./load-image":170}],168:[function(require,module,exports){
 /*
  * JavaScript Load Image Orientation
  * https://github.com/blueimp/JavaScript-Load-Image
@@ -48632,7 +48690,7 @@ return Autolinker;
   }
 })
 
-},{"./load-image":174,"./load-image-meta":171,"./load-image-scale":173}],173:[function(require,module,exports){
+},{"./load-image":170,"./load-image-meta":167,"./load-image-scale":169}],169:[function(require,module,exports){
 /*
  * JavaScript Load Image Scaling
  * https://github.com/blueimp/JavaScript-Load-Image
@@ -48918,7 +48976,7 @@ return Autolinker;
   }
 })
 
-},{"./load-image":174}],174:[function(require,module,exports){
+},{"./load-image":170}],170:[function(require,module,exports){
 /*
  * JavaScript Load Image
  * https://github.com/blueimp/JavaScript-Load-Image
@@ -49065,7 +49123,7 @@ return Autolinker;
   }
 })((typeof window !== 'undefined' && window) || this)
 
-},{}],175:[function(require,module,exports){
+},{}],171:[function(require,module,exports){
 /**
  * The layer.js.LayerPatchParser method will parse
  *
@@ -49300,7 +49358,7 @@ return Autolinker;
   }
 })();
 
-},{}],176:[function(require,module,exports){
+},{}],172:[function(require,module,exports){
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -49506,7 +49564,7 @@ return Autolinker;
   exports['default'] = Notify;
 
 }));
-},{}],177:[function(require,module,exports){
+},{}],173:[function(require,module,exports){
 /* jshint node:true */
 
 module.exports = {
@@ -50413,7 +50471,7 @@ module.exports = {
     ":yum:": "😋",
     ":zzz:": "💤"
 };
-},{}],178:[function(require,module,exports){
+},{}],174:[function(require,module,exports){
 /* jshint node:true */
 var emojiMap = require('./emoji-map.js');
 
@@ -50431,7 +50489,7 @@ module.exports = function (text) {
     });
     return text;
 };
-},{"./emoji-map.js":177}],179:[function(require,module,exports){
+},{"./emoji-map.js":173}],175:[function(require,module,exports){
 (function (global){
 var location = global.location || {};
 /*jslint indent: 2, browser: true, bitwise: true, plusplus: true */
@@ -51028,7 +51086,7 @@ if (!location.protocol) {
 }
 module.exports = twemoji;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],180:[function(require,module,exports){
+},{}],176:[function(require,module,exports){
 (function (global){
 
 var rng;
@@ -51064,7 +51122,7 @@ module.exports = rng;
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],181:[function(require,module,exports){
+},{}],177:[function(require,module,exports){
 //     uuid.js
 //
 //     Copyright (c) 2010-2012 Robert Kieffer
@@ -51249,7 +51307,7 @@ uuid.unparse = unparse;
 
 module.exports = uuid;
 
-},{"./rng":180}],182:[function(require,module,exports){
+},{"./rng":176}],178:[function(require,module,exports){
 /**
  * @license
  * Copyright (c) 2014 The Polymer Project Authors. All rights reserved.
@@ -53755,179 +53813,5 @@ window.CustomElements.addModule(function(scope) {
   var head = document.querySelector("head");
   head.insertBefore(style, head.firstChild);
 })(window.WebComponents);
-},{}],183:[function(require,module,exports){
-var _global = (function() { return this; })();
-var NativeWebSocket = _global.WebSocket || _global.MozWebSocket;
-var websocket_version = require('./version');
-
-
-/**
- * Expose a W3C WebSocket class with just one or two arguments.
- */
-function W3CWebSocket(uri, protocols) {
-	var native_instance;
-
-	if (protocols) {
-		native_instance = new NativeWebSocket(uri, protocols);
-	}
-	else {
-		native_instance = new NativeWebSocket(uri);
-	}
-
-	/**
-	 * 'native_instance' is an instance of nativeWebSocket (the browser's WebSocket
-	 * class). Since it is an Object it will be returned as it is when creating an
-	 * instance of W3CWebSocket via 'new W3CWebSocket()'.
-	 *
-	 * ECMAScript 5: http://bclary.com/2004/11/07/#a-13.2.2
-	 */
-	return native_instance;
-}
-
-
-/**
- * Module exports.
- */
-module.exports = {
-    'w3cwebsocket' : NativeWebSocket ? W3CWebSocket : null,
-    'version'      : websocket_version
-};
-
-},{"./version":184}],184:[function(require,module,exports){
-module.exports = require('../package.json').version;
-
-},{"../package.json":185}],185:[function(require,module,exports){
-module.exports={
-  "_args": [
-    [
-      {
-        "raw": "websocket@^1.0.22",
-        "scope": null,
-        "escapedName": "websocket",
-        "name": "websocket",
-        "rawSpec": "^1.0.22",
-        "spec": ">=1.0.22 <2.0.0",
-        "type": "range"
-      },
-      "/Users/michaelkantor/node_modules/layer-websdk"
-    ]
-  ],
-  "_from": "websocket@>=1.0.22 <2.0.0",
-  "_id": "websocket@1.0.24",
-  "_inCache": true,
-  "_location": "/websocket",
-  "_nodeVersion": "7.3.0",
-  "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/websocket-1.0.24.tgz_1482977757939_0.1858439394272864"
-  },
-  "_npmUser": {
-    "name": "theturtle32",
-    "email": "brian@worlize.com"
-  },
-  "_npmVersion": "3.10.10",
-  "_phantomChildren": {},
-  "_requested": {
-    "raw": "websocket@^1.0.22",
-    "scope": null,
-    "escapedName": "websocket",
-    "name": "websocket",
-    "rawSpec": "^1.0.22",
-    "spec": ">=1.0.22 <2.0.0",
-    "type": "range"
-  },
-  "_requiredBy": [
-    "/layer-websdk"
-  ],
-  "_resolved": "https://registry.npmjs.org/websocket/-/websocket-1.0.24.tgz",
-  "_shasum": "74903e75f2545b6b2e1de1425bc1c905917a1890",
-  "_shrinkwrap": null,
-  "_spec": "websocket@^1.0.22",
-  "_where": "/Users/michaelkantor/node_modules/layer-websdk",
-  "author": {
-    "name": "Brian McKelvey",
-    "email": "brian@worlize.com",
-    "url": "https://www.worlize.com/"
-  },
-  "browser": "lib/browser.js",
-  "bugs": {
-    "url": "https://github.com/theturtle32/WebSocket-Node/issues"
-  },
-  "config": {
-    "verbose": false
-  },
-  "contributors": [
-    {
-      "name": "Iñaki Baz Castillo",
-      "email": "ibc@aliax.net",
-      "url": "http://dev.sipdoc.net"
-    }
-  ],
-  "dependencies": {
-    "debug": "^2.2.0",
-    "nan": "^2.3.3",
-    "typedarray-to-buffer": "^3.1.2",
-    "yaeti": "^0.0.6"
-  },
-  "description": "Websocket Client & Server Library implementing the WebSocket protocol as specified in RFC 6455.",
-  "devDependencies": {
-    "buffer-equal": "^1.0.0",
-    "faucet": "^0.0.1",
-    "gulp": "git+https://github.com/gulpjs/gulp.git#4.0",
-    "gulp-jshint": "^2.0.4",
-    "jshint": "^2.0.0",
-    "jshint-stylish": "^2.2.1",
-    "tape": "^4.0.1"
-  },
-  "directories": {
-    "lib": "./lib"
-  },
-  "dist": {
-    "shasum": "74903e75f2545b6b2e1de1425bc1c905917a1890",
-    "tarball": "https://registry.npmjs.org/websocket/-/websocket-1.0.24.tgz"
-  },
-  "engines": {
-    "node": ">=0.8.0"
-  },
-  "gitHead": "0e15f9445953927c39ce84a232cb7dd6e3adf12e",
-  "homepage": "https://github.com/theturtle32/WebSocket-Node",
-  "keywords": [
-    "websocket",
-    "websockets",
-    "socket",
-    "networking",
-    "comet",
-    "push",
-    "RFC-6455",
-    "realtime",
-    "server",
-    "client"
-  ],
-  "license": "Apache-2.0",
-  "main": "index",
-  "maintainers": [
-    {
-      "name": "theturtle32",
-      "email": "brian@worlize.com"
-    }
-  ],
-  "name": "websocket",
-  "optionalDependencies": {},
-  "readme": "ERROR: No README data found!",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/theturtle32/WebSocket-Node.git"
-  },
-  "scripts": {
-    "gulp": "gulp",
-    "install": "(node-gyp rebuild 2> builderror.log) || (exit 0)",
-    "test": "faucet test/unit"
-  },
-  "version": "1.0.24"
-}
-
-},{}],186:[function(require,module,exports){
-module.exports = XMLHttpRequest;
-
 },{}]},{},[8])(8)
 });

@@ -25,9 +25,15 @@ registerComponent('layer-customer-chat-button', {
   properties: {
     openHTML: {
       value: '\uf00d',
+      set() {
+        this._udpateHtml();
+      },
     },
     closedHTML: {
       value: '\uf0e5',
+      set() {
+        this._udpateHtml();
+      },
     },
     /**
      * isOpen property inidicates if the dialog is open or closed.
@@ -43,7 +49,7 @@ registerComponent('layer-customer-chat-button', {
       set(value) {
         this.classList[value ? 'add' : 'remove']('floating-chat-icon-open');
         this.classList[value ? 'remove' : 'add']('floating-chat-icon-closed');
-        this.innerHTML = value ? this.openHTML : this.closedHTML;
+        this._udpateHtml();
       }
     },
 
@@ -75,5 +81,9 @@ registerComponent('layer-customer-chat-button', {
     _handleClick(evt) {
       this.trigger('layer-customer-chat-button-click', { open: !this.isOpen });
     },
+
+    _udpateHtml() {
+      this.innerHTML = this.isOpen ? this.openHTML : this.closedHTML;
+    }
   },
 });
